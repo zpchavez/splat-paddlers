@@ -20,8 +20,12 @@ class Ball
 
   update() {
     if (this.caught) {
-      this.sprite.vx = this.paddle.sprite.vx;
-      this.sprite.vy = this.paddle.sprite.vy;
+      this.sprite.x = (
+        this.paddle.sprite.x +
+        (this.paddle.sprite.width / 2) -
+        (this.sprite.width / 2)
+      );
+      this.sprite.y = this.paddle.sprite.y - this.sprite.height;
     }
     this.g.move(this.sprite);
   }
