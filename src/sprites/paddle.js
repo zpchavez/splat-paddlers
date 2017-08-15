@@ -1,4 +1,8 @@
+import Ball from './ball';
 import { getPlayerControls } from '../controls';
+
+const BALL_RELEASE_SPEED = 5;
+const PADDLE_MOVE_SPEED = 5;
 
 class Paddle
 {
@@ -14,16 +18,24 @@ class Paddle
 
     this.rightArrowDown = false;
     this.leftArrowDown = false;
+    this.caught = true;
     this.g = g;
     this.sprite = paddle;
     this.controls = getPlayerControls(g, 1);
     g.sprites.paddle = this;
   }
 
+  attachStarterBall(ball) {
+    ball.sprite.x = this.sprite.x + this.sprite.width/2 - 4,
+    ball.sprite.y = this.sprite.y - 8
+    this.starterBall = ball;
+    ball.paddle = this;
+  }
+
   handleInput() {
     this.controls.right.press = () => {
       this.rightArrowDown = true;
-      this.sprite.vx = 5;
+      this.sprite.vx = PADDLE_MOVE_SPEED;
       this.sprite.vy = 0;
     };
     this.controls.right.release = () => {
@@ -35,7 +47,7 @@ class Paddle
     };
     this.controls.left.press = () => {
       this.leftArrowDown = true;
-      this.sprite.vx = -5;
+      this.sprite.vx = PADDLE_MOVE_SPEED * -1;
       this.sprite.vy = 0;
     };
     this.controls.left.release = () => {
@@ -46,10 +58,17 @@ class Paddle
       }
     };
     this.controls.action.press = () => {
-      console.log('action pressed');
+      if (this.caught) {
+        this.releaseBall();
+      }
     }
-    this.controls.action.release = () => {
-      console.log('action released');
+  }
+
+  releaseBall() {
+    this.caught = false;
+    if (this.starterBall) {
+      this.starterBall.sprite.vy = BALL_RELEASE_SPEED * -1;
+      this.starterBall.sprite.vx = this.sprite.vx;
     }
   }
 

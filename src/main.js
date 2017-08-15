@@ -21,12 +21,13 @@ var g = ga(
     const world = g.makeTiledWorld(level1, 'assets/tileset.png');
     world.visible = true;
 
-    const player1 =  new Paddle(g);
-    const ball1 = new Ball(g);
+    const player1 = new Paddle(g);
+    const ball = new Ball(g);
+    player1.attachStarterBall(ball);
 
     g.state = () => {
       player1.update();
-      ball1.update();
+      ball.update();
     };
   },
   [
@@ -34,5 +35,4 @@ var g = ga(
   ]
 );
 
-console.log('about to start');
 g.start();
