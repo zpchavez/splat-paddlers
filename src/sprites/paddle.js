@@ -1,7 +1,7 @@
 import Ball from './ball';
 import { getPlayerControls } from '../controls';
 
-const BALL_RELEASE_SPEED = 5;
+const BALL_RELEASE_SPEED = 4;
 const PADDLE_MOVE_SPEED = 5;
 
 class Paddle

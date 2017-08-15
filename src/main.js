@@ -13,7 +13,7 @@ var g = ga(
   768,
   () => {
     g.assets
-    g.canvas.style.border = "1px black dashed";
+    g.canvas.style.border = "2px black dashed";
     g.canvas.style.display = "block";
     g.canvas.style.margin = "auto";
     g.backgroundColor = "white";
