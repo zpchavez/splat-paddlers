@@ -2,7 +2,8 @@ import Ball from './ball';
 import { getPlayerControls } from '../controls';
 
 const BALL_RELEASE_SPEED = 4;
-const PADDLE_MOVE_SPEED = 5;
+const PADDLE_MOVE_SPEED = 8;
+const ANTI_COLLISION_FRAMES = 10;
 
 class Paddle
 {
@@ -14,6 +15,7 @@ class Paddle
       "black",
     );
 
+    this.id = g.getAutoIncrementedId()
     g.stage.putBottom(paddle, 0, -48);
 
     this.rightArrowDown = false;
@@ -21,8 +23,8 @@ class Paddle
     this.caught = true;
     this.g = g;
     this.sprite = paddle;
+    this.antiCollisionFrames = {};
     this.controls = getPlayerControls(g, 1);
-    g.sprites.paddle = this;
   }
 
   attachStarterBall(ball) {
@@ -76,6 +78,32 @@ class Paddle
     const g = this.g;
     g.contain(this.sprite, g.stage.localBounds);
     this.handleInput();
+
+    Object.keys(this.antiCollisionFrames).forEach(actorId => {
+      this.antiCollisionFrames[actorId] -= 1;
+      if (this.antiCollisionFrames[actorId] === 0) {
+        delete this.antiCollisionFrames[actorId]
+      }
+    });
+
+    g.collisionGroups.balls.forEach(ball => {
+      if (!this.antiCollisionFrames[ball.id]) {
+        const collision = g.hitTestCircleRectangle(ball.sprite, this.sprite);
+        if (collision) {
+          console.log('ball.sprite.x', ball.sprite.x, 'paddle.sprite.x', this.sprite.x);
+          console.log('paddle.sprite.width', this.sprite.width);
+          if (ball.sprite.x > (this.sprite.x + this.sprite.width) || ball.sprite.x < this.sprite.x) {
+            console.log('horizontal collision');
+            ball.sprite.vx = (ball.sprite.vx * -1) + this.sprite.x;
+          } else {
+            console.log('vertical collision');
+            ball.sprite.vy *= -1;
+          }
+          this.antiCollisionFrames[ball.id] = ANTI_COLLISION_FRAMES;
+        }
+      }
+    })
+
     g.move(this.sprite);
   }
 }

@@ -17,16 +17,28 @@ var g = ga(
     g.canvas.style.display = "block";
     g.canvas.style.margin = "auto";
     g.backgroundColor = "white";
-    g.sprites = {};
+    g.collisionGroups = {
+      balls: [],
+      paddles: []
+    };
+
+    let actorIdIncrementor = 0;
+    g.getAutoIncrementedId = () => {
+      return actorIdIncrementor += 1;
+    }
+
     const world = g.makeTiledWorld(level1, 'assets/tileset.png');
     world.visible = true;
 
-    const player1 = new Paddle(g);
+    const paddle = new Paddle(g);
     const ball = new Ball(g);
-    player1.attachStarterBall(ball);
+    g.collisionGroups.balls.push(ball);
+    g.collisionGroups.paddles.push(paddle);
+
+    paddle.attachStarterBall(ball);
 
     g.state = () => {
-      player1.update();
+      paddle.update();
       ball.update();
     };
   },

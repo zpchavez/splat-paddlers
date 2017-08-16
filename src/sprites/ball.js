@@ -8,7 +8,7 @@ class Ball
       1,
     );
 
-    g.sprites.ball = this;
+    this.id = g.getAutoIncrementedId()
     this.g = g;
     this.sprite = ball;
   }
@@ -19,13 +19,13 @@ class Ball
       this.sprite.x = this.g.stage.width;
     }
     if (this.sprite.x > this.g.stage.width) {
-      this.sprite.x = this.sprite.width * -1;
+      this.sprite.x = 0;
     }
     if (this.sprite.y < this.sprite.height * -1) {
       this.sprite.y = this.g.stage.height;
     }
-    if (this.sprite.y > this.g.height) {
-      this.sprite.y = this.sprite.height * -1;
+    if (this.sprite.y > this.g.stage.height) {
+      this.sprite.y = 0;
     }
 
     // When changing a sprite's position, ga shows it moving across
