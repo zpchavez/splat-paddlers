@@ -11,7 +11,7 @@ class Paddle
   constructor(g) {
     const paddle = g.rectangle(
       64,
-      64,
+      16,
       "blue",
       "black",
     );
@@ -92,7 +92,7 @@ class Paddle
 
   handleInput() {
     this.handleHorizontalControls();
-    this.handleVerticalControls();
+    // this.handleVerticalControls();
 
     this.controls.action.press = () => {
       if (this.caught) {
@@ -131,40 +131,37 @@ class Paddle
 
           let hitRegion = null;
 
-          console.log('Previous ball', ballPos);
-          console.log('Previous paddle', paddlePos);
-
           if (ballPos.y <= paddlePos.y) {
-            console.log('hit top');
             hitRegion = 'top';
           } else if (ballPos.x <= paddlePos.x) {
-            console.log('hit left');
             hitRegion = 'left';
           } else if (ballPos.y >= paddlePos.y + this.sprite.height) {
-            console.log('hit bottom');
             hitRegion = 'bottom';
           } else if (ballPos.x >= paddlePos.x + this.sprite.width) {
-            console.log('hit right');
             hitRegion = 'right';
           } else {
-            console.log('Could not determine hit region');
             return;
           }
 
-          console.log('hitRegion', hitRegion);
-
           // if (ball.sprite.y > this.sprite.y && ball.sprite.y < (this.sprite.y + this.sprite.height)) {
           if (hitRegion === 'left' || hitRegion === 'right') {
-            console.log(ball.sprite.y, this.sprite.y, this.sprite.height, this.sprite);
-            console.log('horizontal collision');
-            ball.sprite.vx = (ball.sprite.vx * -1) + this.sprite.vx;
+            // If paddle moving in same direction as ball, add velocities
+            if (ball.sprite.vx * this.sprite.vx > 0) {
+              ball.sprite.vx += this.sprite.vx;
+            } else {
+              ball.sprite.vx = (ball.sprite.vx * -1) + this.sprite.vx;
+            }
+            // Limit max speed
             ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
-            console.log('new vx', ball.sprite.vx);
           } else {
-            console.log('vertical collision');
-            ball.sprite.vy = (ball.sprite.vy * -1) + this.sprite.vy;
+            // If paddle moving in same direction as ball, add velocities
+            if (ball.sprite.vy * this.sprite.vy > 0) {
+              ball.sprite.vy += this.sprite.vy;
+            } else {
+              ball.sprite.vy = (ball.sprite.vy * -1) + this.sprite.vy;
+            }
+            // Limit max speed
             ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
-            console.log('new vy', ball.sprite.vy);
           }
           this.antiCollisionFrames[ball.id] = ANTI_COLLISION_FRAMES;
         }
