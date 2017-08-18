@@ -13,6 +13,13 @@ class Ball
     this.sprite = ball;
   }
 
+  getPreviousPosition() {
+    return {
+      x: this.sprite.x - this.sprite.vx,
+      y: this.sprite.y - this.sprite.vy,
+    };
+  }
+
   screenWrap() {
     let before = [this.sprite.x, this.sprite.y];
     if (this.sprite.x < this.sprite.width * -1) {

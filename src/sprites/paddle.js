@@ -4,13 +4,14 @@ import { getPlayerControls } from '../controls';
 const BALL_RELEASE_SPEED = 4;
 const PADDLE_MOVE_SPEED = 8;
 const ANTI_COLLISION_FRAMES = 10;
+const MAX_BALL_SPEED = 10;
 
 class Paddle
 {
   constructor(g) {
     const paddle = g.rectangle(
       64,
-      16,
+      64,
       "blue",
       "black",
     );
@@ -20,6 +21,8 @@ class Paddle
 
     this.rightArrowDown = false;
     this.leftArrowDown = false;
+    this.upArrowDown = false;
+    this.downArrowDown = false;
     this.caught = true;
     this.g = g;
     this.sprite = paddle;
@@ -34,31 +37,63 @@ class Paddle
     ball.paddle = this;
   }
 
-  handleInput() {
+  getPreviousPosition() {
+    return {
+      x: this.sprite.x - this.sprite.vx,
+      y: this.sprite.y - this.sprite.vy,
+    };
+  }
+
+  handleVerticalControls() {
+    this.controls.up.press = () => {
+      this.upArrowDown = true;
+      this.sprite.vy = PADDLE_MOVE_SPEED * -1;
+    };
+    this.controls.up.release = () => {
+      this.upArrowDown = false;
+      if (!this.downArrowDown) {
+        this.sprite.vy = 0;
+      }
+    };
+    this.controls.down.press = () => {
+      this.downArrowDown = true;
+      this.sprite.vy = PADDLE_MOVE_SPEED;
+    };
+    this.controls.down.release = () => {
+      this.downArrowDown = false;
+      if (!this.upArrowDown) {
+        this.sprite.vy = 0;
+      }
+    };
+  }
+
+  handleHorizontalControls() {
     this.controls.right.press = () => {
       this.rightArrowDown = true;
       this.sprite.vx = PADDLE_MOVE_SPEED;
-      this.sprite.vy = 0;
     };
     this.controls.right.release = () => {
       this.rightArrowDown = false;
       if (!this.leftArrowDown) {
         this.sprite.vx = 0;
-        this.sprite.vy = 0;
       }
     };
     this.controls.left.press = () => {
       this.leftArrowDown = true;
       this.sprite.vx = PADDLE_MOVE_SPEED * -1;
-      this.sprite.vy = 0;
     };
     this.controls.left.release = () => {
       this.leftArrowDown = false;
       if (!this.rightArrowDown) {
         this.sprite.vx = 0;
-        this.sprite.vy = 0;
       }
     };
+  }
+
+  handleInput() {
+    this.handleHorizontalControls();
+    this.handleVerticalControls();
+
     this.controls.action.press = () => {
       if (this.caught) {
         this.releaseBall();
@@ -87,22 +122,54 @@ class Paddle
     });
 
     g.collisionGroups.balls.forEach(ball => {
-      if (!this.antiCollisionFrames[ball.id]) {
-        const collision = g.hitTestCircleRectangle(ball.sprite, this.sprite);
+      if (!this.caught && !this.antiCollisionFrames[ball.id]) {
+        const collision = g.hitTestRectangle(ball.sprite, this.sprite);
         if (collision) {
-          console.log('ball.sprite.x', ball.sprite.x, 'paddle.sprite.x', this.sprite.x);
-          console.log('paddle.sprite.width', this.sprite.width);
-          if (ball.sprite.x > (this.sprite.x + this.sprite.width) || ball.sprite.x < this.sprite.x) {
+
+          const ballPos = ball.getPreviousPosition();
+          const paddlePos = this.getPreviousPosition();
+
+          let hitRegion = null;
+
+          console.log('Previous ball', ballPos);
+          console.log('Previous paddle', paddlePos);
+
+          if (ballPos.y <= paddlePos.y) {
+            console.log('hit top');
+            hitRegion = 'top';
+          } else if (ballPos.x <= paddlePos.x) {
+            console.log('hit left');
+            hitRegion = 'left';
+          } else if (ballPos.y >= paddlePos.y + this.sprite.height) {
+            console.log('hit bottom');
+            hitRegion = 'bottom';
+          } else if (ballPos.x >= paddlePos.x + this.sprite.width) {
+            console.log('hit right');
+            hitRegion = 'right';
+          } else {
+            console.log('Could not determine hit region');
+            return;
+          }
+
+          console.log('hitRegion', hitRegion);
+
+          // if (ball.sprite.y > this.sprite.y && ball.sprite.y < (this.sprite.y + this.sprite.height)) {
+          if (hitRegion === 'left' || hitRegion === 'right') {
+            console.log(ball.sprite.y, this.sprite.y, this.sprite.height, this.sprite);
             console.log('horizontal collision');
-            ball.sprite.vx = (ball.sprite.vx * -1) + this.sprite.x;
+            ball.sprite.vx = (ball.sprite.vx * -1) + this.sprite.vx;
+            ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
+            console.log('new vx', ball.sprite.vx);
           } else {
             console.log('vertical collision');
-            ball.sprite.vy *= -1;
+            ball.sprite.vy = (ball.sprite.vy * -1) + this.sprite.vy;
+            ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
+            console.log('new vy', ball.sprite.vy);
           }
           this.antiCollisionFrames[ball.id] = ANTI_COLLISION_FRAMES;
         }
       }
-    })
+    });
 
     g.move(this.sprite);
   }
