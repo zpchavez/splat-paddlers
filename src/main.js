@@ -1,8 +1,8 @@
 require('../lib/ga.js');
 require('../lib/custom.js');
 
-import Paddle from './sprites/paddle';
-import Ball from './sprites/ball';
+import Paddle from './things/paddle';
+import Ball from './things/ball';
 
 const ga = window.ga;
 
@@ -22,9 +22,9 @@ var g = ga(
       paddles: []
     };
 
-    let actorIdIncrementor = 0;
+    let thingIdIncrementor = 0;
     g.getAutoIncrementedId = () => {
-      return actorIdIncrementor += 1;
+      return thingIdIncrementor += 1;
     }
 
     const world = g.makeTiledWorld(level1, 'assets/tileset.png');

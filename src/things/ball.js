@@ -1,6 +1,10 @@
-class Ball
+import AbstractThing from './abstract-thing';
+
+class Ball extends AbstractThing
 {
   constructor(g) {
+    super(g);
+    
     const ball = g.circle(
       8,
       "blue",
@@ -8,16 +12,7 @@ class Ball
       1,
     );
 
-    this.id = g.getAutoIncrementedId()
-    this.g = g;
     this.sprite = ball;
-  }
-
-  getPreviousPosition() {
-    return {
-      x: this.sprite.x - this.sprite.vx,
-      y: this.sprite.y - this.sprite.vy,
-    };
   }
 
   screenWrap() {

@@ -1,3 +1,4 @@
+import AbstractThing from './abstract-thing';
 import Ball from './ball';
 import { getPlayerControls } from '../controls';
 
@@ -6,9 +7,11 @@ const PADDLE_MOVE_SPEED = 8;
 const ANTI_COLLISION_FRAMES = 10;
 const MAX_BALL_SPEED = 10;
 
-class Paddle
+class Paddle extends AbstractThing
 {
   constructor(g) {
+    super(g);
+
     const paddle = g.rectangle(
       64,
       16,
@@ -16,7 +19,6 @@ class Paddle
       "black",
     );
 
-    this.id = g.getAutoIncrementedId()
     g.stage.putBottom(paddle, 0, -48);
 
     this.rightArrowDown = false;
@@ -24,7 +26,6 @@ class Paddle
     this.upArrowDown = false;
     this.downArrowDown = false;
     this.caught = true;
-    this.g = g;
     this.sprite = paddle;
     this.antiCollisionFrames = {};
     this.controls = getPlayerControls(g, 1);
@@ -35,13 +36,6 @@ class Paddle
     ball.sprite.y = this.sprite.y - 8
     this.starterBall = ball;
     ball.paddle = this;
-  }
-
-  getPreviousPosition() {
-    return {
-      x: this.sprite.x - this.sprite.vx,
-      y: this.sprite.y - this.sprite.vy,
-    };
   }
 
   handleVerticalControls() {
