@@ -3,10 +3,9 @@ require('../lib/custom.js');
 
 import Paddle from './things/paddle';
 import Ball from './things/ball';
+import Block from './things/block';
 
 const ga = window.ga;
-
-const level1 = require('./levels/level-00');
 
 var g = ga(
   768,
@@ -27,8 +26,12 @@ var g = ga(
       return thingIdIncrementor += 1;
     }
 
-    const world = g.makeTiledWorld(level1, 'assets/tileset.png');
-    world.visible = true;
+    const blocks = [];
+    for (let x = 128; x <= 608; x += 32) {
+      for (let y = 128; y <= 608; y += 32) {
+        blocks.push(new Block(g, { x, y }));
+      }
+    }
 
     const paddle = new Paddle(g);
     const ball = new Ball(g);

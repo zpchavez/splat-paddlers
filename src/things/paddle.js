@@ -13,7 +13,7 @@ class Paddle extends AbstractThing
   constructor(g) {
     super(g);
 
-    const paddle = g.rectangle(
+    this.sprite = g.rectangle(
       64,
       16,
       colors.blue.fill,
@@ -21,14 +21,13 @@ class Paddle extends AbstractThing
       2
     );
 
-    g.stage.putBottom(paddle, 0, -48);
+    g.stage.putBottom(this.sprite, 0, -48);
 
     this.rightArrowDown = false;
     this.leftArrowDown = false;
     this.upArrowDown = false;
     this.downArrowDown = false;
     this.caught = true;
-    this.sprite = paddle;
     this.antiCollisionFrames = {};
     this.controls = getPlayerControls(g, 1);
   }
