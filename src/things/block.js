@@ -1,4 +1,5 @@
 import AbstractThing from './abstract-thing';
+import Ball from './ball';
 import colors from '../colors';
 
 class Block extends AbstractThing
@@ -23,11 +24,14 @@ class Block extends AbstractThing
     this.sprite.alpha = 0.5;
   }
 
-  handleBallCollision(ball) {
-    if (this.color === 'blank') {
-      this.g.remove(this.sprite);
-      this.color = ball.color;
-      this.createSprite();
+  handleCollision(otherThing) {
+    if (otherThing instanceof Ball) {
+      const ball = otherThing;
+      if (this.color === 'blank') {
+        this.g.remove(this.sprite);
+        this.color = ball.color;
+        this.createSprite();
+      }
     }
   }
 }

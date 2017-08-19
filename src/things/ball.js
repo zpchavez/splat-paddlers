@@ -1,5 +1,8 @@
 import AbstractThing from './abstract-thing';
 import colors from '../colors';
+import Paddle from './paddle';
+
+const MAX_BALL_SPEED = 10;
 
 class Ball extends AbstractThing
 {
@@ -13,7 +16,8 @@ class Ball extends AbstractThing
       2,
     );
 
-    // this.sprite.layer = 1;
+    this.collidesWith = ['paddles', 'blocks'];
+
     this.color = 'blue';
   }
 
@@ -59,18 +63,52 @@ class Ball extends AbstractThing
     }
   }
 
-  handleBlockCollision() {
-    this.g.collisionGroups.blocks.forEach(block => {
-      const collision = this.g.hitTestRectangle(this.sprite, block.sprite);
-      if (collision) {
-        block.handleBallCollision(this);
+  handleCollision(otherThing) {
+    if (otherThing instanceof Paddle) {
+      const ball = this;
+      const paddle = otherThing;
+      const ballPos = ball.getPreviousPosition();
+      const paddlePos = paddle.getPreviousPosition();
+
+      let hitRegion = null;
+
+      if (ballPos.y + ball.sprite.height <= paddlePos.y) {
+        hitRegion = 'top';
+      } else if (ballPos.x + ball.sprite.width <= paddlePos.x) {
+        hitRegion = 'left';
+      } else if (ballPos.y >= paddlePos.y + paddle.sprite.height) {
+        hitRegion = 'bottom';
+      } else if (ballPos.x >= paddlePos.x + paddle.sprite.width) {
+        hitRegion = 'right';
+      } else {
+        return;
       }
-    })
+
+      if (hitRegion === 'left' || hitRegion === 'right') {
+        // If paddle moving in same direction as ball, add velocities
+        if (ball.sprite.vx * paddle.sprite.vx > 0) {
+          ball.sprite.vx += paddle.sprite.vx;
+        } else {
+          ball.sprite.vx = (ball.sprite.vx * -1) + paddle.sprite.vx;
+        }
+        // Limit max speed
+        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
+      } else {
+        // If paddle moving in same direction as ball, add velocities
+        if (ball.sprite.vy * paddle.sprite.vy > 0) {
+          ball.sprite.vy += paddle.sprite.vy;
+        } else {
+          ball.sprite.vy = (ball.sprite.vy * -1) + paddle.sprite.vy;
+        }
+        // Limit max speed
+        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
+      }
+    }
   }
 
   update() {
+    super.update();
     this.handleCaughtBall();
-    this.handleBlockCollision();
     this.screenWrap();
     this.g.move(this.sprite);
   }
