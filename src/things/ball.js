@@ -6,17 +6,23 @@ class Ball extends AbstractThing
   constructor(g) {
     super(g);
 
-    const ball = g.circle(
+    this.sprite = g.circle(
       8,
       colors.blue.fill,
       colors.blue.stroke,
       2,
     );
 
-    this.sprite = ball;
+    // this.sprite.layer = 1;
+    this.color = 'blue';
   }
 
   screenWrap() {
+    if (this.screenWrappedLastFrame) {
+      this.sprite.visible = true;
+      this.screenWrappedLastFrame = false;
+    }
+
     let before = [this.sprite.x, this.sprite.y];
     if (this.sprite.x < this.sprite.width * -1) {
       this.sprite.x = this.g.stage.width;
@@ -42,7 +48,7 @@ class Ball extends AbstractThing
     }
   }
 
-  update() {
+  handleCaughtBall() {
     if (this.paddle && this.paddle.caught) {
       this.sprite.x = (
         this.paddle.sprite.x +
@@ -51,13 +57,21 @@ class Ball extends AbstractThing
       );
       this.sprite.y = this.paddle.sprite.y - this.sprite.height;
     }
+  }
 
-    if (this.screenWrappedLastFrame) {
-      this.sprite.visible = true;
-      this.screenWrappedLastFrame = false;
-    }
+  handleBlockCollision() {
+    this.g.collisionGroups.blocks.forEach(block => {
+      const collision = this.g.hitTestRectangle(this.sprite, block.sprite);
+      if (collision) {
+        block.handleBallCollision(this);
+      }
+    })
+  }
+
+  update() {
+    this.handleCaughtBall();
+    this.handleBlockCollision();
     this.screenWrap();
-
     this.g.move(this.sprite);
   }
 }

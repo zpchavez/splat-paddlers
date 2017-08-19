@@ -11,14 +11,14 @@ var g = ga(
   768,
   768,
   () => {
-    g.assets
     g.canvas.style.border = "2px black solid";
     g.canvas.style.display = "block";
     g.canvas.style.margin = "auto";
     g.backgroundColor = "white";
     g.collisionGroups = {
       balls: [],
-      paddles: []
+      paddles: [],
+      blocks: [],
     };
 
     let thingIdIncrementor = 0;
@@ -32,6 +32,7 @@ var g = ga(
         blocks.push(new Block(g, { x, y }));
       }
     }
+    g.collisionGroups.blocks = blocks;
 
     const paddle = new Paddle(g);
     const ball = new Ball(g);
