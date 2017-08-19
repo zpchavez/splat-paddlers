@@ -1,15 +1,16 @@
 import AbstractThing from './abstract-thing';
+import colors from '../colors';
 
 class Ball extends AbstractThing
 {
   constructor(g) {
     super(g);
-    
+
     const ball = g.circle(
       8,
-      "blue",
-      "black",
-      1,
+      colors.blue.fill,
+      colors.blue.stroke,
+      2,
     );
 
     this.sprite = ball;

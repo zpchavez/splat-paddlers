@@ -1,6 +1,7 @@
 import AbstractThing from './abstract-thing';
 import Ball from './ball';
 import { getPlayerControls } from '../controls';
+import colors from '../colors';
 
 const BALL_RELEASE_SPEED = 4;
 const PADDLE_MOVE_SPEED = 8;
@@ -15,8 +16,9 @@ class Paddle extends AbstractThing
     const paddle = g.rectangle(
       64,
       16,
-      "blue",
-      "black",
+      colors.blue.fill,
+      colors.blue.stroke,
+      2
     );
 
     g.stage.putBottom(paddle, 0, -48);
