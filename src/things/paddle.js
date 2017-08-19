@@ -125,9 +125,9 @@ class Paddle extends AbstractThing
 
           let hitRegion = null;
 
-          if (ballPos.y <= paddlePos.y) {
+          if (ballPos.y + ball.sprite.height <= paddlePos.y) {
             hitRegion = 'top';
-          } else if (ballPos.x <= paddlePos.x) {
+          } else if (ballPos.x + ball.sprite.width <= paddlePos.x) {
             hitRegion = 'left';
           } else if (ballPos.y >= paddlePos.y + this.sprite.height) {
             hitRegion = 'bottom';
