@@ -1,4 +1,5 @@
 import AbstractThing from './abstract-thing';
+import Block from './block';
 import colors from '../colors';
 import Paddle from './paddle';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
@@ -54,41 +55,47 @@ class Ball extends AbstractThing
   }
 
   handleCollision(otherThing) {
-    if (otherThing instanceof Paddle) {
+    if (
+      otherThing instanceof Paddle ||
+      (
+        otherThing instanceof Block &&
+        otherThing.color !== 'blank' &&
+        otherThing.color !== this.color
+      )
+    ) {
       const ball = this;
-      const paddle = otherThing;
       const ballPos = ball.getPreviousPosition();
-      const paddlePos = paddle.getPreviousPosition();
+      const otherThingPos = otherThing.getPreviousPosition();
 
       let hitRegion = null;
 
-      if (ballPos.y + ball.sprite.height <= paddlePos.y) {
+      if (ballPos.y + ball.sprite.height <= otherThingPos.y) {
         hitRegion = 'top';
-      } else if (ballPos.x + ball.sprite.width <= paddlePos.x) {
+      } else if (ballPos.x + ball.sprite.width <= otherThingPos.x) {
         hitRegion = 'left';
-      } else if (ballPos.y >= paddlePos.y + paddle.sprite.height) {
+      } else if (ballPos.y >= otherThingPos.y + otherThing.sprite.height) {
         hitRegion = 'bottom';
-      } else if (ballPos.x >= paddlePos.x + paddle.sprite.width) {
+      } else if (ballPos.x >= otherThingPos.x + otherThing.sprite.width) {
         hitRegion = 'right';
       } else {
         return;
       }
 
       if (hitRegion === 'left' || hitRegion === 'right') {
-        // If paddle moving in same direction as ball, add velocities
-        if (ball.sprite.vx * paddle.sprite.vx > 0) {
-          ball.sprite.vx += paddle.sprite.vx;
+        // If otherThing moving in same direction as ball, add velocities
+        if (ball.sprite.vx * otherThing.sprite.vx > 0) {
+          ball.sprite.vx += otherThing.sprite.vx;
         } else {
-          ball.sprite.vx = (ball.sprite.vx * -1) + paddle.sprite.vx;
+          ball.sprite.vx = (ball.sprite.vx * -1) + otherThing.sprite.vx;
         }
         // Limit max speed
         ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
       } else {
-        // If paddle moving in same direction as ball, add velocities
-        if (ball.sprite.vy * paddle.sprite.vy > 0) {
-          ball.sprite.vy += paddle.sprite.vy;
+        // If otherThing moving in same direction as ball, add velocities
+        if (ball.sprite.vy * otherThing.sprite.vy > 0) {
+          ball.sprite.vy += otherThing.sprite.vy;
         } else {
-          ball.sprite.vy = (ball.sprite.vy * -1) + paddle.sprite.vy;
+          ball.sprite.vy = (ball.sprite.vy * -1) + otherThing.sprite.vy;
         }
         // Limit max speed
         ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);

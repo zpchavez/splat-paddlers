@@ -32,6 +32,11 @@ class Block extends AbstractThing
         this.color = ball.color;
         this.createSprite();
       }
+      if (this.color !== ball.color) {
+        this.g.remove(this.sprite);
+        this.color = ball.color;
+        this.createSprite();
+      }
     }
   }
 }
