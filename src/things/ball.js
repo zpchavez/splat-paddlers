@@ -1,24 +1,25 @@
 import AbstractThing from './abstract-thing';
 import colors from '../colors';
 import Paddle from './paddle';
+import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
 
 const MAX_BALL_SPEED = 10;
 
 class Ball extends AbstractThing
 {
-  constructor(g) {
+  constructor(g, color) {
     super(g);
 
     this.sprite = g.circle(
       8,
-      colors.blue.fill,
-      colors.blue.stroke,
+      colors[color].fill,
+      colors[color].stroke,
       2,
     );
 
     this.collidesWith = ['paddles', 'blocks'];
 
-    this.color = 'blue';
+    this.color = color;
   }
 
   screenWrap() {
@@ -49,17 +50,6 @@ class Ball extends AbstractThing
     if (before[0] !== this.sprite.x || before[1] !== this.sprite.y) {
       this.sprite.visible = false;
       this.screenWrappedLastFrame = true;
-    }
-  }
-
-  handleCaughtBall() {
-    if (this.paddle && this.paddle.caught) {
-      this.sprite.x = (
-        this.paddle.sprite.x +
-        (this.paddle.sprite.width / 2) -
-        (this.sprite.width / 2)
-      );
-      this.sprite.y = this.paddle.sprite.y - this.sprite.height;
     }
   }
 
@@ -108,7 +98,6 @@ class Ball extends AbstractThing
 
   update() {
     super.update();
-    this.handleCaughtBall();
     this.screenWrap();
     this.g.move(this.sprite);
   }

@@ -5,36 +5,51 @@ import colors from '../colors';
 
 const BALL_RELEASE_SPEED = 4;
 const PADDLE_MOVE_SPEED = 8;
+export const LEFT = 'left';
+export const RIGHT = 'right';
+export const TOP = 'top';
+export const BOTTOM = 'bottom';
 
 class Paddle extends AbstractThing
 {
-  constructor(g) {
+  constructor(g, options) {
     super(g);
 
     this.sprite = g.rectangle(
-      64,
-      16,
-      colors.blue.fill,
-      colors.blue.stroke,
+      [TOP, BOTTOM].indexOf(options.position) > -1 ? 64 : 16,
+      [TOP, BOTTOM].indexOf(options.position) > -1 ? 16 : 64,
+      colors[options.color].fill,
+      colors[options.color].stroke,
       2
     );
 
-    g.stage.putBottom(this.sprite, 0, -48);
+    switch (options.position) {
+      case TOP:
+        g.stage.putTop(this.sprite, 0, 48);
+        break;
+      case RIGHT:
+        g.stage.putRight(this.sprite, -48, 0);
+        break;
+      case BOTTOM:
+        g.stage.putBottom(this.sprite, 0, -48);
+        break;
+      case LEFT:
+        g.stage.putLeft(this.sprite, 48, 0);
+        break;
+      default:
+        throw new Error('invalid position');
+        this.g.pause();
+    }
 
-    this.rightArrowDown = false;
-    this.leftArrowDown = false;
-    this.upArrowDown = false;
-    this.downArrowDown = false;
-    this.caught = true;
+    this.position = options.position;
+    this.color = options.color;
+    this.player = options.player;
     this.antiCollisionFrames = {};
     this.controls = getPlayerControls(g, 1);
   }
 
   attachStarterBall(ball) {
-    ball.sprite.x = this.sprite.x + this.sprite.width/2 - 4,
-    ball.sprite.y = this.sprite.y - 8
-    this.starterBall = ball;
-    ball.paddle = this;
+    this.caughtBall = ball;
   }
 
   handleVerticalControls() {
@@ -44,7 +59,7 @@ class Paddle extends AbstractThing
     };
     this.controls.up.release = () => {
       this.upArrowDown = false;
-      if (!this.downArrowDown) {
+      if (!this.controls.down.isDown) {
         this.sprite.vy = 0;
       }
     };
@@ -54,7 +69,7 @@ class Paddle extends AbstractThing
     };
     this.controls.down.release = () => {
       this.downArrowDown = false;
-      if (!this.upArrowDown) {
+      if (!this.controls.up.isDown) {
         this.sprite.vy = 0;
       }
     };
@@ -67,7 +82,7 @@ class Paddle extends AbstractThing
     };
     this.controls.right.release = () => {
       this.rightArrowDown = false;
-      if (!this.leftArrowDown) {
+      if (!this.controls.left.isDown) {
         this.sprite.vx = 0;
       }
     };
@@ -77,28 +92,68 @@ class Paddle extends AbstractThing
     };
     this.controls.left.release = () => {
       this.leftArrowDown = false;
-      if (!this.rightArrowDown) {
+      if (!this.controls.right.isDown) {
         this.sprite.vx = 0;
       }
     };
   }
 
   handleInput() {
-    this.handleHorizontalControls();
-    // this.handleVerticalControls();
+    if ([TOP, BOTTOM].indexOf(this.position) > -1) {
+      this.handleHorizontalControls();
+    }
+    if ([LEFT, RIGHT].indexOf(this.position) > -1) {
+      this.handleVerticalControls();
+    }
 
     this.controls.action.press = () => {
-      if (this.caught) {
+      if (this.caughtBall) {
         this.releaseBall();
       }
     }
   }
 
   releaseBall() {
-    this.caught = false;
-    if (this.starterBall) {
-      this.starterBall.sprite.vy = BALL_RELEASE_SPEED * -1;
-      this.starterBall.sprite.vx = this.sprite.vx;
+    if (this.caughtBall) {
+      console.log('got a caught ball');
+      switch (this.position) {
+        case BOTTOM:
+          this.caughtBall.sprite.vy = BALL_RELEASE_SPEED * -1;
+          this.caughtBall.sprite.vx = this.sprite.vx;
+          break;
+        case TOP:
+          this.caughtBall.sprite.vy = BALL_RELEASE_SPEED;
+          this.caughtBall.sprite.vx = this.sprite.vx;
+          break;
+        case LEFT:
+          this.caughtBall.sprite.vy = this.sprite.vy;
+          this.caughtBall.sprite.vx = BALL_RELEASE_SPEED;
+          break;
+        case RIGHT:
+          this.caughtBall.sprite.vy = this.sprite.vy;
+          this.caughtBall.sprite.vx = BALL_RELEASE_SPEED * -1;
+          break;
+      }
+      this.caughtBall = null;
+    }
+  }
+
+  handleCaughtBall() {
+    if (this.caughtBall) {
+      switch (this.position) {
+        case TOP:
+          this.sprite.putBottom(this.caughtBall.sprite);
+          break;
+        case LEFT:
+          this.sprite.putRight(this.caughtBall.sprite);
+          break;
+        case BOTTOM:
+          this.sprite.putTop(this.caughtBall.sprite);
+          break;
+        case RIGHT:
+          this.sprite.putLeft(this.caughtBall.sprite);
+          break;
+      }
     }
   }
 
@@ -107,6 +162,7 @@ class Paddle extends AbstractThing
     const g = this.g;
     g.contain(this.sprite, g.stage.localBounds);
     this.handleInput();
+    this.handleCaughtBall();
 
     g.move(this.sprite);
   }

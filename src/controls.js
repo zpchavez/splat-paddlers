@@ -3,12 +3,20 @@ export function getPlayerControls(g, playerNumber) {
   switch (playerNumber) {
     case 1:
       return {
-        left: keyboard(37),
         up: keyboard(38),
-        right: keyboard(39),
+        left: keyboard(37),
         down: keyboard(40),
-        action: keyboard(32), // spacebar
+        right: keyboard(39),
+        action: keyboard(13), // enter
       }
       break;
+    case 2:
+      return {
+        up: keyboard(87),     // W
+        left: keyboard(65),   // A
+        down: keyboard(),     // S
+        right: keyboard(),    // D
+        action: keyboard(32), // spacebar
+      }
   }
 }

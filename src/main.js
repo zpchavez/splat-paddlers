@@ -34,8 +34,8 @@ var g = ga(
     }
     g.collisionGroups.blocks = blocks;
 
-    const paddle = new Paddle(g);
-    const ball = new Ball(g);
+    const paddle = new Paddle(g, { player: 1, position: 'bottom', color: 'red' });
+    const ball = new Ball(g, 'red');
     g.collisionGroups.balls.push(ball);
     g.collisionGroups.paddles.push(paddle);
 
