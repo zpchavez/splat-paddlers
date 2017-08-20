@@ -25,16 +25,16 @@ class Paddle extends AbstractThing
 
     switch (options.position) {
       case TOP:
-        g.stage.putTop(this.sprite, 0, 48);
+        g.stage.putTop(this.sprite);
         break;
       case RIGHT:
-        g.stage.putRight(this.sprite, -48, 0);
+        g.stage.putRight(this.sprite);
         break;
       case BOTTOM:
-        g.stage.putBottom(this.sprite, 0, -48);
+        g.stage.putBottom(this.sprite);
         break;
       case LEFT:
-        g.stage.putLeft(this.sprite, 48, 0);
+        g.stage.putLeft(this.sprite);
         break;
       default:
         throw new Error('invalid position');
