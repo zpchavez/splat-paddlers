@@ -7,6 +7,14 @@ import Block from './things/block';
 
 const ga = window.ga;
 
+import penguin from './pixelart/penguin.png';
+import musicNote from './pixelart/music-note.png';
+
+const pixelArt = [
+  penguin,
+  musicNote
+];
+
 var g = ga(
   768,
   768,
@@ -27,9 +35,14 @@ var g = ga(
     }
 
     const blocks = [];
+    let counter = 0;
+    let art = pixelArt[g.randomInt(0, pixelArt.length - 1)];
     for (let x = 128; x <= 608; x += 32) {
       for (let y = 128; y <= 608; y += 32) {
-        blocks.push(new Block(g, { x, y }));
+        if (art[counter] !== null) {
+          blocks.push(new Block(g, art[counter], { x, y }));
+        }
+        counter += 1;
       }
     }
     g.collisionGroups.blocks = blocks;
@@ -42,7 +55,7 @@ var g = ga(
     ].forEach(paddleOptions => {
       const paddle = new Paddle(g, paddleOptions);
       g.collisionGroups.paddles.push(paddle);
-      if (['top', 'bottom'].indexOf(paddleOptions.position) > -1) {
+      if (['left', 'right'].indexOf(paddleOptions.position) > -1) {
         const ball = new Ball(g, paddleOptions.color);
         paddle.attachStarterBall(ball);
         g.collisionGroups.balls.push(ball);

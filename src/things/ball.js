@@ -5,7 +5,7 @@ import Paddle from './paddle';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
 
 const MAX_BALL_SPEED = 5;
-const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
+// const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
 
 class Ball extends AbstractThing
 {
@@ -36,13 +36,13 @@ class Ball extends AbstractThing
       this.sprite.vy *= -1; // top or bottom side bounce
       bounced = true;
     }
-    if (bounced) {
-      this.edgeBounces += 1;
-    }
-    if (this.edgeBounces >= EDGE_BOUNCES_BEFORE_TURNING_BLANK) {
-      this.changeBallColor('blank');
-      this.edgeBounces = 0;
-    }
+    // if (bounced) {
+    //   this.edgeBounces += 1;
+    // }
+    // if (this.edgeBounces >= EDGE_BOUNCES_BEFORE_TURNING_BLANK) {
+    //   this.changeBallColor('blank');
+    //   this.edgeBounces = 0;
+    // }
   }
 
   screenWrap() {

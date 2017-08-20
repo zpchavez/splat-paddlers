@@ -4,25 +4,26 @@ import colors from '../colors';
 
 class Block extends AbstractThing
 {
-  constructor(g, position) {
+  constructor(g, fillColor, position) {
     super(g);
     this.color = 'blank';
+    this.fillColor = fillColor;
     this.position = position;
     this.createSprite();
   }
 
   createSprite() {
     this.sprite = this.g.rectangle(
-      32,
-      32,
+      30,
+      30,
+      `#${this.fillColor}`,
       colors[this.color].fill,
-      colors[this.color].stroke,
       2,
       this.position.x,
       this.position.y
     );
     if (this.color === 'blank') {
-      this.sprite.alpha = 0.0;
+      this.sprite.alpha = 0;
     } else {
       this.sprite.alpha = 0.5;
     }
