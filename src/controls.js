@@ -14,8 +14,8 @@ export function getPlayerControls(g, playerNumber) {
       return {
         up: keyboard(87),     // W
         left: keyboard(65),   // A
-        down: keyboard(),     // S
-        right: keyboard(),    // D
+        down: keyboard(83),   // S
+        right: keyboard(68),  // D
         action: keyboard(32), // spacebar
       }
   }

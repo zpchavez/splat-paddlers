@@ -45,7 +45,7 @@ class Paddle extends AbstractThing
     this.color = options.color;
     this.player = options.player;
     this.antiCollisionFrames = {};
-    this.controls = getPlayerControls(g, 1);
+    this.controls = getPlayerControls(g, this.player);
   }
 
   attachStarterBall(ball) {
@@ -115,7 +115,6 @@ class Paddle extends AbstractThing
 
   releaseBall() {
     if (this.caughtBall) {
-      console.log('got a caught ball');
       switch (this.position) {
         case BOTTOM:
           this.caughtBall.sprite.vy = BALL_RELEASE_SPEED * -1;

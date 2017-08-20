@@ -7,6 +7,11 @@ class AbstractThing
     this.collidesWith = [];
     this.antiCollisionFrames = [];
     this.g = g;
+
+    if (!g.things) {
+      g.things = [];
+    }
+    g.things.push(this);
   }
 
   getPreviousPosition() {
