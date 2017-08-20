@@ -4,7 +4,8 @@ import colors from '../colors';
 import Paddle from './paddle';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
 
-const MAX_BALL_SPEED = 10;
+const MAX_BALL_SPEED = 5;
+const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
 
 class Ball extends AbstractThing
 {
@@ -13,6 +14,7 @@ class Ball extends AbstractThing
 
     this.color = color;
     this.createSprite();
+    this.edgeBounces = 0;
     this.collidesWith = ['paddles', 'blocks'];
   }
 
@@ -21,8 +23,26 @@ class Ball extends AbstractThing
       8,
       colors[this.color].fill,
       colors[this.color].stroke,
-      2,
+      3,
     );
+  }
+
+  bounceOffBounds() {
+    let bounced = false;
+    if (this.sprite.x <= 0 || this.sprite.x >= this.g.stage.width - this.sprite.width) {
+      this.sprite.vx *= -1; // left or right side bounce
+      bounced = true;
+    } else if (this.sprite.y <= 0 || this.sprite.y >= this.g.stage.height - this.sprite.height) {
+      this.sprite.vy *= -1; // top or bottom side bounce
+      bounced = true;
+    }
+    if (bounced) {
+      this.edgeBounces += 1;
+    }
+    if (this.edgeBounces >= EDGE_BOUNCES_BEFORE_TURNING_BLANK) {
+      this.changeBallColor('blank');
+      this.edgeBounces = 0;
+    }
   }
 
   screenWrap() {
@@ -122,7 +142,7 @@ class Ball extends AbstractThing
 
   update() {
     super.update();
-    this.screenWrap();
+    this.bounceOffBounds();
     this.g.move(this.sprite);
   }
 }

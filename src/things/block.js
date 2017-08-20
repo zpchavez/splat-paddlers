@@ -21,7 +21,11 @@ class Block extends AbstractThing
       this.position.x,
       this.position.y
     );
-    this.sprite.alpha = 0.5;
+    if (this.color === 'blank') {
+      this.sprite.alpha = 0.0;
+    } else {
+      this.sprite.alpha = 0.5;
+    }
   }
 
   handleCollision(otherThing) {
