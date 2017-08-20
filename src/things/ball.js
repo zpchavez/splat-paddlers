@@ -36,13 +36,13 @@ class Ball extends AbstractThing
       this.sprite.x = this.g.stage.width;
     }
     if (this.sprite.x > this.g.stage.width) {
-      this.sprite.x = 0;
+      this.sprite.x = this.sprite.width * -1;
     }
     if (this.sprite.y < this.sprite.height * -1) {
       this.sprite.y = this.g.stage.height;
     }
     if (this.sprite.y > this.g.stage.height) {
-      this.sprite.y = 0;
+      this.sprite.y = this.sprite.height * -1;
     }
 
     // When changing a sprite's position, ga shows it moving across
