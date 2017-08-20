@@ -11,16 +11,18 @@ class Ball extends AbstractThing
   constructor(g, color) {
     super(g);
 
-    this.sprite = g.circle(
+    this.color = color;
+    this.createSprite();
+    this.collidesWith = ['paddles', 'blocks'];
+  }
+
+  createSprite() {
+    this.sprite = this.g.circle(
       8,
-      colors[color].fill,
-      colors[color].stroke,
+      colors[this.color].fill,
+      colors[this.color].stroke,
       2,
     );
-
-    this.collidesWith = ['paddles', 'blocks'];
-
-    this.color = color;
   }
 
   screenWrap() {
@@ -54,6 +56,17 @@ class Ball extends AbstractThing
     }
   }
 
+  changeBallColor(newColor) {
+    const oldSprite = this.sprite;
+    this.g.remove(this.sprite);
+    this.color = newColor;
+    this.createSprite();
+    this.sprite.x = oldSprite.x;
+    this.sprite.y = oldSprite.y;
+    this.sprite.vx = oldSprite.vx;
+    this.sprite.vy = oldSprite.vy;
+  }
+
   handleCollision(otherThing) {
     if (
       otherThing instanceof Paddle ||
@@ -66,6 +79,10 @@ class Ball extends AbstractThing
       const ball = this;
       const ballPos = ball.getPreviousPosition();
       const otherThingPos = otherThing.getPreviousPosition();
+
+      if (otherThing instanceof Paddle && otherThing.color !== this.color) {
+        this.changeBallColor(otherThing.color);
+      }
 
       let hitRegion = null;
 
