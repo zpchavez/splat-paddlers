@@ -96,6 +96,7 @@ class Ball extends AbstractThing
         otherThing.color !== this.color
       )
     ) {
+      this.edgeBounces = 0; // reset edge bounces
       const ball = this;
       const ballPos = ball.getPreviousPosition();
       const otherThingPos = otherThing.getPreviousPosition();
