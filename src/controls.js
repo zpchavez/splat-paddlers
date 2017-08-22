@@ -18,5 +18,9 @@ export function getPlayerControls(g, playerNumber) {
         right: keyboard(68),  // D
         action: keyboard(32), // spacebar
       }
+      break;
+    default:
+      throw new Error(`Invalid layer number: ${playerNumber}`);
+      g.pause();
   }
 }

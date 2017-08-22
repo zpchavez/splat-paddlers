@@ -25,7 +25,7 @@ class Paddle extends AbstractThing
 
     switch (options.position) {
       case TOP:
-        g.stage.putTop(this.sprite);
+        g.stage.putTop(this.sprite, 0, 48);
         break;
       case RIGHT:
         g.stage.putRight(this.sprite);
@@ -159,7 +159,11 @@ class Paddle extends AbstractThing
   update() {
     super.update();
     const g = this.g;
-    g.contain(this.sprite, g.stage.localBounds);
+
+    const boundsExcludingHud = Object.assign({}, g.stage.localBounds);
+    boundsExcludingHud.y = 32;
+    g.contain(this.sprite, boundsExcludingHud);
+
     this.handleInput();
     this.handleCaughtBall();
 

@@ -4,6 +4,7 @@ import colors from '../colors';
 import Paddle from './paddle';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
 
+const TOP_BOUNDS = 32;
 const MAX_BALL_SPEED = 5;
 const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
 
@@ -32,7 +33,7 @@ class Ball extends AbstractThing
     if (this.sprite.x <= 0 || this.sprite.x >= this.g.stage.width - this.sprite.width) {
       this.sprite.vx *= -1; // left or right side bounce
       bounced = true;
-    } else if (this.sprite.y <= 0 || this.sprite.y >= this.g.stage.height - this.sprite.height) {
+    } else if (this.sprite.y <= TOP_BOUNDS || this.sprite.y >= this.g.stage.height - this.sprite.height) {
       this.sprite.vy *= -1; // top or bottom side bounce
       bounced = true;
     }
