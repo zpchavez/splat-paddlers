@@ -126,8 +126,10 @@ class Ball extends AbstractThing
         } else {
           ball.sprite.vx = (ball.sprite.vx * -1) + otherThing.sprite.vx;
         }
+        ball.sprite.vy += otherThing.sprite.vy;
         // Limit max speed
         ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
+        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
       } else {
         // If otherThing moving in same direction as ball, add velocities
         if (ball.sprite.vy * otherThing.sprite.vy > 0) {
@@ -135,8 +137,10 @@ class Ball extends AbstractThing
         } else {
           ball.sprite.vy = (ball.sprite.vy * -1) + otherThing.sprite.vy;
         }
+        ball.sprite.vx += otherThing.sprite.vx;
         // Limit max speed
         ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
+        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
       }
     }
   }
