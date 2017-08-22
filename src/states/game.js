@@ -26,15 +26,20 @@ export default (g) => {
   }
   g.collisionGroups.blocks = blocks;
 
-  [
+  const paddleInfo = [
     { position: 'bottom', color: 'blue', player: 1},
     { position: 'right', color: 'blue', player: 1},
     { position: 'top', color: 'red', player: 2},
     { position: 'left', color: 'red', player: 2},
-  ].forEach(paddleOptions => {
+  ];
+
+  paddleInfo[g.randomInt(0, 1)].startWithBall = true;
+  paddleInfo[g.randomInt(2, 3)].startWithBall = true;
+
+  paddleInfo.forEach(paddleOptions => {
     const paddle = new Paddle(g, paddleOptions);
     g.collisionGroups.paddles.push(paddle);
-    if (['top', 'bottom'].indexOf(paddleOptions.position) > -1) {
+    if (paddleOptions.startWithBall) {
       const ball = new Ball(g, paddleOptions.color);
       paddle.attachStarterBall(ball);
       g.collisionGroups.balls.push(ball);
