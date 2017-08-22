@@ -16,9 +16,6 @@ var g = ga(
 
     g.state = gameState(g);
   },
-  [
-    "assets/tileset.png",
-  ]
 );
 
 g.start();
