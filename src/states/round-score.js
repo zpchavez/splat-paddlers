@@ -24,16 +24,11 @@ module.exports = (g) => {
       128
     )
   );
-  Object.keys(score).forEach((color, index) => {
-    scoreTexts.push(
-      textUtil.createHorizontallyCenteredText(
-        `${color}: ${score[color]}`,
-        36,
-        '#000000',
-        128 + (32 * (index + 2))
-      )
-    );
-  });
+  const scoreTextStrings = Object.keys(score).map(color => `${color}: ${score[color]}`);
+  scoreTexts.push.apply(
+    scoreTexts,
+    textUtil.createHorizontallyCenteredTexts(scoreTextStrings, 36, '#000000', 192, 32)
+  );
 
   g.wait(3000, () => {
     scoreTexts.forEach(text => g.remove(text));
