@@ -1,3 +1,4 @@
+import TextUtil from '../text-util';
 import gameState from './game';
 import { getPlayerControls } from '../controls';
 
@@ -12,23 +13,23 @@ module.exports = (g) => {
     }
   })
   g.things.forEach(thing => g.remove(thing.sprite));
+
+  const textUtil = new TextUtil(g);
   const scoreTexts = [];
   scoreTexts.push(
-    g.text(
+    textUtil.createHorizontallyCenteredText(
       'Round score',
-      '48px sans-serif',
+      48,
       '#000000',
-      g.stage.halfWidth - (11 * 12),
       128
     )
   );
   Object.keys(score).forEach((color, index) => {
     scoreTexts.push(
-      g.text(
+      textUtil.createHorizontallyCenteredText(
         `${color}: ${score[color]}`,
-        '24px sans-serif',
+        36,
         '#000000',
-        g.stage.halfWidth - 32,
         128 + (32 * (index + 2))
       )
     );
