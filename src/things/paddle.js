@@ -46,13 +46,14 @@ class Paddle extends AbstractThing
     this.player = options.player;
     this.antiCollisionFrames = {};
     this.controls = getPlayerControls(g, this.player);
+    this.initInput();
   }
 
   attachStarterBall(ball) {
     this.caughtBall = ball;
   }
 
-  handleVerticalControls() {
+  initVerticalControls() {
     this.controls.up.press = () => {
       this.upArrowDown = true;
       this.sprite.vy = PADDLE_MOVE_SPEED * -1;
@@ -75,7 +76,7 @@ class Paddle extends AbstractThing
     };
   }
 
-  handleHorizontalControls() {
+  initHorizontalControls() {
     this.controls.right.press = () => {
       this.rightArrowDown = true;
       this.sprite.vx = PADDLE_MOVE_SPEED;
@@ -98,12 +99,12 @@ class Paddle extends AbstractThing
     };
   }
 
-  handleInput() {
+  initInput() {
     if ([TOP, BOTTOM].indexOf(this.position) > -1) {
-      this.handleHorizontalControls();
+      this.initHorizontalControls();
     }
     if ([LEFT, RIGHT].indexOf(this.position) > -1) {
-      this.handleVerticalControls();
+      this.initVerticalControls();
     }
 
     this.controls.action.press = () => {
@@ -164,7 +165,6 @@ class Paddle extends AbstractThing
     boundsExcludingHud.y = 32;
     g.contain(this.sprite, boundsExcludingHud);
 
-    this.handleInput();
     this.handleCaughtBall();
 
     g.move(this.sprite);
