@@ -2,6 +2,7 @@ require('../lib/ga.js');
 require('../lib/custom.js');
 
 import gameState from './states/game';
+import mainMenuState from './states/main-menu';
 
 const ga = window.ga;
 
@@ -14,6 +15,7 @@ var g = ga(
     g.canvas.style.margin = "auto";
     g.backgroundColor = "white";
 
+    // g.state = mainMenuState(g);
     g.state = gameState(g);
   },
 );
