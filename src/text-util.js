@@ -2,16 +2,35 @@ class TextUtil
 {
   constructor(g) {
     this.g = g;
+    this.texts = [];
   }
 
-  createHorizontallyCenteredTexts(texts, size, color, y, spacing) {
+  clear() {
+    this.g.remove(this.texts);
+  }
+
+  createText(string, size, color, x, y) {
+    const text = this.g.text(
+      string,
+      `${size}px monospace`,
+      color,
+      x,
+      y
+    );
+
+    this.texts.push(text);
+
+    return text;
+  }
+
+  createHorizontallyCenteredTexts(strings, size, color, y, spacing) {
     const g = this.g;
     const letterSpacing = size * 0.2;
-    let xAdjustment = texts.length === 1
-      ? texts[0].length
-      : texts.reduce((text, acc) => text.length > acc.length ? text.length : acc.length);
+    let xAdjustment = strings.length === 1
+      ? strings[0].length
+      : strings.reduce((text, acc) => text.length > acc.length ? text.length : acc.length);
 
-    return texts.map(
+    const texts = strings.map(
       (text, index) => g.text(
         text,
         `${size}px monospace`,
@@ -20,18 +39,26 @@ class TextUtil
         y + (spacing * index)
       )
     );
+
+    this.texts.push.apply(this.texts, texts);
+
+    return texts;
   }
 
-  createHorizontallyCenteredText(text, size, color, y) {
+  createHorizontallyCenteredText(string, size, color, y) {
     const letterSpacing = size * 0.2;
     const g = this.g
-    return g.text(
-      text,
+    const text = g.text(
+      string,
       `${size}px monospace`,
       color,
-      g.stage.halfWidth - ((text.length / 2) * ((size + letterSpacing) / 2)),
+      g.stage.halfWidth - ((string.length / 2) * ((size + letterSpacing) / 2)),
       y
     );
+
+    this.texts.push(text);
+
+    return text;
   }
 }
 

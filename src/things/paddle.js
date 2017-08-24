@@ -45,8 +45,8 @@ class Paddle extends AbstractThing
     this.color = options.color;
     this.player = options.player;
     this.antiCollisionFrames = {};
-    this.controls = getPlayerControls(g, this.player);
     this.initInput();
+    this.controls = getPlayerControls(g, this.player);
   }
 
   attachStarterBall(ball) {
@@ -100,6 +100,8 @@ class Paddle extends AbstractThing
   }
 
   initInput() {
+    this.controls = getPlayerControls(this.g, this.player);
+
     if ([TOP, BOTTOM].indexOf(this.position) > -1) {
       this.initHorizontalControls();
     }
