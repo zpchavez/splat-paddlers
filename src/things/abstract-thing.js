@@ -2,7 +2,7 @@ const ANTI_COLLISION_FRAMES = 10;
 
 class AbstractThing
 {
-  constructor(g) {
+  constructor(g, name) {
     if (!g.getAutoIncrementedId) {
       let thingIdIncrementor = 0;
       g.getAutoIncrementedId = () => {
@@ -10,8 +10,16 @@ class AbstractThing
       }
     }
 
-    this.id = g.getAutoIncrementedId()
+    if (!g.collisionGroups) {
+      g.collisionGroups = {};
+    }
+    if (!g.collisionGroups[name]) {
+      g.collisionGroups[name] = [];
+    }
 
+    this.id = g.getAutoIncrementedId()
+    g.collisionGroups[name].push(this);
+    this.name = name;
     this.collidesWith = [];
     this.antiCollisionFrames = [];
     this.g = g;

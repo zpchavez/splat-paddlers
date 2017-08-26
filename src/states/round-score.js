@@ -16,10 +16,10 @@ const lpad = function(str, len) {
 
 module.exports = (g) => {
   let score = {};
-  g.collisionGroups.paddles.forEach(paddle => {
+  g.collisionGroups.paddle.forEach(paddle => {
     score[paddle.color] = 0;
   });
-  g.collisionGroups.blocks.forEach(block => {
+  g.collisionGroups.block.forEach(block => {
     if (block.color !== 'blank') {
       score[block.color] += 1;
     }

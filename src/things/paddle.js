@@ -10,14 +10,18 @@ export const RIGHT = 'right';
 export const TOP = 'top';
 export const BOTTOM = 'bottom';
 
+export const PADDLE_LENGTH = 64;
+
 class Paddle extends AbstractThing
 {
-  constructor(g, options) {
-    super(g);
+  constructor(g, options={}) {
+    super(g, 'paddle');
+
+    options.length || (options.length = PADDLE_LENGTH);
 
     this.sprite = g.rectangle(
-      [TOP, BOTTOM].indexOf(options.position) > -1 ? 64 : 16,
-      [TOP, BOTTOM].indexOf(options.position) > -1 ? 16 : 64,
+      [TOP, BOTTOM].indexOf(options.position) > -1 ? options.length : 16,
+      [TOP, BOTTOM].indexOf(options.position) > -1 ? 16 : options.length,
       colors[options.color].fill,
       colors[options.color].stroke,
       2
@@ -28,13 +32,13 @@ class Paddle extends AbstractThing
         g.stage.putTop(this.sprite, 0, 48);
         break;
       case RIGHT:
-        g.stage.putRight(this.sprite);
+        g.stage.putRight(this.sprite, this.sprite.width * -1);
         break;
       case BOTTOM:
-        g.stage.putBottom(this.sprite);
+        g.stage.putBottom(this.sprite, 0, this.sprite.height * -1);
         break;
       case LEFT:
-        g.stage.putLeft(this.sprite);
+        g.stage.putLeft(this.sprite, this.sprite.width, 0);
         break;
       default:
         this.g.pause();
@@ -51,6 +55,7 @@ class Paddle extends AbstractThing
 
   attachStarterBall(ball) {
     this.caughtBall = ball;
+    this.handleCaughtBall();
   }
 
   initVerticalControls() {
@@ -163,13 +168,18 @@ class Paddle extends AbstractThing
     super.update();
     const g = this.g;
 
-    const boundsExcludingHud = Object.assign({}, g.stage.localBounds);
-    boundsExcludingHud.y = 32;
-    g.contain(this.sprite, boundsExcludingHud);
-
     this.handleCaughtBall();
 
     g.move(this.sprite);
+
+    const bounds = Object.assign({}, g.stage.localBounds);
+    if (this.position === TOP || this.position === BOTTOM) {
+      bounds.x = 32;
+      bounds.width -= 32;
+    } else if (this.position === LEFT || this.position === RIGHT) {
+      bounds.y = 32;
+    }
+    g.contain(this.sprite, bounds);
   }
 }
 

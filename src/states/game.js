@@ -7,11 +7,7 @@ import roundScoreState from '../states/round-score';
 
 export default (g) => {
   g.things = [];
-  g.collisionGroups = {
-    balls: [],
-    blocks: [],
-    paddles: [],
-  };
+  g.collisionGroups = {};
 
   const blocks = [];
   for (let x = 128; x <= 608; x += 32) {
@@ -19,15 +15,14 @@ export default (g) => {
       blocks.push(new Block(g, { x, y }));
     }
   }
-  g.collisionGroups.blocks = blocks;
 
   let paddleInfo = [];
   if (g.globals.players === 2 || g.globals.teams) {
     paddleInfo = [
-      { position: 'bottom', color: 'blue'},
-      { position: 'right', color: 'blue'},
-      { position: 'top', color: 'red'},
-      { position: 'left', color: 'red'},
+      {position: 'bottom', color: 'blue'},
+      {position: 'right', color: 'blue'},
+      {position: 'top', color: 'red'},
+      {position: 'left', color: 'red'},
     ];
     if (g.globals.players === 2) {
       paddleInfo[0].player = 1;
@@ -44,20 +39,18 @@ export default (g) => {
     paddleInfo[g.randomInt(2, 3)].startWithBall = true;
   } else if (g.globals.players === 4) {
     paddleInfo = [
-      { position: 'bottom', color: 'blue', player: 1, startWithBall: true},
-      { position: 'right', color: 'red', player: 2, startWithBall: true},
-      { position: 'top', color: 'yellow', player: 3, startWithBall: true},
-      { position: 'left', color: 'green', player: 4, startWithBall: true},
+      {position: 'bottom', color: 'blue', player: 1, startWithBall: true},
+      {position: 'right', color: 'red', player: 2, startWithBall: true},
+      {position: 'top', color: 'yellow', player: 3, startWithBall: true},
+      {position: 'left', color: 'green', player: 4, startWithBall: true},
     ];
   }
 
   paddleInfo.forEach(paddleOptions => {
     const paddle = new Paddle(g, paddleOptions);
-    g.collisionGroups.paddles.push(paddle);
     if (paddleOptions.startWithBall) {
       const ball = new Ball(g, paddleOptions.color);
       paddle.attachStarterBall(ball);
-      g.collisionGroups.balls.push(ball);
     }
   })
 

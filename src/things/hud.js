@@ -5,7 +5,7 @@ const TIMER_SECONDS = 90;
 class Hud extends AbstractThing
 {
   constructor(g, options={}) {
-    super(g);
+    super(g, 'hud');
 
     this.sprite = g.rectangle(
       768,

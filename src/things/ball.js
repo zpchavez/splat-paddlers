@@ -11,12 +11,12 @@ const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
 class Ball extends AbstractThing
 {
   constructor(g, color) {
-    super(g);
+    super(g, 'ball');
 
     this.color = color;
     this.createSprite();
     this.edgeBounces = 0;
-    this.collidesWith = ['paddles', 'blocks'];
+    this.collidesWith = ['paddle', 'block'];
   }
 
   createSprite() {
@@ -31,9 +31,11 @@ class Ball extends AbstractThing
   bounceOffBounds() {
     let bounced = false;
     if (this.sprite.x <= 0 || this.sprite.x >= this.g.stage.width - this.sprite.width) {
+      console.log('side bounce');
       this.sprite.vx *= -1; // left or right side bounce
       bounced = true;
     } else if (this.sprite.y <= TOP_BOUNDS || this.sprite.y >= this.g.stage.height - this.sprite.height) {
+      console.log('top/bottom bounce');
       this.sprite.vy *= -1; // top or bottom side bounce
       bounced = true;
     }
