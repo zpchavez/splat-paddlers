@@ -1,7 +1,9 @@
 import AbstractThing from './abstract-thing';
 import Ball from './ball';
-import { getPlayerControls } from '../controls';
 import colors from '../colors';
+import { getPlayerControls } from '../controls';
+import { HUD_HEIGHT } from './hud';
+import { PIT_SIZE } from './pit';
 
 const BALL_RELEASE_SPEED = 4;
 const PADDLE_MOVE_SPEED = 8;
@@ -174,11 +176,11 @@ class Paddle extends AbstractThing
 
     const bounds = Object.assign({}, g.stage.localBounds);
     if (this.position === TOP || this.position === BOTTOM) {
-      bounds.x = 32;
-      bounds.width -= 32;
+      bounds.x = PIT_SIZE;
+      bounds.width -= PIT_SIZE;
     } else if (this.position === LEFT || this.position === RIGHT) {
-      bounds.y = 64;
-      bounds.height -= 32;
+      bounds.y = PIT_SIZE + HUD_HEIGHT;
+      bounds.height -= PIT_SIZE;
     }
     g.contain(this.sprite, bounds);
   }

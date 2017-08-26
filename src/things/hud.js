@@ -1,6 +1,7 @@
 import AbstractThing from './abstract-thing';
 
 const TIMER_SECONDS = 90;
+export const HUD_HEIGHT = 32;
 
 class Hud extends AbstractThing
 {
@@ -9,7 +10,7 @@ class Hud extends AbstractThing
 
     this.sprite = g.rectangle(
       768,
-      31,
+      HUD_HEIGHT - 1,
       '#aaaaaa',
       '#000000',
       0,

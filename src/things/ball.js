@@ -8,6 +8,7 @@ import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
 const TOP_BOUNDS = 32;
 const MAX_BALL_SPEED = 5;
 const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
+export const MODS = ['stickyball'];
 
 class Ball extends AbstractThing
 {
@@ -18,6 +19,7 @@ class Ball extends AbstractThing
     this.createSprite();
     this.edgeBounces = 0;
     this.collidesWith = ['paddle', 'block', 'pit'];
+    this.mod = null;
   }
 
   createSprite() {
@@ -45,6 +47,44 @@ class Ball extends AbstractThing
       this.changeBallColor('blank');
       this.edgeBounces = 0;
     }
+  }
+
+  releaseFromPit(pit) {
+    this.createSprite();
+
+    const MIN_SPEED = 2;
+
+    switch (pit.position) {
+      case 'TOP LEFT':
+        this.sprite.x = pit.sprite.x + pit.sprite.halfWidth;
+        this.sprite.y = pit.sprite.y + pit.sprite.halfHeight;
+        this.sprite.vx = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED);
+        this.sprite.vy = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED);
+        break;
+      case 'TOP RIGHT':
+        this.sprite.x = pit.sprite.x - pit.sprite.halfWidth;
+        this.sprite.y = pit.sprite.y + pit.sprite.halfHeight;
+        this.sprite.vx = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED) * -1;
+        this.sprite.vy = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED);
+        break;
+      case 'BOTTOM LEFT':
+        this.sprite.x = pit.sprite.x + pit.sprite.halfWidth;
+        this.sprite.y = pit.sprite.y - pit.sprite.halfHeight;
+        this.sprite.vx = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED);
+        this.sprite.vy = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED) * -1;
+        break;
+      case 'BOTTOM RIGHT':
+        this.sprite.x = pit.sprite.x - pit.sprite.halfWidth;
+        this.sprite.y = pit.sprite.y - pit.sprite.halfHeight;
+        this.sprite.vx = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED) * -1;
+        this.sprite.vy = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED) * -1;
+        break;
+      default:
+        this.g.pause();
+        throw new Error(`Invalid pit position: ${pit.position}`)
+    }
+
+    this.antiCollisionFrames[pit.id] = 10;
   }
 
   changeBallColor(newColor) {

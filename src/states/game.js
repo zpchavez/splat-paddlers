@@ -59,10 +59,10 @@ export default (g) => {
     g.state = roundScoreState(g);
   }});
 
-  new Pit(g, 0, 32);
-  new Pit(g, g.stage.width-32, 32);
-  new Pit(g, 0, g.stage.height-32);
-  new Pit(g, g.stage.width-32, g.stage.height-32);
+  new Pit(g, 'TOP LEFT');
+  new Pit(g, 'TOP RIGHT');
+  new Pit(g, 'BOTTOM LEFT');
+  new Pit(g, 'BOTTOM RIGHT');
 
   return () => {
     g.things.forEach(thing => thing.update());
