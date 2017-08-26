@@ -1,7 +1,7 @@
-import Paddle from '../things/paddle';
 import Ball from '../things/ball';
 import Block from '../things/block';
 import Hud from '../things/hud';
+import Paddle from '../things/paddle';
 
 import roundScoreState from '../states/round-score';
 
@@ -9,14 +9,9 @@ export default (g) => {
   g.things = [];
   g.collisionGroups = {
     balls: [],
-    paddles: [],
     blocks: [],
+    paddles: [],
   };
-
-  let thingIdIncrementor = 0;
-  g.getAutoIncrementedId = () => {
-    return thingIdIncrementor += 1;
-  }
 
   const blocks = [];
   for (let x = 128; x <= 608; x += 32) {
