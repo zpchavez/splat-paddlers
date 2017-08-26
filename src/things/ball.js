@@ -46,37 +46,6 @@ class Ball extends AbstractThing
     }
   }
 
-  screenWrap() {
-    if (this.screenWrappedLastFrame) {
-      this.sprite.visible = true;
-      this.screenWrappedLastFrame = false;
-    }
-
-    let before = [this.sprite.x, this.sprite.y];
-    if (this.sprite.x < this.sprite.width * -1) {
-      this.sprite.x = this.g.stage.width;
-    }
-    if (this.sprite.x > this.g.stage.width) {
-      this.sprite.x = this.sprite.width * -1;
-    }
-    if (this.sprite.y < this.sprite.height * -1) {
-      this.sprite.y = this.g.stage.height;
-    }
-    if (this.sprite.y > this.g.stage.height) {
-      this.sprite.y = this.sprite.height * -1;
-    }
-
-    // When changing a sprite's position, ga shows it moving across
-    // the intervening space really fast, instead of just changing
-    // its position instantanously, resulting in the sprite noticeably flickering
-    // at some point on the screen. To get around this, make the sprite invisible
-    // for one frame.
-    if (before[0] !== this.sprite.x || before[1] !== this.sprite.y) {
-      this.sprite.visible = false;
-      this.screenWrappedLastFrame = true;
-    }
-  }
-
   changeBallColor(newColor) {
     const oldSprite = this.sprite;
     this.g.remove(this.sprite);
