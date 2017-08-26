@@ -2,6 +2,7 @@ import Ball from '../things/ball';
 import Block from '../things/block';
 import Hud from '../things/hud';
 import Paddle from '../things/paddle';
+import Pit from '../things/pit';
 
 import roundScoreState from '../states/round-score';
 
@@ -57,6 +58,11 @@ export default (g) => {
   const hud = new Hud(g, { onTimerReachesZero: () => {
     g.state = roundScoreState(g);
   }});
+
+  new Pit(g, 0, 32);
+  new Pit(g, g.stage.width-32, 32);
+  new Pit(g, 0, g.stage.height-32);
+  new Pit(g, g.stage.width-32, g.stage.height-32);
 
   return () => {
     g.things.forEach(thing => thing.update());

@@ -2,6 +2,7 @@ import AbstractThing from './abstract-thing';
 import Block from './block';
 import colors from '../colors';
 import Paddle from './paddle';
+import Pit from './pit';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
 
 const TOP_BOUNDS = 32;
@@ -16,7 +17,7 @@ class Ball extends AbstractThing
     this.color = color;
     this.createSprite();
     this.edgeBounces = 0;
-    this.collidesWith = ['paddle', 'block'];
+    this.collidesWith = ['paddle', 'block', 'pit'];
   }
 
   createSprite() {
@@ -31,11 +32,9 @@ class Ball extends AbstractThing
   bounceOffBounds() {
     let bounced = false;
     if (this.sprite.x <= 0 || this.sprite.x >= this.g.stage.width - this.sprite.width) {
-      console.log('side bounce');
       this.sprite.vx *= -1; // left or right side bounce
       bounced = true;
     } else if (this.sprite.y <= TOP_BOUNDS || this.sprite.y >= this.g.stage.height - this.sprite.height) {
-      console.log('top/bottom bounce');
       this.sprite.vy *= -1; // top or bottom side bounce
       bounced = true;
     }
@@ -118,13 +117,18 @@ class Ball extends AbstractThing
       )
     ) {
       this.bounceOff(otherThing);
+    } else if (otherThing instanceof Pit) {
+      this.g.remove(this.sprite);
+      this.sprite.visible = false;
     }
   }
 
   update() {
     super.update();
-    this.bounceOffBounds();
-    this.g.move(this.sprite);
+    if (this.sprite.visible) {
+      this.bounceOffBounds();
+      this.g.move(this.sprite);
+    }
   }
 }
 

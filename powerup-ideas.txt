@@ -1,0 +1,7 @@
+Growball - paddle grows with every hit
+Powerball - goes through all blocks
+Splatball - on bounce effects blocks in a splat pattern
+Screwball - Does curlicues
+Zagball - Zigzags
+Teleball - Can be controlled slightly by the last player to hit it
+Stickyball - sticks to paddle every time

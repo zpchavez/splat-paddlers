@@ -168,16 +168,17 @@ class Paddle extends AbstractThing
     super.update();
     const g = this.g;
 
-    this.handleCaughtBall();
-
     g.move(this.sprite);
+
+    this.handleCaughtBall();
 
     const bounds = Object.assign({}, g.stage.localBounds);
     if (this.position === TOP || this.position === BOTTOM) {
       bounds.x = 32;
       bounds.width -= 32;
     } else if (this.position === LEFT || this.position === RIGHT) {
-      bounds.y = 32;
+      bounds.y = 64;
+      bounds.height -= 32;
     }
     g.contain(this.sprite, bounds);
   }

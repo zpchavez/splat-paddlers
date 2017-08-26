@@ -43,6 +43,8 @@ class AbstractThing
     this.collidesWith.forEach(collisionGroup => {
       g.collisionGroups[collisionGroup].forEach(otherThing => {
         if (
+          this.sprite.visible &&
+          otherThing.sprite.visible &&
           this.sprite !== otherThing.sprite &&
           g.hitTestRectangle(this.sprite, otherThing.sprite) &&
           !this.antiCollisionFrames[otherThing.id] &&
