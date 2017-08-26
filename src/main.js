@@ -19,4 +19,3 @@ var g = ga(
 );
 
 g.start();
-g.enableFullscreen();
