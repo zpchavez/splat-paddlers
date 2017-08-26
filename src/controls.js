@@ -38,7 +38,7 @@ export function getPlayerControls(g, playerNumber) {
       }
       break;
     default:
-      throw new Error(`Invalid layer number: ${playerNumber}`);
       g.pause();
+      throw new Error(`Invalid layer number: ${playerNumber}`);
   }
 }

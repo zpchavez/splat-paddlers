@@ -37,8 +37,8 @@ class Paddle extends AbstractThing
         g.stage.putLeft(this.sprite);
         break;
       default:
-        throw new Error('invalid position');
         this.g.pause();
+        throw new Error('invalid position');
     }
 
     this.position = options.position;

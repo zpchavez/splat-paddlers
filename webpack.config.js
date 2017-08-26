@@ -3,6 +3,7 @@ var WebpackError = require('webpack-error-notification');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ClosureCompilerPlugin = require('webpack-closure-compiler');
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 var path = require('path');
 
 var assetsPath = path.resolve(__dirname, 'assets');
@@ -41,15 +42,21 @@ if (environment === 'development') {
     new WebpackError(process.platform)
   );
 } else if (environment === 'production') {
-  config.plugins.push(
-    new ClosureCompilerPlugin({
-      jsCompiler: true,
-      compiler: {
-        compilation_level: 'SIMPLE',
-        language_in: 'ECMASCRIPT5'
-      }
-    })
-  );
+  if (process.env.MINIFIER === 'uglify') {
+    config.plugins.push(
+      new UglifyJSPlugin()
+    );
+  } else if (process.env.MINIFIER === 'closure') {
+    config.plugins.push(
+      new ClosureCompilerPlugin({
+        jsCompiler: true,
+        compiler: {
+          compilation_level: 'SIMPLE',
+          language_in: 'ECMASCRIPT5'
+        }
+      })
+    );
+  }
 }
 
 

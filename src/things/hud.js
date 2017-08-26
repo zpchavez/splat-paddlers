@@ -17,8 +17,8 @@ class Hud extends AbstractThing
     );
 
     if (typeof options.onTimerReachesZero !== 'function') {
-      throw new ('Must specify onTimerReachesZero callback');
       g.pause();
+      throw new ('Must specify onTimerReachesZero callback');
     }
     this.onTimerReachesZero = options.onTimerReachesZero;
 
