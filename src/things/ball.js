@@ -57,6 +57,55 @@ class Ball extends AbstractThing
     this.sprite.vy = oldSprite.vy;
   }
 
+  bounceOff(otherThing) {
+    this.edgeBounces = 0; // reset edge bounces
+    const ball = this;
+    const ballPos = ball.getPreviousPosition();
+    const otherThingPos = otherThing.getPreviousPosition();
+
+    if (otherThing instanceof Paddle && otherThing.color !== this.color) {
+      this.changeBallColor(otherThing.color);
+    }
+
+    let hitRegion = null;
+
+    if (ballPos.y + ball.sprite.height <= otherThingPos.y) {
+      hitRegion = 'top';
+    } else if (ballPos.x + ball.sprite.width <= otherThingPos.x) {
+      hitRegion = 'left';
+    } else if (ballPos.y >= otherThingPos.y + otherThing.sprite.height) {
+      hitRegion = 'bottom';
+    } else if (ballPos.x >= otherThingPos.x + otherThing.sprite.width) {
+      hitRegion = 'right';
+    } else {
+      return;
+    }
+
+    if (hitRegion === 'left' || hitRegion === 'right') {
+      // If otherThing moving in same direction as ball, add velocities
+      if (ball.sprite.vx * otherThing.sprite.vx > 0) {
+        ball.sprite.vx += otherThing.sprite.vx;
+      } else {
+        ball.sprite.vx = (ball.sprite.vx * -1) + otherThing.sprite.vx;
+      }
+      ball.sprite.vy += otherThing.sprite.vy;
+      // Limit max speed
+      ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
+      ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
+    } else {
+      // If otherThing moving in same direction as ball, add velocities
+      if (ball.sprite.vy * otherThing.sprite.vy > 0) {
+        ball.sprite.vy += otherThing.sprite.vy;
+      } else {
+        ball.sprite.vy = (ball.sprite.vy * -1) + otherThing.sprite.vy;
+      }
+      ball.sprite.vx += otherThing.sprite.vx;
+      // Limit max speed
+      ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
+      ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
+    }
+  }
+
   handleCollision(otherThing) {
     if (
       otherThing instanceof Paddle ||
@@ -66,52 +115,7 @@ class Ball extends AbstractThing
         otherThing.color !== this.color
       )
     ) {
-      this.edgeBounces = 0; // reset edge bounces
-      const ball = this;
-      const ballPos = ball.getPreviousPosition();
-      const otherThingPos = otherThing.getPreviousPosition();
-
-      if (otherThing instanceof Paddle && otherThing.color !== this.color) {
-        this.changeBallColor(otherThing.color);
-      }
-
-      let hitRegion = null;
-
-      if (ballPos.y + ball.sprite.height <= otherThingPos.y) {
-        hitRegion = 'top';
-      } else if (ballPos.x + ball.sprite.width <= otherThingPos.x) {
-        hitRegion = 'left';
-      } else if (ballPos.y >= otherThingPos.y + otherThing.sprite.height) {
-        hitRegion = 'bottom';
-      } else if (ballPos.x >= otherThingPos.x + otherThing.sprite.width) {
-        hitRegion = 'right';
-      } else {
-        return;
-      }
-
-      if (hitRegion === 'left' || hitRegion === 'right') {
-        // If otherThing moving in same direction as ball, add velocities
-        if (ball.sprite.vx * otherThing.sprite.vx > 0) {
-          ball.sprite.vx += otherThing.sprite.vx;
-        } else {
-          ball.sprite.vx = (ball.sprite.vx * -1) + otherThing.sprite.vx;
-        }
-        ball.sprite.vy += otherThing.sprite.vy;
-        // Limit max speed
-        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
-        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
-      } else {
-        // If otherThing moving in same direction as ball, add velocities
-        if (ball.sprite.vy * otherThing.sprite.vy > 0) {
-          ball.sprite.vy += otherThing.sprite.vy;
-        } else {
-          ball.sprite.vy = (ball.sprite.vy * -1) + otherThing.sprite.vy;
-        }
-        ball.sprite.vx += otherThing.sprite.vx;
-        // Limit max speed
-        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
-        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
-      }
+      this.bounceOff(otherThing);
     }
   }
 
