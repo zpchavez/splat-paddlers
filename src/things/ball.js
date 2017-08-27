@@ -14,6 +14,7 @@ const modToColor = {
   'stickyball': '#ffaa00',
   'powerball': '#b50000',
   'growball': '#00dd01',
+  'shrinkball': '#ffc1c1',
 };
 export const MODS = Object.keys(modToColor);
 

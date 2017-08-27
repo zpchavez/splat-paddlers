@@ -7,6 +7,7 @@ import { PIT_SIZE } from './pit';
 
 const BALL_RELEASE_SPEED = 4;
 const PADDLE_MOVE_SPEED = 8;
+const MIN_PADDLE_LENGTH = 16;
 const MAX_PADDLE_LENGTH = 256;
 export const LEFT = 'left';
 export const RIGHT = 'right';
@@ -186,9 +187,14 @@ class Paddle extends AbstractThing
   }
 
   handleCollision(otherThing) {
-    if (otherThing instanceof Ball && otherThing.mod === 'growball') {
-      this.length = Math.min(this.length + 8, MAX_PADDLE_LENGTH);
-      this.recreateSprite();
+    if (otherThing instanceof Ball) {
+      if (otherThing.mod === 'growball') {
+        this.length = Math.min(this.length + 8, MAX_PADDLE_LENGTH);
+        this.recreateSprite();
+      } else if (otherThing.mod === 'shrinkball') {
+        this.length = Math.max(this.length - 8, MIN_PADDLE_LENGTH);
+        this.recreateSprite();
+      }
     }
   }
 
