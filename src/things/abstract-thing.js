@@ -63,6 +63,10 @@ class AbstractThing
     // Override
   }
 
+  remove() {
+    this.g.remove(this.sprite);
+  }
+
   update() {
     Object.keys(this.antiCollisionFrames).forEach(thingId => {
       this.antiCollisionFrames[thingId] -= 1;

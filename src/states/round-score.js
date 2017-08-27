@@ -1,18 +1,7 @@
 import TextUtil from '../text-util';
 import gameState from './game';
 import { getPlayerControls } from '../controls';
-
-const fill = function(len) {
-  return (Array(Math.max(0, len)).fill(' ')).join('');
-}
-
-const rpad = function(str, len) {
-  return str + fill(len - str.length);
-}
-
-const lpad = function(str, len) {
-  return fill(len - str.length) + str;
-}
+import { rpad, lpad } from '../utils';
 
 module.exports = (g) => {
   let score = {};

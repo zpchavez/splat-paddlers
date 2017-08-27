@@ -4,7 +4,9 @@ import colors from '../colors';
 import Paddle from './paddle';
 import Pit from './pit';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
+import { lpad } from '../utils';
 
+const BALL_SIZE = 8;
 const TOP_BOUNDS = 32;
 const MAX_BALL_SPEED = 5;
 const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
@@ -20,15 +22,34 @@ class Ball extends AbstractThing
     this.edgeBounces = 0;
     this.collidesWith = ['paddle', 'block', 'pit'];
     this.mod = null;
+    this.decorations = [];
   }
 
   createSprite() {
     this.sprite = this.g.circle(
-      8,
+      BALL_SIZE,
       colors[this.color].fill,
       colors[this.color].stroke,
       3,
     );
+
+    if (this.mod === 'stickyball') {
+      let colorCode = colors[this.color].fill.substr(1);
+      let inverseR = 255 - parseInt(colorCode.substr(0, 2), 16);
+      let inverseG = 255 - parseInt(colorCode.substr(2, 2), 16);
+      let inverseB = 255 - parseInt(colorCode.substr(4, 2), 16);
+      let inverseColor = (
+        '#' +
+        lpad(inverseR.toString(16), 2, '0') +
+        lpad(inverseG.toString(16), 2, '0') +
+        lpad(inverseB.toString(16), 2, '0')
+      );
+      this.decorations = [{
+        sprite: this.g.text('S', `${BALL_SIZE}px monospace`, inverseColor),
+        relX: Math.floor(this.sprite.halfWidth / 2),
+        relY: -1,
+      }];
+    }
   }
 
   bounceOffBounds() {
@@ -89,7 +110,7 @@ class Ball extends AbstractThing
 
   changeBallColor(newColor) {
     const oldSprite = this.sprite;
-    this.g.remove(this.sprite);
+    this.remove();
     this.color = newColor;
     this.createSprite();
     this.sprite.x = oldSprite.x;
@@ -158,9 +179,23 @@ class Ball extends AbstractThing
     ) {
       this.bounceOff(otherThing);
     } else if (otherThing instanceof Pit) {
-      this.g.remove(this.sprite);
+      this.remove();
       this.sprite.visible = false;
     }
+  }
+
+  updateDecorations() {
+    this.decorations.forEach(decoration => {
+      decoration.sprite.x = this.sprite.x + decoration.relX;
+      decoration.sprite.y = this.sprite.y + decoration.relY;
+    });
+  }
+
+  remove() {
+    super.remove();
+    this.decorations.forEach(decoration => {
+      this.g.remove(decoration.sprite);
+    });
   }
 
   update() {
@@ -168,6 +203,7 @@ class Ball extends AbstractThing
     if (this.sprite.visible) {
       this.bounceOffBounds();
       this.g.move(this.sprite);
+      this.updateDecorations();
     }
   }
 }
