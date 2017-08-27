@@ -13,7 +13,7 @@ module.exports = (g) => {
       score[block.color] += 1;
     }
   })
-  g.things.forEach(thing => g.remove(thing.sprite));
+  g.things.forEach(thing => thing.remove());
 
   // Sort score descending
   const sortedScores = Object.keys(score).map(
