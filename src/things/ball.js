@@ -69,30 +69,37 @@ class Ball extends AbstractThing
 
     const MIN_SPEED = 2;
 
+    let xySpeed = [
+      (Math.random() * 1.5) + 1,
+      (Math.random() * 1.5) + 1
+    ];
+    // Double one of them so that the angle isn't such that it bounces back in the pit
+    xySpeed[this.g.randomInt(0, 1)] *= 2;
+
     switch (pit.position) {
       case 'TOP LEFT':
         this.sprite.x = pit.sprite.x + pit.sprite.halfWidth;
         this.sprite.y = pit.sprite.y + pit.sprite.halfHeight;
-        this.sprite.vx = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED);
-        this.sprite.vy = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED);
+        this.sprite.vx = xySpeed[0];
+        this.sprite.vy = xySpeed[1];
         break;
       case 'TOP RIGHT':
         this.sprite.x = pit.sprite.x - pit.sprite.halfWidth;
         this.sprite.y = pit.sprite.y + pit.sprite.halfHeight;
-        this.sprite.vx = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED) * -1;
-        this.sprite.vy = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED);
+        this.sprite.vx = xySpeed[0] * -1;
+        this.sprite.vy = xySpeed[1];
         break;
       case 'BOTTOM LEFT':
         this.sprite.x = pit.sprite.x + pit.sprite.halfWidth;
         this.sprite.y = pit.sprite.y - pit.sprite.halfHeight;
-        this.sprite.vx = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED);
-        this.sprite.vy = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED) * -1;
+        this.sprite.vx = xySpeed[0];
+        this.sprite.vy = xySpeed[1] * -1;
         break;
       case 'BOTTOM RIGHT':
         this.sprite.x = pit.sprite.x - pit.sprite.halfWidth;
         this.sprite.y = pit.sprite.y - pit.sprite.halfHeight;
-        this.sprite.vx = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED) * -1;
-        this.sprite.vy = this.g.randomInt(MIN_SPEED, MAX_BALL_SPEED) * -1;
+        this.sprite.vx = xySpeed[0] * -1;
+        this.sprite.vy = xySpeed[1] * -1;
         break;
       default:
         this.g.pause();
