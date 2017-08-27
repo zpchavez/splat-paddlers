@@ -10,10 +10,11 @@ const BALL_SIZE = 8;
 const TOP_BOUNDS = 32;
 const MAX_BALL_SPEED = 5;
 const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
-export const MODS = ['stickyball'];
 const modToColor = {
   'stickyball': '#ffaa00',
+  'powerball': '#b50000',
 };
+export const MODS = Object.keys(modToColor);
 
 class Ball extends AbstractThing
 {
@@ -29,21 +30,20 @@ class Ball extends AbstractThing
   }
 
   createSprite() {
+    if (this.mod) {
+      this.decorations = [{
+        sprite: this.g.circle(BALL_SIZE * 2, modToColor[this.mod], '#000000', 2),
+        relX: (this.sprite.halfWidth * -1),
+        relY: (this.sprite.halfHeight * -1),
+      }];
+    }
+
     this.sprite = this.g.circle(
       BALL_SIZE,
       colors[this.color].fill,
       colors[this.color].stroke,
       3,
     );
-
-    if (this.mod === 'stickyball') {
-      this.decorations = [{
-        sprite: this.g.circle(BALL_SIZE * 2, modToColor[this.mod], '#000000', 2),
-        relX: (this.sprite.halfWidth * -1),
-        relY: (this.sprite.halfHeight * -1),
-      }];
-      this.decorations[0].sprite.layer = -1;
-    }
   }
 
   recreateSprite() {
@@ -188,7 +188,9 @@ class Ball extends AbstractThing
         this.color = otherThing.color;
         this.recreateSprite();
       } else {
-        this.bounceOff(otherThing);
+        if (!(otherThing instanceof Block && this.mod === 'powerball')) {
+          this.bounceOff(otherThing);
+        }
       }
     } else if (otherThing instanceof Pit) {
       this.remove();
