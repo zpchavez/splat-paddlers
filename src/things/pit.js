@@ -42,7 +42,7 @@ class Pit extends AbstractThing
     if (otherThing instanceof Ball) {
       this.lostBallTimers.push({
         ball: otherThing,
-        frames: 60 * this.g.randomInt(3, 10)
+        frames: 60 * this.g.randomInt(2, 5)
       });
     }
   }
