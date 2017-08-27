@@ -7,6 +7,7 @@ import { PIT_SIZE } from './pit';
 
 const BALL_RELEASE_SPEED = 4;
 const PADDLE_MOVE_SPEED = 8;
+const MAX_PADDLE_LENGTH = 256;
 export const LEFT = 'left';
 export const RIGHT = 'right';
 export const TOP = 'top';
@@ -21,13 +22,12 @@ class Paddle extends AbstractThing
 
     options.length || (options.length = PADDLE_LENGTH);
 
-    this.sprite = g.rectangle(
-      [TOP, BOTTOM].indexOf(options.position) > -1 ? options.length : 16,
-      [TOP, BOTTOM].indexOf(options.position) > -1 ? 16 : options.length,
-      colors[options.color].fill,
-      colors[options.color].stroke,
-      2
-    );
+    this.length = options.length;
+    this.position = options.position;
+    this.color = options.color;
+    this.player = options.player;
+
+    this.createSprite();
 
     switch (options.position) {
       case TOP:
@@ -47,9 +47,6 @@ class Paddle extends AbstractThing
         throw new Error('invalid position');
     }
 
-    this.position = options.position;
-    this.color = options.color;
-    this.player = options.player;
     this.antiCollisionFrames = {};
     this.initInput();
     this.controls = getPlayerControls(g, this.player);
@@ -58,6 +55,26 @@ class Paddle extends AbstractThing
   attachBall(ball) {
     this.caughtBall = ball;
     this.handleCaughtBall();
+  }
+
+  createSprite() {
+    this.sprite = this.g.rectangle(
+      [TOP, BOTTOM].indexOf(this.position) > -1 ? this.length : 16,
+      [TOP, BOTTOM].indexOf(this.position) > -1 ? 16 : this.length,
+      colors[this.color].fill,
+      colors[this.color].stroke,
+      2
+    );
+  }
+
+  recreateSprite() {
+    const oldSprite = this.sprite;
+    this.remove();
+    this.createSprite();
+    this.sprite.x = oldSprite.x;
+    this.sprite.y = oldSprite.y;
+    this.sprite.vx = oldSprite.vx;
+    this.sprite.vy = oldSprite.vy;
   }
 
   initVerticalControls() {
@@ -165,6 +182,13 @@ class Paddle extends AbstractThing
           this.sprite.putLeft(this.caughtBall.sprite);
           break;
       }
+    }
+  }
+
+  handleCollision(otherThing) {
+    if (otherThing instanceof Ball && otherThing.mod === 'growball') {
+      this.length = Math.min(this.length + 8, MAX_PADDLE_LENGTH);
+      this.recreateSprite();
     }
   }
 

@@ -7,6 +7,5 @@ export const rpad = function(str, len, filler=' ') {
 };
 
 export const lpad = function(str, len, filler=' ') {
-  console.log('l padding', str, len, len - str.length);
   return fill(len - str.length, filler) + str;
 };

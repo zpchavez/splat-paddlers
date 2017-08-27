@@ -13,6 +13,7 @@ const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
 const modToColor = {
   'stickyball': '#ffaa00',
   'powerball': '#b50000',
+  'growball': '#00dd01',
 };
 export const MODS = Object.keys(modToColor);
 
