@@ -51,7 +51,7 @@ export default (g) => {
     const paddle = new Paddle(g, paddleOptions);
     if (paddleOptions.startWithBall) {
       const ball = new Ball(g, paddleOptions.color);
-      paddle.attachStarterBall(ball);
+      paddle.attachBall(ball);
     }
   })
 

@@ -46,6 +46,16 @@ class Ball extends AbstractThing
     }
   }
 
+  recreateSprite() {
+    const oldSprite = this.sprite;
+    this.remove();
+    this.createSprite();
+    this.sprite.x = oldSprite.x;
+    this.sprite.y = oldSprite.y;
+    this.sprite.vx = oldSprite.vx;
+    this.sprite.vy = oldSprite.vy;
+  }
+
   bounceOffBounds() {
     let bounced = false;
     if (this.sprite.x <= 0 || this.sprite.x >= this.g.stage.width - this.sprite.width) {
@@ -70,8 +80,8 @@ class Ball extends AbstractThing
     const MIN_SPEED = 2;
 
     let xySpeed = [
-      (Math.random() * 1.5) + 1,
-      (Math.random() * 1.5) + 1
+      (Math.random() * 1.5) + 2,
+      (Math.random() * 1.5) + 2
     ];
     // Double one of them so that the angle isn't such that it bounces back in the pit
     xySpeed[this.g.randomInt(0, 1)] *= 2;
@@ -110,14 +120,8 @@ class Ball extends AbstractThing
   }
 
   changeBallColor(newColor) {
-    const oldSprite = this.sprite;
-    this.remove();
     this.color = newColor;
-    this.createSprite();
-    this.sprite.x = oldSprite.x;
-    this.sprite.y = oldSprite.y;
-    this.sprite.vx = oldSprite.vx;
-    this.sprite.vy = oldSprite.vy;
+    this.recreateSprite();
   }
 
   bounceOff(otherThing) {
@@ -178,10 +182,19 @@ class Ball extends AbstractThing
         otherThing.color !== this.color
       )
     ) {
-      this.bounceOff(otherThing);
+      if (otherThing instanceof Paddle && this.mod === 'stickyball') {
+        otherThing.attachBall(this);
+        this.mod = null;
+        this.color = otherThing.color;
+        this.recreateSprite();
+      } else {
+        this.bounceOff(otherThing);
+      }
     } else if (otherThing instanceof Pit) {
       this.remove();
       this.sprite.visible = false;
+      this.sprite.vx = 0;
+      this.sprite.vy = 0;
     }
   }
 
@@ -194,9 +207,14 @@ class Ball extends AbstractThing
 
   remove() {
     super.remove();
+    this.removeDecorations();
+  }
+
+  removeDecorations() {
     this.decorations.forEach(decoration => {
       this.g.remove(decoration.sprite);
     });
+    this.decorations = [];
   }
 
   update() {

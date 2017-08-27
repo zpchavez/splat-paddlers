@@ -55,7 +55,7 @@ class Paddle extends AbstractThing
     this.controls = getPlayerControls(g, this.player);
   }
 
-  attachStarterBall(ball) {
+  attachBall(ball) {
     this.caughtBall = ball;
     this.handleCaughtBall();
   }
@@ -149,6 +149,8 @@ class Paddle extends AbstractThing
 
   handleCaughtBall() {
     if (this.caughtBall) {
+      this.caughtBall.vx = 0;
+      this.caughtBall.vy = 0;
       switch (this.position) {
         case TOP:
           this.sprite.putBottom(this.caughtBall.sprite);
