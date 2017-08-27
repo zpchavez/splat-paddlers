@@ -11,6 +11,9 @@ const TOP_BOUNDS = 32;
 const MAX_BALL_SPEED = 5;
 const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
 export const MODS = ['stickyball'];
+const modToColor = {
+  'stickyball': '#ffaa00',
+};
 
 class Ball extends AbstractThing
 {
@@ -34,21 +37,12 @@ class Ball extends AbstractThing
     );
 
     if (this.mod === 'stickyball') {
-      let colorCode = colors[this.color].fill.substr(1);
-      let inverseR = 255 - parseInt(colorCode.substr(0, 2), 16);
-      let inverseG = 255 - parseInt(colorCode.substr(2, 2), 16);
-      let inverseB = 255 - parseInt(colorCode.substr(4, 2), 16);
-      let inverseColor = (
-        '#' +
-        lpad(inverseR.toString(16), 2, '0') +
-        lpad(inverseG.toString(16), 2, '0') +
-        lpad(inverseB.toString(16), 2, '0')
-      );
       this.decorations = [{
-        sprite: this.g.text('S', `${BALL_SIZE}px monospace`, inverseColor),
-        relX: Math.floor(this.sprite.halfWidth / 2),
-        relY: -1,
+        sprite: this.g.circle(BALL_SIZE * 2, modToColor[this.mod], '#000000', 2),
+        relX: (this.sprite.halfWidth * -1),
+        relY: (this.sprite.halfHeight * -1),
       }];
+      this.decorations[0].sprite.layer = -1;
     }
   }
 
