@@ -78,23 +78,38 @@ class Paddle extends AbstractThing
     this.sprite.vy = oldSprite.vy;
   }
 
+  getMirroringBall() {
+    return this.g.collisionGroups.ball.find(ball => ball.mirroring === this.position);
+  }
+
+  applyToMirroredBall(direction) {
+    const mirroredBall = this.getMirroringBall();
+    if (mirroredBall) {
+      mirroredBall.setMirrorDirection(direction);
+    }
+  };
+
   initVerticalControls() {
     this.controls.up.press = () => {
       this.upArrowDown = true;
+      this.applyToMirroredBall(-1);
       this.sprite.vy = PADDLE_MOVE_SPEED * -1;
     };
     this.controls.up.release = () => {
       this.upArrowDown = false;
+      this.applyToMirroredBall(0);
       if (!this.controls.down.isDown) {
         this.sprite.vy = 0;
       }
     };
     this.controls.down.press = () => {
       this.downArrowDown = true;
+      this.applyToMirroredBall(1);
       this.sprite.vy = PADDLE_MOVE_SPEED;
     };
     this.controls.down.release = () => {
       this.downArrowDown = false;
+      this.applyToMirroredBall(0);
       if (!this.controls.up.isDown) {
         this.sprite.vy = 0;
       }
@@ -104,19 +119,23 @@ class Paddle extends AbstractThing
   initHorizontalControls() {
     this.controls.right.press = () => {
       this.rightArrowDown = true;
+      this.applyToMirroredBall(1);
       this.sprite.vx = PADDLE_MOVE_SPEED;
     };
     this.controls.right.release = () => {
       this.rightArrowDown = false;
+      this.applyToMirroredBall(0);
       if (!this.controls.left.isDown) {
         this.sprite.vx = 0;
       }
     };
     this.controls.left.press = () => {
+      this.applyToMirroredBall(-1);
       this.leftArrowDown = true;
       this.sprite.vx = PADDLE_MOVE_SPEED * -1;
     };
     this.controls.left.release = () => {
+      this.applyToMirroredBall(0);
       this.leftArrowDown = false;
       if (!this.controls.right.isDown) {
         this.sprite.vx = 0;

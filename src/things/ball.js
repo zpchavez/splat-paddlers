@@ -15,6 +15,7 @@ const modToColor = {
   'powerball': '#b50000',
   'growball': '#00dd01',
   'shrinkball': '#ffc1c1',
+  'mirrorball': '#822389',
 };
 export const MODS = Object.keys(modToColor);
 
@@ -29,6 +30,13 @@ class Ball extends AbstractThing
     this.collidesWith = ['paddle', 'block', 'pit'];
     this.mod = null;
     this.decorations = [];
+    this.mirroring = null;
+  }
+
+  changeMod(mod) {
+    this.mod = mod;
+    this.mirroring = null;
+    this.prevMirroring = 0;
   }
 
   createSprite() {
@@ -184,11 +192,14 @@ class Ball extends AbstractThing
     ) {
       if (otherThing instanceof Paddle && this.mod === 'stickyball') {
         otherThing.attachBall(this);
-        this.mod = null;
+        this.changeMod(null);
         this.color = otherThing.color;
         this.recreateSprite();
       } else {
         if (!(otherThing instanceof Block && this.mod === 'powerball')) {
+          if (otherThing instanceof Paddle && this.mod === 'mirrorball') {
+            this.mirroring = otherThing.position;
+          }
           this.bounceOff(otherThing);
         }
       }
@@ -198,6 +209,27 @@ class Ball extends AbstractThing
       this.sprite.vx = 0;
       this.sprite.vy = 0;
     }
+  }
+
+  setMirrorDirection(direction) {
+    if (!this.mirroring) {
+      return;
+    }
+    const multiplier = 2;
+    if (this.mirroring === 'top' || this.mirroring === 'bottom') {
+      if (direction === 0) {
+        this.sprite.vx += this.prevMirroring * multiplier;
+      } else {
+        this.sprite.vx += direction * multiplier;
+      }
+    } else {
+      if (direction === 0) {
+        this.sprite.vy += this.prevMirroring * multiplier;
+      } else {
+        this.sprite.vy += direction * multiplier;
+      }
+    }
+    this.prevMirroring = direction;
   }
 
   updateDecorations() {
