@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node dev-server.js",
-    "build": "rm -rf ./build; APP_ENV=production ./node_modules/.bin/webpack"
+    "build-closure": "rm -rf ./build; APP_ENV=production MINIFIER=closure ./node_modules/.bin/webpack",
+    "build-uglify": "rm -rf ./build; APP_ENV=production MINIFIER=uglify ./node_modules/.bin/webpack"
   },
   "dependencies": {
     "babel-core": "^6.18.2",
@@ -16,6 +17,7 @@
     "html-webpack-plugin": "^2.24.1",
     "query-string": "^4.2.3",
     "request": "^2.76.0",
+    "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^1.13.3",
     "webpack-closure-compiler": "^2.1.5",
     "webpack-dev-middleware": "^1.8.4",

@@ -5,7 +5,7 @@ import colors from '../colors';
 class Block extends AbstractThing
 {
   constructor(g, position) {
-    super(g);
+    super(g, 'block');
     this.color = 'blank';
     this.position = position;
     this.createSprite();

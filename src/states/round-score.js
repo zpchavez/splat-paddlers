@@ -1,38 +1,52 @@
+import TextUtil from '../text-util';
 import gameState from './game';
 import { getPlayerControls } from '../controls';
+import { rpad, lpad } from '../utils';
 
 module.exports = (g) => {
   let score = {};
-  g.collisionGroups.paddles.forEach(paddle => {
+  g.collisionGroups.paddle.forEach(paddle => {
     score[paddle.color] = 0;
   });
-  g.collisionGroups.blocks.forEach(block => {
+  g.collisionGroups.block.forEach(block => {
     if (block.color !== 'blank') {
       score[block.color] += 1;
     }
   })
-  g.things.forEach(thing => g.remove(thing.sprite));
+  g.things.forEach(thing => thing.remove());
+
+  // Sort score descending
+  const sortedScores = Object.keys(score).map(
+    color => ({ color, score: score[color]})
+  ).sort((a, b) => b.score - a.score);
+
+  const longestColor = sortedScores.reduce(
+    (acc, score) => score.color.length > acc ? score.color.length : acc,
+    sortedScores[0].color.length
+  );
+  const longestScore = sortedScores.reduce(
+    (acc, score) => score.score.toString().length > acc ? score.score.toString().length : acc,
+    sortedScores[0].score.toString().length
+  );
+
+  const textUtil = new TextUtil(g);
   const scoreTexts = [];
   scoreTexts.push(
-    g.text(
+    textUtil.createHorizontallyCenteredText(
       'Round score',
-      '48px sans-serif',
+      48,
       '#000000',
-      g.stage.halfWidth - (11 * 12),
       128
     )
   );
-  Object.keys(score).forEach((color, index) => {
-    scoreTexts.push(
-      g.text(
-        `${color}: ${score[color]}`,
-        '24px sans-serif',
-        '#000000',
-        g.stage.halfWidth - 32,
-        128 + (32 * (index + 2))
-      )
-    );
-  });
+
+  const scoreTextStrings = sortedScores.map(
+    ({ score, color }) => rpad(`${color}`, longestColor + 1) + lpad(`${score}`, longestScore)
+  );
+  scoreTexts.push.apply(
+    scoreTexts,
+    textUtil.createHorizontallyCenteredTexts(scoreTextStrings, 36, '#000000', 192, 48)
+  );
 
   g.wait(3000, () => {
     scoreTexts.forEach(text => g.remove(text));

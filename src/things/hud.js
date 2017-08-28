@@ -1,15 +1,16 @@
 import AbstractThing from './abstract-thing';
 
 const TIMER_SECONDS = 90;
+export const HUD_HEIGHT = 32;
 
 class Hud extends AbstractThing
 {
   constructor(g, options={}) {
-    super(g);
+    super(g, 'hud');
 
     this.sprite = g.rectangle(
       768,
-      31,
+      HUD_HEIGHT - 1,
       '#aaaaaa',
       '#000000',
       0,
@@ -17,8 +18,8 @@ class Hud extends AbstractThing
     );
 
     if (typeof options.onTimerReachesZero !== 'function') {
-      throw new ('Must specify onTimerReachesZero callback');
       g.pause();
+      throw new ('Must specify onTimerReachesZero callback');
     }
     this.onTimerReachesZero = options.onTimerReachesZero;
 

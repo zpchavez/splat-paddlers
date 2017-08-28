@@ -13,7 +13,7 @@ export default {
   },
   yellow: {
     stroke: '#000000',
-    fill: '#fff600',
+    fill: '#fff000',
   },
   green: {
     stroke: '#000000',
