@@ -186,8 +186,8 @@ class Paddle extends AbstractThing
 
   handleCaughtBall() {
     if (this.caughtBall) {
-      this.caughtBall.vx = 0;
-      this.caughtBall.vy = 0;
+      this.caughtBall.sprite.vx = 0;
+      this.caughtBall.sprite.vy = 0;
       switch (this.position) {
         case TOP:
           this.sprite.putBottom(this.caughtBall.sprite);

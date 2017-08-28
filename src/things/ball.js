@@ -29,7 +29,6 @@ class Ball extends AbstractThing
     this.edgeBounces = 0;
     this.collidesWith = ['paddle', 'block', 'pit'];
     this.mod = null;
-    this.decorations = [];
     this.mirroring = null;
   }
 
@@ -40,19 +39,11 @@ class Ball extends AbstractThing
   }
 
   createSprite() {
-    if (this.mod) {
-      this.decorations = [{
-        sprite: this.g.circle(BALL_SIZE * 2, modToColor[this.mod], '#000000', 2),
-        relX: (this.sprite.halfWidth * -1),
-        relY: (this.sprite.halfHeight * -1),
-      }];
-    }
-
     this.sprite = this.g.circle(
       BALL_SIZE,
       colors[this.color].fill,
-      colors[this.color].stroke,
-      3,
+      this.mod ? modToColor[this.mod] :colors[this.color].stroke,
+      this.mod ? BALL_SIZE : 3,
     );
   }
 
@@ -190,7 +181,7 @@ class Ball extends AbstractThing
         otherThing.color !== this.color
       )
     ) {
-      if (otherThing instanceof Paddle && this.mod === 'stickyball') {
+      if (otherThing instanceof Paddle && this.mod === 'stickyball' && !otherThing.caughtBall) {
         otherThing.attachBall(this);
         this.changeMod(null);
         this.color = otherThing.color;
@@ -232,31 +223,11 @@ class Ball extends AbstractThing
     this.prevMirroring = direction;
   }
 
-  updateDecorations() {
-    this.decorations.forEach(decoration => {
-      decoration.sprite.x = this.sprite.x + decoration.relX;
-      decoration.sprite.y = this.sprite.y + decoration.relY;
-    });
-  }
-
-  remove() {
-    super.remove();
-    this.removeDecorations();
-  }
-
-  removeDecorations() {
-    this.decorations.forEach(decoration => {
-      this.g.remove(decoration.sprite);
-    });
-    this.decorations = [];
-  }
-
   update() {
     super.update();
     if (this.sprite.visible) {
       this.bounceOffBounds();
       this.g.move(this.sprite);
-      this.updateDecorations();
     }
   }
 }
