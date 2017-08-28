@@ -8,7 +8,7 @@ import { lpad } from '../utils';
 
 const BALL_SIZE = 8;
 const TOP_BOUNDS = 32;
-const MAX_BALL_SPEED = 5;
+const MAX_BALL_SPEED = 6;
 const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
 const modToColor = {
   'stickyball': '#ffaa00',
@@ -79,11 +79,9 @@ class Ball extends AbstractThing
   releaseFromPit(pit) {
     this.createSprite();
 
-    const MIN_SPEED = 2;
-
     let xySpeed = [
-      (Math.random() * 1.5) + 2,
-      (Math.random() * 1.5) + 2
+      this.g.randomInt(2, 3),
+      this.g.randomInt(2, 3),
     ];
     // Double one of them so that the angle isn't such that it bounces back in the pit
     xySpeed[this.g.randomInt(0, 1)] *= 2;
