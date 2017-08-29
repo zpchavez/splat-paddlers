@@ -8,14 +8,7 @@ class Hud extends AbstractThing
   constructor(g, options={}) {
     super(g, 'hud');
 
-    this.sprite = g.rectangle(
-      768,
-      HUD_HEIGHT - 1,
-      '#aaaaaa',
-      '#000000',
-      0,
-      0
-    );
+    this.createSprite();
 
     if (typeof options.onTimerReachesZero !== 'function') {
       g.pause();
@@ -31,6 +24,22 @@ class Hud extends AbstractThing
       this.g.stage.halfWidth - 12,
       0
     );
+  }
+
+  createSprite() {
+    this.sprite = this.g.rectangle(
+      768,
+      HUD_HEIGHT - 1,
+      '#aaaaaa',
+      '#000000',
+      0,
+      0
+    );
+  }
+
+  recreateSprite() {
+    this.remove();
+    this.createSprite();
   }
 
   updateTimerText() {

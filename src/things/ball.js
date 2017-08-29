@@ -4,10 +4,10 @@ import colors from '../colors';
 import Paddle from './paddle';
 import Pit from './pit';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
+import { HUD_HEIGHT } from './hud';
 import { lpad } from '../utils';
 
 const BALL_SIZE = 8;
-const TOP_BOUNDS = 32;
 const MAX_BALL_SPEED = 6;
 const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
 const modToColor = {
@@ -16,6 +16,7 @@ const modToColor = {
   'growball': '#00dd01',
   'shrinkball': '#ffc1c1',
   'mirrorball': '#822389',
+  'asteroidball': '#5078fc',
 };
 export const MODS = Object.keys(modToColor);
 
@@ -25,10 +26,10 @@ class Ball extends AbstractThing
     super(g, 'ball');
 
     this.color = color;
+    this.mod = null;
     this.createSprite();
     this.edgeBounces = 0;
     this.collidesWith = ['paddle', 'block', 'pit'];
-    this.mod = null;
     this.mirroring = null;
   }
 
@@ -62,7 +63,7 @@ class Ball extends AbstractThing
     if (this.sprite.x <= 0 || this.sprite.x >= this.g.stage.width - this.sprite.width) {
       this.sprite.vx *= -1; // left or right side bounce
       bounced = true;
-    } else if (this.sprite.y <= TOP_BOUNDS || this.sprite.y >= this.g.stage.height - this.sprite.height) {
+    } else if (this.sprite.y <= HUD_HEIGHT || this.sprite.y >= this.g.stage.height - this.sprite.height) {
       this.sprite.vy *= -1; // top or bottom side bounce
       bounced = true;
     }
@@ -75,8 +76,45 @@ class Ball extends AbstractThing
     }
   }
 
+  screenWrap() {
+    if (this.screenWrappedLastFrame) {
+      this.sprite.visible = true;
+      this.screenWrappedLastFrame = false;
+    }
+
+    let before = [this.sprite.x, this.sprite.y];
+    if (this.sprite.x < this.sprite.width * -1) {
+      this.sprite.x = this.g.stage.width;
+    }
+    if (this.sprite.x > this.g.stage.width) {
+      this.sprite.x = this.sprite.width * -1;
+    }
+    if (this.sprite.y < HUD_HEIGHT + this.sprite.height * -1) {
+      this.sprite.y = this.g.stage.height;
+    }
+    if (this.sprite.y > this.g.stage.height) {
+      this.sprite.y = HUD_HEIGHT - this.sprite.height;
+    }
+
+    // When changing a sprite's position, ga shows it moving across
+    // the intervening space really fast, instead of just changing
+    // its position instantanously, resulting in the sprite noticeably flickering
+    // at some point on the screen. To get around this, make the sprite invisible
+    // for one frame.
+    if (before[0] !== this.sprite.x || before[1] !== this.sprite.y) {
+      this.sprite.visible = false;
+      this.screenWrappedLastFrame = true;
+    }
+  }
+
   releaseFromPit(pit) {
     this.createSprite();
+    if (this.mod === 'asteroidball') {
+      console.log('recreating hud sprite');
+      // Recreate HUD sprite so that it remains on top, otherwise vertical
+      // wrapping doesn't look right.
+      this.g.collisionGroups.hud[0].recreateSprite();
+    }
 
     let xySpeed = [
       this.g.randomInt(2, 3),
@@ -196,9 +234,7 @@ class Ball extends AbstractThing
       }
     } else if (otherThing instanceof Pit) {
       this.remove();
-      this.sprite.visible = false;
-      this.sprite.vx = 0;
-      this.sprite.vy = 0;
+      this.sprite = null;
     }
   }
 
@@ -225,8 +261,12 @@ class Ball extends AbstractThing
 
   update() {
     super.update();
-    if (this.sprite.visible) {
-      this.bounceOffBounds();
+    if (this.sprite) {
+      if (this.mod === 'asteroidball') {
+        this.screenWrap();
+      } else {
+        this.bounceOffBounds();
+      }
       this.g.move(this.sprite);
     }
   }

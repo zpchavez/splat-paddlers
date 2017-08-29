@@ -79,7 +79,7 @@ class Paddle extends AbstractThing
   }
 
   getMirroringBall() {
-    return this.g.collisionGroups.ball.find(ball => ball.mirroring === this.position);
+    return this.g.collisionGroups.ball.find(ball => ball.mirroring === this.position && ball.sprite);
   }
 
   applyToMirroredBall(direction) {
