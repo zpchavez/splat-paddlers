@@ -66,7 +66,9 @@ class AbstractThing
   }
 
   remove() {
-    this.g.remove(this.sprite);
+    if (this.sprite) {
+      this.g.remove(this.sprite);
+    }
   }
 
   update() {
