@@ -1,5 +1,6 @@
 import TextUtil from '../text-util';
 import gameState from './game';
+import colors from '../colors';
 import { getPlayerControls } from '../controls';
 import { rpad, lpad } from '../utils';
 
@@ -46,6 +47,15 @@ module.exports = (g) => {
   scoreTexts.push.apply(
     scoreTexts,
     textUtil.createHorizontallyCenteredTexts(scoreTextStrings, 36, '#000000', 192, 48)
+  );
+
+  scoreTexts.push(
+    textUtil.createHorizontallyCenteredText(
+      `${sortedScores[0].color.toUpperCase()} WINS THE ROUND!`,
+      48,
+      colors[sortedScores[0].color].fill,
+      64
+    )
   );
 
   g.wait(3000, () => {
