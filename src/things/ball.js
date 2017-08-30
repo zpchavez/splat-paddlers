@@ -110,7 +110,6 @@ class Ball extends AbstractThing
   releaseFromPit(pit) {
     this.createSprite();
     if (this.mod === 'asteroidball') {
-      console.log('recreating hud sprite');
       // Recreate HUD sprite so that it remains on top, otherwise vertical
       // wrapping doesn't look right.
       this.g.collisionGroups.hud[0].recreateSprite();
@@ -264,6 +263,7 @@ class Ball extends AbstractThing
     if (this.sprite) {
       if (this.mod === 'asteroidball') {
         this.screenWrap();
+        this.handleCollisions();
       } else {
         this.bounceOffBounds();
       }
