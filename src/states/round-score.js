@@ -53,7 +53,7 @@ module.exports = (g) => {
     textUtil.createHorizontallyCenteredText(
       `${sortedScores[0].color.toUpperCase()} WINS THE ROUND!`,
       48,
-      colors[sortedScores[0].color].fill,
+      '#000000',
       64
     )
   );
