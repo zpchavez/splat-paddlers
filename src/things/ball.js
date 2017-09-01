@@ -112,7 +112,7 @@ class Ball extends AbstractThing
     if (this.mod === 'asteroidball') {
       // Recreate HUD sprite so that it remains on top, otherwise vertical
       // wrapping doesn't look right.
-      this.g.collisionGroups.hud[0].recreateSprite();
+      this.g.collisionGroups.hud[0].recreateSprites();
     }
 
     let xySpeed = [
@@ -259,14 +259,17 @@ class Ball extends AbstractThing
   }
 
   update() {
-    super.update();
+    this.updateAntiCollisionFrames();
     if (this.sprite) {
       if (this.mod === 'asteroidball') {
         this.screenWrap();
-        this.handleCollisions();
       } else {
         this.bounceOffBounds();
       }
+    }
+
+    this.handleCollisions();
+    if (this.sprite) {
       this.g.move(this.sprite);
     }
   }

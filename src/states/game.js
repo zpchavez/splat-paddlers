@@ -38,6 +38,10 @@ export default (g) => {
     }
     paddleInfo[g.randomInt(0, 1)].startWithBall = true;
     paddleInfo[g.randomInt(2, 3)].startWithBall = true;
+    g.globals.roundScore = {
+      blue: 0,
+      red: 0,
+    };
   } else if (g.globals.players === 4) {
     paddleInfo = [
       {position: 'bottom', color: 'blue', player: 1, startWithBall: true},
@@ -45,6 +49,12 @@ export default (g) => {
       {position: 'top', color: 'yellow', player: 3, startWithBall: true},
       {position: 'left', color: 'green', player: 4, startWithBall: true},
     ];
+    g.globals.roundScore = {
+      blue: 0,
+      red: 0,
+      green: 0,
+      yellow: 0,
+    };
   }
 
   paddleInfo.forEach(paddleOptions => {

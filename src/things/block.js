@@ -31,12 +31,19 @@ class Block extends AbstractThing
   handleCollision(otherThing) {
     if (otherThing instanceof Ball) {
       const ball = otherThing;
-      if (this.color === 'blank') {
+      if (this.color === 'blank' && ball.color !== 'blank') {
+        this.g.globals.roundScore[ball.color] += 1;
         this.g.remove(this.sprite);
         this.color = ball.color;
         this.createSprite();
       }
       if (this.color !== ball.color) {
+        if (this.color !== 'blank') {
+          this.g.globals.roundScore[this.color] -= 1;
+        }
+        if (ball.color !== 'blank') {
+          this.g.globals.roundScore[ball.color] += 1;
+        }
         this.g.remove(this.sprite);
         this.color = ball.color;
         this.createSprite();

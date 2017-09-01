@@ -71,13 +71,17 @@ class AbstractThing
     }
   }
 
-  update() {
+  updateAntiCollisionFrames() {
     Object.keys(this.antiCollisionFrames).forEach(thingId => {
       this.antiCollisionFrames[thingId] -= 1;
       if (this.antiCollisionFrames[thingId] === 0) {
         delete this.antiCollisionFrames[thingId]
       }
     });
+  }
+
+  update() {
+    this.updateAntiCollisionFrames();
 
     if (this.sprite) {
       this.handleCollisions()

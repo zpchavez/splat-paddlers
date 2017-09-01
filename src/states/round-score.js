@@ -5,15 +5,7 @@ import { getPlayerControls } from '../controls';
 import { rpad, lpad } from '../utils';
 
 module.exports = (g) => {
-  let score = {};
-  g.collisionGroups.paddle.forEach(paddle => {
-    score[paddle.color] = 0;
-  });
-  g.collisionGroups.block.forEach(block => {
-    if (block.color !== 'blank') {
-      score[block.color] += 1;
-    }
-  })
+  let score = g.globals.roundScore;
   g.things.forEach(thing => thing.remove());
 
   // Sort score descending
