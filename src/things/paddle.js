@@ -187,6 +187,10 @@ class Paddle extends AbstractThing
 
   handleCaughtBall() {
     if (this.caughtBall) {
+      if (!this.caughtBall.sprite) { // Handle case where ball caught as it goes into a pit
+        this.caughtBall = null;
+        return;
+      }
       this.caughtBall.sprite.vx = 0;
       this.caughtBall.sprite.vy = 0;
       switch (this.position) {
