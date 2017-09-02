@@ -5,6 +5,7 @@ import Paddle from './paddle';
 import Pit from './pit';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
 import { HUD_HEIGHT } from './hud';
+import { ANTI_COLLISION_FRAMES } from './abstract-thing';
 import { lpad } from '../utils';
 
 const BALL_SIZE = 8;
@@ -71,7 +72,7 @@ class Ball extends AbstractThing
       bounced = true;
     }
     if (bounced) {
-      this.antiCollisionFrames['border'] = 10;
+      this.antiCollisionFrames['border'] = ANTI_COLLISION_FRAMES;
       this.edgeBounces += 1;
     }
     if (this.edgeBounces >= EDGE_BOUNCES_BEFORE_TURNING_BLANK) {

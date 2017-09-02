@@ -1,4 +1,4 @@
-const ANTI_COLLISION_FRAMES = 10;
+export const ANTI_COLLISION_FRAMES = 2;
 
 class AbstractThing
 {
