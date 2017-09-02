@@ -17,7 +17,7 @@ class Hud extends AbstractThing
     }
     this.onTimerReachesZero = options.onTimerReachesZero;
 
-    this.timerFrames = (TIMER_SECONDS + 1) * 60;
+    this.timerFrames = (TIMER_SECONDS + 1) * this.g.fps;
   }
 
   createSprites() {
@@ -33,7 +33,7 @@ class Hud extends AbstractThing
     );
 
     this.timerText = g.text(
-      Math.ceil(this.timerFrames / 60),
+      Math.ceil(this.timerFrames / this.g.fps),
       '24px monospace',
       '#ffffff',
       this.g.stage.halfWidth - 12,
@@ -65,7 +65,7 @@ class Hud extends AbstractThing
   }
 
   updateTimerText() {
-    this.timerText.content = Math.floor(this.timerFrames / 60);
+    this.timerText.content = Math.floor(this.timerFrames / this.g.fps);
   }
 
   remove() {
