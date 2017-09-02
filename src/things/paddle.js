@@ -15,7 +15,7 @@ export const TOP = 'top';
 export const BOTTOM = 'bottom';
 
 export const PADDLE_LENGTH = 64;
-export const PADDLE_HEIGHT = 16;
+export const PADDLE_HEIGHT = 12;
 
 class Paddle extends AbstractThing
 {
@@ -33,7 +33,7 @@ class Paddle extends AbstractThing
 
     switch (options.position) {
       case TOP:
-        g.stage.putTop(this.sprite, 16, 48);
+        g.stage.putTop(this.sprite, 16, HUD_HEIGHT + this.sprite.height);
         break;
       case RIGHT:
         g.stage.putRight(this.sprite, this.sprite.width * -1, -32);
