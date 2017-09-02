@@ -48,8 +48,7 @@ class Pit extends AbstractThing
   }
 
   releaseModifiedBall(ball) {
-    const mods = MODS.concat(null);
-    ball.changeMod(MODS[this.g.randomInt(0, mods.length - 1)]);
+    ball.changeMod(MODS[this.g.randomInt(0, MODS.length - 1)]);
     const randomPit = this.g.collisionGroups.pit[
       this.g.randomInt(0, this.g.collisionGroups.pit.length - 1)
     ];
