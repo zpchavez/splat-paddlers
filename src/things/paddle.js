@@ -2,10 +2,10 @@ import AbstractThing from './abstract-thing';
 import Ball from './ball';
 import colors from '../colors';
 import { getPlayerControls } from '../controls';
+import { MAX_BALL_SPEED } from './ball';
 import { HUD_HEIGHT } from './hud';
 import { PIT_SIZE } from './pit';
 
-const BALL_RELEASE_SPEED = 4;
 const PADDLE_MOVE_SPEED = 8;
 const MIN_PADDLE_LENGTH = 16;
 const MAX_PADDLE_LENGTH = 256;
@@ -165,20 +165,20 @@ class Paddle extends AbstractThing
     if (this.caughtBall) {
       switch (this.position) {
         case BOTTOM:
-          this.caughtBall.sprite.vy = BALL_RELEASE_SPEED * -1;
+          this.caughtBall.sprite.vy = MAX_BALL_SPEED * -1;
           this.caughtBall.sprite.vx = this.sprite.vx;
           break;
         case TOP:
-          this.caughtBall.sprite.vy = BALL_RELEASE_SPEED;
+          this.caughtBall.sprite.vy = MAX_BALL_SPEED;
           this.caughtBall.sprite.vx = this.sprite.vx;
           break;
         case LEFT:
           this.caughtBall.sprite.vy = this.sprite.vy;
-          this.caughtBall.sprite.vx = BALL_RELEASE_SPEED;
+          this.caughtBall.sprite.vx = MAX_BALL_SPEED;
           break;
         case RIGHT:
           this.caughtBall.sprite.vy = this.sprite.vy;
-          this.caughtBall.sprite.vx = BALL_RELEASE_SPEED * -1;
+          this.caughtBall.sprite.vx = MAX_BALL_SPEED * -1;
           break;
       }
       this.caughtBall = null;

@@ -9,7 +9,7 @@ import { ANTI_COLLISION_FRAMES } from './abstract-thing';
 import { lpad } from '../utils';
 
 const BALL_SIZE = 8;
-const MAX_BALL_SPEED = 6;
+export const MAX_BALL_SPEED = 6;
 const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
 const modToColor = {
   'stickyball': '#ffaa00',
@@ -120,12 +120,13 @@ class Ball extends AbstractThing
       this.g.collisionGroups.hud[0].recreateSprites();
     }
 
+
     let xySpeed = [
       this.g.randomInt(2, 3),
       this.g.randomInt(2, 3),
     ];
-    // Double one of them so that the angle isn't such that it bounces back in the pit
-    xySpeed[this.g.randomInt(0, 1)] *= 2;
+    // At least one of vx and vy must always be the max speed
+    xySpeed[this.g.randomInt(0, 1)] = MAX_BALL_SPEED;
 
     switch (pit.position) {
       case 'TOP LEFT':
@@ -223,10 +224,10 @@ class Ball extends AbstractThing
       throw new Error('Could not find hit area');
     }
     if (['top', 'bottom'].indexOf(paddle.position) > -1) {
-      ball.sprite.vy *= -1;
+      ball.sprite.vy = MAX_BALL_SPEED * (ball.sprite.vy > 0 ? -1 : 1);
       ball.sprite.vx = hitAreas[hitAreaIndex].v;
     } else {
-      ball.sprite.vx *= -1;
+      ball.sprite.vx = MAX_BALL_SPEED * (ball.sprite.vx > 0 ? -1 : 1);
       ball.sprite.vy = hitAreas[hitAreaIndex].v;
     }
   }
