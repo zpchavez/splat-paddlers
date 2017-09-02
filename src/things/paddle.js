@@ -15,6 +15,7 @@ export const TOP = 'top';
 export const BOTTOM = 'bottom';
 
 export const PADDLE_LENGTH = 64;
+export const PADDLE_HEIGHT = 16;
 
 class Paddle extends AbstractThing
 {
@@ -60,8 +61,8 @@ class Paddle extends AbstractThing
 
   createSprite() {
     this.sprite = this.g.rectangle(
-      [TOP, BOTTOM].indexOf(this.position) > -1 ? this.length : 16,
-      [TOP, BOTTOM].indexOf(this.position) > -1 ? 16 : this.length,
+      [TOP, BOTTOM].indexOf(this.position) > -1 ? this.length : PADDLE_HEIGHT,
+      [TOP, BOTTOM].indexOf(this.position) > -1 ? PADDLE_HEIGHT : this.length,
       colors[this.color].fill,
       colors[this.color].stroke,
       2

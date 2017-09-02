@@ -59,6 +59,9 @@ class Ball extends AbstractThing
   }
 
   bounceOffBounds() {
+    if (this.antiCollisionFrames['border']) {
+      return;
+    }
     let bounced = false;
     if (this.sprite.x <= 0 || this.sprite.x >= this.g.stage.width - this.sprite.width) {
       this.sprite.vx *= -1; // left or right side bounce
@@ -68,6 +71,7 @@ class Ball extends AbstractThing
       bounced = true;
     }
     if (bounced) {
+      this.antiCollisionFrames['border'] = 10;
       this.edgeBounces += 1;
     }
     if (this.edgeBounces >= EDGE_BOUNCES_BEFORE_TURNING_BLANK) {
@@ -162,6 +166,19 @@ class Ball extends AbstractThing
 
   bounceOffPaddle(paddle) {
     const ball = this;
+
+    // Ignore hit against bounds side, unless it's an asteroidball
+    if (
+      ball.mod !== 'asteroidball' && (
+        (paddle.position === 'top' && ball.sprite.vy > 0) ||
+        (paddle.position === 'bottom' && ball.sprite.vy < 0) ||
+        (paddle.position === 'left' && ball.sprite.vx > 0) ||
+        (paddle.position === 'right' && ball.sprite.vx < 0)
+      )
+    ) {
+      return;
+    }
+
     const ballPos = ball.getPreviousPosition();
     const paddlePos = paddle.getPreviousPosition();
     // There are 13 different areas on the paddle that affect the ball's trajectory
@@ -326,6 +343,7 @@ class Ball extends AbstractThing
     }
 
     this.handleCollisions();
+
     if (this.sprite) {
       this.g.move(this.sprite);
     }
