@@ -2,7 +2,7 @@ import AbstractThing from './abstract-thing';
 import Ball, { MODS } from './ball';
 import { HUD_HEIGHT } from './hud';
 
-export const PIT_SIZE = 32;
+export const PIT_SIZE = 16;
 
 class Pit extends AbstractThing
 {
@@ -32,7 +32,7 @@ class Pit extends AbstractThing
         throw new Error(`Invalid pit position: ${position}`);
     }
 
-    this.sprite = g.rectangle(32, 32, '#000000', '#000000', 0, x, y);
+    this.sprite = g.rectangle(PIT_SIZE, PIT_SIZE, '#000000', '#000000', 0, x, y);
 
     this.position = position;
     this.lostBallTimers = [];
