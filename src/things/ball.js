@@ -160,6 +160,59 @@ class Ball extends AbstractThing
     this.recreateSprite();
   }
 
+  bounceOffPaddle(paddle) {
+    const ball = this;
+    const ballPos = ball.getPreviousPosition();
+    const paddlePos = paddle.getPreviousPosition();
+    // There are 13 different areas on the paddle that affect the ball's trajectory
+    // The center sets velocity to 0, then there are six areas on either side.
+    const sizeHitAreaSizes = Math.floor(paddle.length / 12);
+    const centerHitAreaSize = paddle.length - (sizeHitAreaSizes * 12);
+    const hitAreas = [];
+    for (let i = 1; i <= 6; i += 1) {
+      hitAreas.push({
+        lower: (i === 1 ? -Infinity : sizeHitAreaSizes * (i - 1)),
+        upper: sizeHitAreaSizes * i,
+        v: -7 + (i)
+      })
+    }
+    const centerHitArea = {
+      lower: sizeHitAreaSizes * 6,
+      upper: (sizeHitAreaSizes * 6) + centerHitAreaSize,
+      v: 0
+    };
+    hitAreas.push(centerHitArea);
+    for (let i = 1; i <= 6; i += 1) {
+      hitAreas.push({
+        lower: centerHitArea.upper + (sizeHitAreaSizes * (i - 1)),
+        upper: (i === 6 ? Infinity : centerHitArea.upper + (sizeHitAreaSizes * i)),
+        v: i
+      })
+    }
+    const hitPixel = (
+      ['top', 'bottom'].indexOf(paddle.position) > -1
+        ? (ballPos.x + ball.sprite.halfWidth) - paddlePos.x
+        : (ballPos.y + ball.sprite.halfHeight) - paddlePos.y
+    );
+    let hitAreaIndex = null;
+    hitAreas.forEach((hitArea, index) => {
+      if (hitAreaIndex === null && hitPixel >= hitArea.lower && hitPixel < hitArea.upper) {
+        hitAreaIndex = index;
+      }
+    });
+    if (hitAreaIndex === null) {
+      this.g.pause();
+      throw new Error('Could not find hit area');
+    }
+    if (['top', 'bottom'].indexOf(paddle.position) > -1) {
+      ball.sprite.vy *= -1;
+      ball.sprite.vx = hitAreas[hitAreaIndex].v;
+    } else {
+      ball.sprite.vx *= -1;
+      ball.sprite.vy = hitAreas[hitAreaIndex].v;
+    }
+  }
+
   bounceOff(otherThing) {
     this.edgeBounces = 0; // reset edge bounces
     const ball = this;
@@ -184,28 +237,32 @@ class Ball extends AbstractThing
       return;
     }
 
-    if (hitRegion === 'left' || hitRegion === 'right') {
-      // If otherThing moving in same direction as ball, add velocities
-      if (ball.sprite.vx * otherThing.sprite.vx > 0) {
-        ball.sprite.vx += otherThing.sprite.vx;
-      } else {
-        ball.sprite.vx = (ball.sprite.vx * -1) + otherThing.sprite.vx;
-      }
-      ball.sprite.vy += otherThing.sprite.vy;
-      // Limit max speed
-      ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
-      ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
+    if (otherThing instanceof Paddle) {
+      this.bounceOffPaddle(otherThing);
     } else {
-      // If otherThing moving in same direction as ball, add velocities
-      if (ball.sprite.vy * otherThing.sprite.vy > 0) {
+      if (hitRegion === 'left' || hitRegion === 'right') {
+        // If otherThing moving in same direction as ball, add velocities
+        if (ball.sprite.vx * otherThing.sprite.vx > 0) {
+          ball.sprite.vx += otherThing.sprite.vx;
+        } else {
+          ball.sprite.vx = (ball.sprite.vx * -1) + otherThing.sprite.vx;
+        }
         ball.sprite.vy += otherThing.sprite.vy;
+        // Limit max speed
+        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
+        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
       } else {
-        ball.sprite.vy = (ball.sprite.vy * -1) + otherThing.sprite.vy;
+        // If otherThing moving in same direction as ball, add velocities
+        if (ball.sprite.vy * otherThing.sprite.vy > 0) {
+          ball.sprite.vy += otherThing.sprite.vy;
+        } else {
+          ball.sprite.vy = (ball.sprite.vy * -1) + otherThing.sprite.vy;
+        }
+        ball.sprite.vx += otherThing.sprite.vx;
+        // Limit max speed
+        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
+        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
       }
-      ball.sprite.vx += otherThing.sprite.vx;
-      // Limit max speed
-      ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
-      ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
     }
   }
 
