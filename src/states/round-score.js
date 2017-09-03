@@ -26,7 +26,7 @@ module.exports = (g) => {
   const scoreTexts = [];
   scoreTexts.push(
     textUtil.createHorizontallyCenteredText(
-      'Round score',
+      'ROUND SCORE',
       48,
       '#000000',
       128
@@ -41,16 +41,36 @@ module.exports = (g) => {
     textUtil.createHorizontallyCenteredTexts(scoreTextStrings, 36, '#000000', 192, 48)
   );
 
+  const winner = sortedScores[0].color;
+  g.globals.roundsWon[winner] += 1;
+
   scoreTexts.push(
     textUtil.createHorizontallyCenteredText(
-      `${sortedScores[0].color.toUpperCase()} WINS THE ROUND!`,
+      `${winner.toUpperCase()} WINS THE ROUND!`,
       48,
       '#000000',
-      64
+      32
     )
   );
 
-  g.wait(3000, () => {
+  scoreTexts.push(
+    textUtil.createHorizontallyCenteredText(
+      `ROUNDS WON`,
+      48,
+      '#000000',
+      412
+    )
+  );
+
+  const roundWinsTextStrings = Object.keys(g.globals.roundsWon).map(
+    (color) => rpad(`${color}`, longestColor + 1) + g.globals.roundsWon[color]
+  );
+  scoreTexts.push.apply(
+    scoreTexts,
+    textUtil.createHorizontallyCenteredTexts(roundWinsTextStrings, 36, '#000000', 480, 48)
+  );
+
+  g.wait(4000, () => {
     scoreTexts.forEach(text => g.remove(text));
     g.state = gameState(g);
   })

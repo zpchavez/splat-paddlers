@@ -57,6 +57,12 @@ export default (g) => {
     };
   }
 
+  g.globals.roundsWon = Object.assign(
+    {},
+    g.globals.roundScore,
+    g.globals.roundsWon || {},
+  );
+
   paddleInfo.forEach(paddleOptions => {
     const paddle = new Paddle(g, paddleOptions);
     if (paddleOptions.startWithBall) {

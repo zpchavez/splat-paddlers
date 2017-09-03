@@ -10,7 +10,7 @@ export default (g) => {
   menu.setYPosition(256);
   menu.addItem('2 Players', () => {
     g.globals = {
-      players: 2
+      players: 2,
     };
     textUtil.clear();
     g.state = gameState(g);
