@@ -170,6 +170,9 @@ class Ball extends AbstractThing
     const ball = this;
     const ballPos = ball.getPreviousPosition();
     const paddlePos = paddle.getPreviousPosition();
+
+    ball.edgeBounces = 0;
+
     // There are 13 different areas on the paddle that affect the ball's trajectory
     // The center sets velocity to 0, then there are six areas on either side.
     const sizeHitAreaSizes = Math.floor(paddle.length / 12);
@@ -220,7 +223,6 @@ class Ball extends AbstractThing
   }
 
   bounceOff(otherThing) {
-    this.edgeBounces = 0; // reset edge bounces
     const ball = this;
     const ballPos = ball.getPreviousPosition();
     const otherThingPos = otherThing.getPreviousPosition();
