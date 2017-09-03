@@ -1,8 +1,11 @@
 import TextUtil from '../text-util';
 import gameState from './game';
+import winnerState from './winner';
 import colors from '../colors';
 import { getPlayerControls } from '../controls';
 import { rpad, lpad } from '../utils';
+
+const ROUNDS_TO_WIN = 3;
 
 module.exports = (g) => {
   let score = g.globals.roundScore;
@@ -23,56 +26,47 @@ module.exports = (g) => {
   );
 
   const textUtil = new TextUtil(g);
-  const scoreTexts = [];
-  scoreTexts.push(
-    textUtil.createHorizontallyCenteredText(
-      'ROUND SCORE',
-      48,
-      '#000000',
-      128
-    )
-  );
+  textUtil.createHorizontallyCenteredText(
+    'ROUND SCORE',
+    48,
+    '#000000',
+    128
+  )
 
   const scoreTextStrings = sortedScores.map(
     ({ score, color }) => rpad(`${color}`, longestColor + 1) + lpad(`${score}`, longestScore)
   );
-  scoreTexts.push.apply(
-    scoreTexts,
-    textUtil.createHorizontallyCenteredTexts(scoreTextStrings, 36, '#000000', 192, 48)
-  );
+  textUtil.createHorizontallyCenteredTexts(scoreTextStrings, 36, '#000000', 192, 48)
 
   const winner = sortedScores[0].color;
   g.globals.roundsWon[winner] += 1;
 
-  scoreTexts.push(
-    textUtil.createHorizontallyCenteredText(
-      `${winner.toUpperCase()} WINS THE ROUND!`,
-      48,
-      '#000000',
-      32
-    )
-  );
+  textUtil.createHorizontallyCenteredText(
+    `${winner.toUpperCase()} WINS THE ROUND!`,
+    48,
+    '#000000',
+    32
+  )
 
-  scoreTexts.push(
-    textUtil.createHorizontallyCenteredText(
-      `ROUNDS WON`,
-      48,
-      '#000000',
-      412
-    )
-  );
+  textUtil.createHorizontallyCenteredText(
+    `ROUNDS WON`,
+    48,
+    '#000000',
+    412
+  )
 
   const roundWinsTextStrings = Object.keys(g.globals.roundsWon).map(
     (color) => rpad(`${color}`, longestColor + 1) + g.globals.roundsWon[color]
   );
-  scoreTexts.push.apply(
-    scoreTexts,
-    textUtil.createHorizontallyCenteredTexts(roundWinsTextStrings, 36, '#000000', 480, 48)
-  );
+  textUtil.createHorizontallyCenteredTexts(roundWinsTextStrings, 36, '#000000', 480, 48)
 
   g.wait(4000, () => {
-    scoreTexts.forEach(text => g.remove(text));
-    g.state = gameState(g);
+    textUtil.clear();
+    if (g.globals.roundsWon[winner] === ROUNDS_TO_WIN) {
+      g.state = winnerState(g, winner);
+    } else {
+      g.state = gameState(g);
+    }
   })
 
   return () => {};
