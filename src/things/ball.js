@@ -168,19 +168,6 @@ class Ball extends AbstractThing
 
   bounceOffPaddle(paddle) {
     const ball = this;
-
-    // Ignore hit against bounds side, unless it's an asteroidball
-    if (
-      ball.mod !== 'asteroidball' && (
-        (paddle.position === 'top' && ball.sprite.vy > 0) ||
-        (paddle.position === 'bottom' && ball.sprite.vy < 0) ||
-        (paddle.position === 'left' && ball.sprite.vx > 0) ||
-        (paddle.position === 'right' && ball.sprite.vx < 0)
-      )
-    ) {
-      return;
-    }
-
     const ballPos = ball.getPreviousPosition();
     const paddlePos = paddle.getPreviousPosition();
     // There are 13 different areas on the paddle that affect the ball's trajectory
@@ -223,13 +210,13 @@ class Ball extends AbstractThing
       this.g.pause();
       throw new Error('Could not find hit area');
     }
-    if (['top', 'bottom'].indexOf(paddle.position) > -1) {
-      ball.sprite.vy = MAX_BALL_SPEED * (ball.sprite.vy > 0 ? -1 : 1);
-      ball.sprite.vx = hitAreas[hitAreaIndex].v;
-    } else {
-      ball.sprite.vx = MAX_BALL_SPEED * (ball.sprite.vx > 0 ? -1 : 1);
-      ball.sprite.vy = hitAreas[hitAreaIndex].v;
-    }
+    const lateralVAttr = ['top', 'bottom'].indexOf(paddle.position) > -1 ? 'vx' : 'vy';
+    const awayVAttr = (lateralVAttr === 'vy') ? 'vx' : 'vy';
+    const newAwayV = ball.mod === 'asteroidball'
+      ? (ball.sprite[awayVAttr] > 0 ? MAX_BALL_SPEED * -1 : MAX_BALL_SPEED)
+      : (['top', 'left'].indexOf(paddle.position) > -1 ? MAX_BALL_SPEED : MAX_BALL_SPEED * -1);
+    ball.sprite[lateralVAttr] = hitAreas[hitAreaIndex].v;
+    ball.sprite[awayVAttr] = newAwayV;
   }
 
   bounceOff(otherThing) {
