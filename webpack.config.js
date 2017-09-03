@@ -1,6 +1,5 @@
 var Webpack = require('webpack');
 var WebpackError = require('webpack-error-notification');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ClosureCompilerPlugin = require('webpack-closure-compiler');
 var UglifyJSPlugin = require('uglifyjs-webpack-plugin')
@@ -61,14 +60,6 @@ if (environment === 'development') {
 
 
 var phaserFilename = (environment === 'development') ? 'phaser.js' : 'phaser.min.js';
-config.plugins.push(
-    new CopyWebpackPlugin([
-        {
-            from: assetsPath,
-            to: buildPath + '/assets',
-        }
-    ])
-)
 
 module.exports = [
   {
