@@ -14,10 +14,10 @@ const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
 const modToColor = {
   'stickyball': '#ffaa00',
   'powerball': '#b50000',
-  'growball': '#00dd01',
-  'shrinkball': '#ffc1c1',
-  'mirrorball': '#822389',
-  'asteroidball': '#5078fc',
+  'growball': '#00bb01',
+  'shrinkball': '#ff69b4',
+  'mirrorball': '#9370db',
+  'asteroidball': '#00cdcd',
 };
 export const MODS = Object.keys(modToColor);
 
@@ -32,6 +32,7 @@ class Ball extends AbstractThing
     this.edgeBounces = 0;
     this.collidesWith = ['paddle', 'block', 'pit'];
     this.mirroring = null;
+    this.prevMirroring = 0;
   }
 
   changeMod(mod) {
@@ -45,7 +46,7 @@ class Ball extends AbstractThing
       BALL_SIZE,
       colors[this.color].fill,
       this.mod ? modToColor[this.mod] :colors[this.color].stroke,
-      this.mod ? BALL_SIZE : 3,
+      this.mod ? BALL_SIZE * 1.5 : 3,
     );
   }
 
@@ -210,8 +211,8 @@ class Ball extends AbstractThing
       }
     });
     if (hitAreaIndex === null) {
-      this.g.pause();
-      throw new Error('Could not find hit area');
+      console.log('Could not find hit area for pixel', hitPixel);
+      return;
     }
     const lateralVAttr = ['top', 'bottom'].indexOf(paddle.position) > -1 ? 'vx' : 'vy';
     const awayVAttr = (lateralVAttr === 'vy') ? 'vx' : 'vy';
