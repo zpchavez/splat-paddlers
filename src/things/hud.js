@@ -76,13 +76,24 @@ class Hud extends AbstractThing
     });
   }
 
+  isTie() {
+    const score = this.g.globals.roundScore;
+    const sortedScores = Object.keys(score).map(
+      color => ({ color, score: score[color]})
+    ).sort((a, b) => b.score - a.score);
+    return sortedScores[0].score === sortedScores[1].score;
+  }
+
   update() {
     super.update();
-    this.timerFrames -= 1;
-    this.updateTimerText();
     this.updateScoreText();
     if (this.timerText.content === 0) {
-      this.onTimerReachesZero();
+      if (!this.isTie()) {
+        this.onTimerReachesZero();
+      }
+    } else {
+      this.timerFrames -= 1;
+      this.updateTimerText();
     }
   }
 }
