@@ -19,11 +19,11 @@ class Block extends AbstractThing
     }
     playerColors.forEach(color => {
       this.sprites[color] = this.g.rectangle(
-        32,
-        32,
+        31,
+        31,
         colors[color].light,
         colors[color].stroke,
-        2,
+        1,
         this.position.x,
         this.position.y
       );
