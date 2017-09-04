@@ -1,18 +1,14 @@
 import TextUtil from '../text-util';
 import gameState from './game';
+import winnerState from './winner';
+import colors from '../colors';
 import { getPlayerControls } from '../controls';
 import { rpad, lpad } from '../utils';
 
+const ROUNDS_TO_WIN = 3;
+
 module.exports = (g) => {
-  let score = {};
-  g.collisionGroups.paddle.forEach(paddle => {
-    score[paddle.color] = 0;
-  });
-  g.collisionGroups.block.forEach(block => {
-    if (block.color !== 'blank') {
-      score[block.color] += 1;
-    }
-  })
+  let score = g.globals.roundScore;
   g.things.forEach(thing => thing.remove());
 
   // Sort score descending
@@ -30,27 +26,47 @@ module.exports = (g) => {
   );
 
   const textUtil = new TextUtil(g);
-  const scoreTexts = [];
-  scoreTexts.push(
-    textUtil.createHorizontallyCenteredText(
-      'Round score',
-      48,
-      '#000000',
-      128
-    )
-  );
+  textUtil.centeredText(
+    'ROUND SCORE',
+    48,
+    '#000000',
+    128
+  )
 
   const scoreTextStrings = sortedScores.map(
     ({ score, color }) => rpad(`${color}`, longestColor + 1) + lpad(`${score}`, longestScore)
   );
-  scoreTexts.push.apply(
-    scoreTexts,
-    textUtil.createHorizontallyCenteredTexts(scoreTextStrings, 36, '#000000', 192, 48)
-  );
+  textUtil.centeredTexts(scoreTextStrings, 36, '#000000', 192, 48)
 
-  g.wait(3000, () => {
-    scoreTexts.forEach(text => g.remove(text));
-    g.state = gameState(g);
+  const winner = sortedScores[0].color;
+  g.globals.roundsWon[winner] += 1;
+
+  textUtil.centeredText(
+    `${winner.toUpperCase()} WINS THE ROUND!`,
+    48,
+    '#000000',
+    32
+  )
+
+  textUtil.centeredText(
+    `ROUNDS WON`,
+    48,
+    '#000000',
+    412
+  )
+
+  const roundWinsTextStrings = Object.keys(g.globals.roundsWon).map(
+    (color) => rpad(`${color}`, longestColor + 1) + g.globals.roundsWon[color]
+  );
+  textUtil.centeredTexts(roundWinsTextStrings, 36, '#000000', 480, 48)
+
+  g.wait(4000, () => {
+    textUtil.clear();
+    if (g.globals.roundsWon[winner] === ROUNDS_TO_WIN) {
+      g.state = winnerState(g, winner);
+    } else {
+      g.state = gameState(g);
+    }
   })
 
   return () => {};

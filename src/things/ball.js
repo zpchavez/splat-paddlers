@@ -4,18 +4,20 @@ import colors from '../colors';
 import Paddle from './paddle';
 import Pit from './pit';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
+import { HUD_HEIGHT } from './hud';
+import { ANTI_COLLISION_FRAMES } from './abstract-thing';
 import { lpad } from '../utils';
 
 const BALL_SIZE = 8;
-const TOP_BOUNDS = 32;
-const MAX_BALL_SPEED = 6;
-const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
+export const MAX_BALL_V = 6;
+const MAX_EDGE_BOUNCES = 2;
 const modToColor = {
   'stickyball': '#ffaa00',
   'powerball': '#b50000',
-  'growball': '#00dd01',
-  'shrinkball': '#ffc1c1',
-  'mirrorball': '#822389',
+  'growball': '#00bb01',
+  'shrinkball': '#ff69b4',
+  'mirrorball': '#9370db',
+  'asteroidball': '#00cdcd',
 };
 export const MODS = Object.keys(modToColor);
 
@@ -25,11 +27,12 @@ class Ball extends AbstractThing
     super(g, 'ball');
 
     this.color = color;
+    this.mod = null;
     this.createSprite();
     this.edgeBounces = 0;
     this.collidesWith = ['paddle', 'block', 'pit'];
-    this.mod = null;
     this.mirroring = null;
+    this.prevMirroring = 0;
   }
 
   changeMod(mod) {
@@ -43,7 +46,7 @@ class Ball extends AbstractThing
       BALL_SIZE,
       colors[this.color].fill,
       this.mod ? modToColor[this.mod] :colors[this.color].stroke,
-      this.mod ? BALL_SIZE : 3,
+      this.mod ? BALL_SIZE * 1.5 : 3,
     );
   }
 
@@ -58,32 +61,75 @@ class Ball extends AbstractThing
   }
 
   bounceOffBounds() {
+    if (this.antiCollisionFrames['border']) {
+      return;
+    }
     let bounced = false;
     if (this.sprite.x <= 0 || this.sprite.x >= this.g.stage.width - this.sprite.width) {
       this.sprite.vx *= -1; // left or right side bounce
       bounced = true;
-    } else if (this.sprite.y <= TOP_BOUNDS || this.sprite.y >= this.g.stage.height - this.sprite.height) {
+    } else if (this.sprite.y <= HUD_HEIGHT || this.sprite.y >= this.g.stage.height - this.sprite.height) {
       this.sprite.vy *= -1; // top or bottom side bounce
       bounced = true;
     }
     if (bounced) {
+      this.antiCollisionFrames['border'] = ANTI_COLLISION_FRAMES;
       this.edgeBounces += 1;
+      this.g.sfx.play('hit3');
     }
-    if (this.edgeBounces >= EDGE_BOUNCES_BEFORE_TURNING_BLANK) {
+    if (this.edgeBounces >= MAX_EDGE_BOUNCES) {
       this.changeBallColor('blank');
       this.edgeBounces = 0;
     }
   }
 
+  screenWrap() {
+    if (this.screenWrappedLastFrame) {
+      this.sprite.visible = true;
+      this.screenWrappedLastFrame = false;
+    }
+
+    let before = [this.sprite.x, this.sprite.y];
+    if (this.sprite.x < this.sprite.width * -1) {
+      this.sprite.x = this.g.stage.width;
+    }
+    if (this.sprite.x > this.g.stage.width) {
+      this.sprite.x = this.sprite.width * -1;
+    }
+    if (this.sprite.y < HUD_HEIGHT + this.sprite.height * -1) {
+      this.sprite.y = this.g.stage.height;
+    }
+    if (this.sprite.y > this.g.stage.height) {
+      this.sprite.y = HUD_HEIGHT - this.sprite.height;
+    }
+
+    // When changing a sprite's position, ga shows it moving across
+    // the intervening space really fast, instead of just changing
+    // its position instantanously, resulting in the sprite noticeably flickering
+    // at some point on the screen. To get around this, make the sprite invisible
+    // for one frame.
+    if (before[0] !== this.sprite.x || before[1] !== this.sprite.y) {
+      this.sprite.visible = false;
+      this.screenWrappedLastFrame = true;
+    }
+  }
+
   releaseFromPit(pit) {
+    this.g.sfx.play('pit2');
     this.createSprite();
+    if (this.mod === 'asteroidball') {
+      // Recreate HUD sprite so that it remains on top, otherwise vertical
+      // wrapping doesn't look right.
+      this.g.collisionGroups.hud[0].recreateSprites();
+    }
+
 
     let xySpeed = [
       this.g.randomInt(2, 3),
       this.g.randomInt(2, 3),
     ];
-    // Double one of them so that the angle isn't such that it bounces back in the pit
-    xySpeed[this.g.randomInt(0, 1)] *= 2;
+    // At least one of vx and vy must always be the max speed
+    xySpeed[this.g.randomInt(0, 1)] = MAX_BALL_V;
 
     switch (pit.position) {
       case 'TOP LEFT':
@@ -123,8 +169,64 @@ class Ball extends AbstractThing
     this.recreateSprite();
   }
 
+  bounceOffPaddle(paddle) {
+    const ball = this;
+    const ballPos = ball.getPreviousPosition();
+    const paddlePos = paddle.getPreviousPosition();
+
+    ball.edgeBounces = 0;
+
+    // There are 13 different areas on the paddle that affect the ball's trajectory
+    // The center sets velocity to 0, then there are six areas on either side.
+    const sizeHitAreaSizes = Math.floor(paddle.length / 12);
+    const centerHitAreaSize = paddle.length - (sizeHitAreaSizes * 12);
+    const hitAreas = [];
+    for (let i = 1; i <= 6; i += 1) {
+      hitAreas.push({
+        lower: (i === 1 ? -Infinity : sizeHitAreaSizes * (i - 1)),
+        upper: sizeHitAreaSizes * i,
+        v: -7 + (i)
+      })
+    }
+    const centerHitArea = {
+      lower: sizeHitAreaSizes * 6,
+      upper: (sizeHitAreaSizes * 6) + centerHitAreaSize,
+      v: 0
+    };
+    hitAreas.push(centerHitArea);
+    for (let i = 1; i <= 6; i += 1) {
+      hitAreas.push({
+        lower: centerHitArea.upper + (sizeHitAreaSizes * (i - 1)),
+        upper: (i === 6 ? Infinity : centerHitArea.upper + (sizeHitAreaSizes * i)),
+        v: i
+      })
+    }
+    const hitPixel = (
+      ['top', 'bottom'].indexOf(paddle.position) > -1
+        ? (ballPos.x + ball.sprite.halfWidth) - paddlePos.x
+        : (ballPos.y + ball.sprite.halfHeight) - paddlePos.y
+    );
+    let hitAreaIndex = null;
+    hitAreas.forEach((hitArea, index) => {
+      if (hitAreaIndex === null && hitPixel >= hitArea.lower && hitPixel < hitArea.upper) {
+        hitAreaIndex = index;
+      }
+    });
+    if (hitAreaIndex === null) {
+      console.log('Could not find hit area for pixel', hitPixel);
+      return;
+    }
+    const lateralVAttr = ['top', 'bottom'].indexOf(paddle.position) > -1 ? 'vx' : 'vy';
+    const awayVAttr = (lateralVAttr === 'vy') ? 'vx' : 'vy';
+    const newAwayV = ball.mod === 'asteroidball'
+      ? (ball.sprite[awayVAttr] > 0 ? MAX_BALL_V * -1 : MAX_BALL_V)
+      : (['top', 'left'].indexOf(paddle.position) > -1 ? MAX_BALL_V : MAX_BALL_V * -1);
+    ball.sprite[lateralVAttr] = hitAreas[hitAreaIndex].v;
+    ball.sprite[awayVAttr] = newAwayV;
+    this.g.sfx.play('hit2');
+  }
+
   bounceOff(otherThing) {
-    this.edgeBounces = 0; // reset edge bounces
     const ball = this;
     const ballPos = ball.getPreviousPosition();
     const otherThingPos = otherThing.getPreviousPosition();
@@ -147,28 +249,33 @@ class Ball extends AbstractThing
       return;
     }
 
-    if (hitRegion === 'left' || hitRegion === 'right') {
-      // If otherThing moving in same direction as ball, add velocities
-      if (ball.sprite.vx * otherThing.sprite.vx > 0) {
-        ball.sprite.vx += otherThing.sprite.vx;
-      } else {
-        ball.sprite.vx = (ball.sprite.vx * -1) + otherThing.sprite.vx;
-      }
-      ball.sprite.vy += otherThing.sprite.vy;
-      // Limit max speed
-      ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
-      ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
+    if (otherThing instanceof Paddle) {
+      this.bounceOffPaddle(otherThing);
     } else {
-      // If otherThing moving in same direction as ball, add velocities
-      if (ball.sprite.vy * otherThing.sprite.vy > 0) {
+      this.g.sfx.play('hit1');
+      if (hitRegion === 'left' || hitRegion === 'right') {
+        // If otherThing moving in same direction as ball, add velocities
+        if (ball.sprite.vx * otherThing.sprite.vx > 0) {
+          ball.sprite.vx += otherThing.sprite.vx;
+        } else {
+          ball.sprite.vx = (ball.sprite.vx * -1) + otherThing.sprite.vx;
+        }
         ball.sprite.vy += otherThing.sprite.vy;
+        // Limit max speed
+        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_V) * (ball.sprite.vx < 0 ? -1 : 1);
+        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_V) * (ball.sprite.vy < 0 ? -1 : 1);
       } else {
-        ball.sprite.vy = (ball.sprite.vy * -1) + otherThing.sprite.vy;
+        // If otherThing moving in same direction as ball, add velocities
+        if (ball.sprite.vy * otherThing.sprite.vy > 0) {
+          ball.sprite.vy += otherThing.sprite.vy;
+        } else {
+          ball.sprite.vy = (ball.sprite.vy * -1) + otherThing.sprite.vy;
+        }
+        ball.sprite.vx += otherThing.sprite.vx;
+        // Limit max speed
+        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_V) * (ball.sprite.vy < 0 ? -1 : 1);
+        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_V) * (ball.sprite.vx < 0 ? -1 : 1);
       }
-      ball.sprite.vx += otherThing.sprite.vx;
-      // Limit max speed
-      ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
-      ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
     }
   }
 
@@ -196,9 +303,7 @@ class Ball extends AbstractThing
       }
     } else if (otherThing instanceof Pit) {
       this.remove();
-      this.sprite.visible = false;
-      this.sprite.vx = 0;
-      this.sprite.vy = 0;
+      this.sprite = null;
     }
   }
 
@@ -224,9 +329,18 @@ class Ball extends AbstractThing
   }
 
   update() {
-    super.update();
-    if (this.sprite.visible) {
-      this.bounceOffBounds();
+    this.updateAntiCollisionFrames();
+    if (this.sprite) {
+      if (this.mod === 'asteroidball') {
+        this.screenWrap();
+      } else {
+        this.bounceOffBounds();
+      }
+    }
+
+    this.handleCollisions();
+
+    if (this.sprite) {
       this.g.move(this.sprite);
     }
   }

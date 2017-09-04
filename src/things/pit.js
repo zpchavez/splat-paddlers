@@ -2,7 +2,7 @@ import AbstractThing from './abstract-thing';
 import Ball, { MODS } from './ball';
 import { HUD_HEIGHT } from './hud';
 
-export const PIT_SIZE = 32;
+export const PIT_SIZE = 16;
 
 class Pit extends AbstractThing
 {
@@ -32,7 +32,7 @@ class Pit extends AbstractThing
         throw new Error(`Invalid pit position: ${position}`);
     }
 
-    this.sprite = g.rectangle(32, 32, '#000000', '#000000', 0, x, y);
+    this.sprite = g.rectangle(PIT_SIZE, PIT_SIZE, '#000000', '#000000', 0, x, y);
 
     this.position = position;
     this.lostBallTimers = [];
@@ -40,16 +40,16 @@ class Pit extends AbstractThing
 
   handleCollision(otherThing) {
     if (otherThing instanceof Ball) {
+      this.g.sfx.play('pit1');
       this.lostBallTimers.push({
         ball: otherThing,
-        frames: 60 * this.g.randomInt(2, 5)
+        frames: this.g.fps * this.g.randomInt(1, 3)
       });
     }
   }
 
   releaseModifiedBall(ball) {
-    const mods = MODS.concat(null);
-    ball.changeMod(MODS[this.g.randomInt(0, mods.length - 1)]);
+    ball.changeMod(MODS[this.g.randomInt(0, MODS.length - 1)]);
     const randomPit = this.g.collisionGroups.pit[
       this.g.randomInt(0, this.g.collisionGroups.pit.length - 1)
     ];

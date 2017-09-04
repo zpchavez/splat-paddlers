@@ -2,6 +2,7 @@ require('../lib/ga.js');
 require('../lib/custom.js');
 
 import mainMenuState from './states/main-menu';
+import Sfx from './sfx';
 
 const ga = window.ga;
 
@@ -13,6 +14,7 @@ var g = ga(
     g.canvas.style.display = "block";
     g.canvas.style.margin = "auto";
     g.backgroundColor = "white";
+    g.sfx = new Sfx();
 
     g.state = mainMenuState(g);
   },

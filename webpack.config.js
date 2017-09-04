@@ -1,6 +1,5 @@
 var Webpack = require('webpack');
 var WebpackError = require('webpack-error-notification');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ClosureCompilerPlugin = require('webpack-closure-compiler');
 var UglifyJSPlugin = require('uglifyjs-webpack-plugin')
@@ -29,6 +28,10 @@ var config = {
     new Webpack.optimize.DedupePlugin(),
     new HtmlWebpackPlugin({
       template: appFolder + '/index.html',
+      minify: {
+        minifyJS: true,
+        collapseWhitespace: true,
+      },
       inject: false
     }),
   ],
@@ -61,14 +64,6 @@ if (environment === 'development') {
 
 
 var phaserFilename = (environment === 'development') ? 'phaser.js' : 'phaser.min.js';
-config.plugins.push(
-    new CopyWebpackPlugin([
-        {
-            from: assetsPath,
-            to: buildPath + '/assets',
-        }
-    ])
-)
 
 module.exports = [
   {
