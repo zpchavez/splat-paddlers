@@ -19,7 +19,6 @@ class Sfx {
   }
 
   play(key) {
-    console.log(this.sounds);
     if (this.sounds[key][0].paused) {
       this.sounds[key][0].play();
     } else if (this.sounds[key][1].paused) {
