@@ -40,6 +40,7 @@ class Pit extends AbstractThing
 
   handleCollision(otherThing) {
     if (otherThing instanceof Ball) {
+      this.g.sfx.play('pit1');
       this.lostBallTimers.push({
         ball: otherThing,
         frames: this.g.fps * this.g.randomInt(1, 3)

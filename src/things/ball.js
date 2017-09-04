@@ -75,6 +75,7 @@ class Ball extends AbstractThing
     if (bounced) {
       this.antiCollisionFrames['border'] = ANTI_COLLISION_FRAMES;
       this.edgeBounces += 1;
+      this.g.sfx.play('hit3');
     }
     if (this.edgeBounces >= EDGE_BOUNCES_BEFORE_TURNING_BLANK) {
       this.changeBallColor('blank');
@@ -114,6 +115,7 @@ class Ball extends AbstractThing
   }
 
   releaseFromPit(pit) {
+    this.g.sfx.play('pit2');
     this.createSprite();
     if (this.mod === 'asteroidball') {
       // Recreate HUD sprite so that it remains on top, otherwise vertical
@@ -221,6 +223,7 @@ class Ball extends AbstractThing
       : (['top', 'left'].indexOf(paddle.position) > -1 ? MAX_BALL_SPEED : MAX_BALL_SPEED * -1);
     ball.sprite[lateralVAttr] = hitAreas[hitAreaIndex].v;
     ball.sprite[awayVAttr] = newAwayV;
+    this.g.sfx.play('hit2');
   }
 
   bounceOff(otherThing) {
@@ -249,6 +252,7 @@ class Ball extends AbstractThing
     if (otherThing instanceof Paddle) {
       this.bounceOffPaddle(otherThing);
     } else {
+      this.g.sfx.play('hit1');
       if (hitRegion === 'left' || hitRegion === 'right') {
         // If otherThing moving in same direction as ball, add velocities
         if (ball.sprite.vx * otherThing.sprite.vx > 0) {
