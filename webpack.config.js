@@ -28,6 +28,10 @@ var config = {
     new Webpack.optimize.DedupePlugin(),
     new HtmlWebpackPlugin({
       template: appFolder + '/index.html',
+      minify: {
+        minifyJS: true,
+        collapseWhitespace: true,
+      },
       inject: false
     }),
   ],
