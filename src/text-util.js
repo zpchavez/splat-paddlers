@@ -23,7 +23,7 @@ class TextUtil
     return text;
   }
 
-  createHorizontallyCenteredTexts(strings, size, color, y, spacing) {
+  centeredTexts(strings, size, color, y, spacing) {
     const g = this.g;
     const letterSpacing = size * 0.2;
     let xAdjustment = strings.length === 1
@@ -45,7 +45,7 @@ class TextUtil
     return texts;
   }
 
-  createHorizontallyCenteredText(string, size, color, y) {
+  centeredText(string, size, color, y) {
     const letterSpacing = size * 0.2;
     const g = this.g
     const text = g.text(

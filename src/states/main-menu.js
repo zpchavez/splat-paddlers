@@ -5,7 +5,7 @@ import Menu from '../menu';
 
 export default (g) => {
   const textUtil = new TextUtil(g);
-  const titleText = textUtil.createHorizontallyCenteredText('Splat Paddlers!', 64, '#000000', 20);
+  const titleText = textUtil.centeredText('Splat Paddlers!', 64, '#000000', 20);
   const menu = new Menu(g);
   menu.setYPosition(256);
   menu.addItem('2 Players', () => {

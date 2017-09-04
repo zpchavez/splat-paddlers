@@ -9,8 +9,8 @@ import { ANTI_COLLISION_FRAMES } from './abstract-thing';
 import { lpad } from '../utils';
 
 const BALL_SIZE = 8;
-export const MAX_BALL_SPEED = 6;
-const EDGE_BOUNCES_BEFORE_TURNING_BLANK = 2;
+export const MAX_BALL_V = 6;
+const MAX_EDGE_BOUNCES = 2;
 const modToColor = {
   'stickyball': '#ffaa00',
   'powerball': '#b50000',
@@ -77,7 +77,7 @@ class Ball extends AbstractThing
       this.edgeBounces += 1;
       this.g.sfx.play('hit3');
     }
-    if (this.edgeBounces >= EDGE_BOUNCES_BEFORE_TURNING_BLANK) {
+    if (this.edgeBounces >= MAX_EDGE_BOUNCES) {
       this.changeBallColor('blank');
       this.edgeBounces = 0;
     }
@@ -129,7 +129,7 @@ class Ball extends AbstractThing
       this.g.randomInt(2, 3),
     ];
     // At least one of vx and vy must always be the max speed
-    xySpeed[this.g.randomInt(0, 1)] = MAX_BALL_SPEED;
+    xySpeed[this.g.randomInt(0, 1)] = MAX_BALL_V;
 
     switch (pit.position) {
       case 'TOP LEFT':
@@ -219,8 +219,8 @@ class Ball extends AbstractThing
     const lateralVAttr = ['top', 'bottom'].indexOf(paddle.position) > -1 ? 'vx' : 'vy';
     const awayVAttr = (lateralVAttr === 'vy') ? 'vx' : 'vy';
     const newAwayV = ball.mod === 'asteroidball'
-      ? (ball.sprite[awayVAttr] > 0 ? MAX_BALL_SPEED * -1 : MAX_BALL_SPEED)
-      : (['top', 'left'].indexOf(paddle.position) > -1 ? MAX_BALL_SPEED : MAX_BALL_SPEED * -1);
+      ? (ball.sprite[awayVAttr] > 0 ? MAX_BALL_V * -1 : MAX_BALL_V)
+      : (['top', 'left'].indexOf(paddle.position) > -1 ? MAX_BALL_V : MAX_BALL_V * -1);
     ball.sprite[lateralVAttr] = hitAreas[hitAreaIndex].v;
     ball.sprite[awayVAttr] = newAwayV;
     this.g.sfx.play('hit2');
@@ -262,8 +262,8 @@ class Ball extends AbstractThing
         }
         ball.sprite.vy += otherThing.sprite.vy;
         // Limit max speed
-        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
-        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
+        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_V) * (ball.sprite.vx < 0 ? -1 : 1);
+        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_V) * (ball.sprite.vy < 0 ? -1 : 1);
       } else {
         // If otherThing moving in same direction as ball, add velocities
         if (ball.sprite.vy * otherThing.sprite.vy > 0) {
@@ -273,8 +273,8 @@ class Ball extends AbstractThing
         }
         ball.sprite.vx += otherThing.sprite.vx;
         // Limit max speed
-        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_SPEED) * (ball.sprite.vy < 0 ? -1 : 1);
-        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_SPEED) * (ball.sprite.vx < 0 ? -1 : 1);
+        ball.sprite.vy = Math.min(Math.abs(ball.sprite.vy), MAX_BALL_V) * (ball.sprite.vy < 0 ? -1 : 1);
+        ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_V) * (ball.sprite.vx < 0 ? -1 : 1);
       }
     }
   }

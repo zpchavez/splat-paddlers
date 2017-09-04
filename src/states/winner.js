@@ -5,7 +5,7 @@ module.exports = (g, winner) => {
   let score = g.globals.roundScore;
 
   const textUtil = new TextUtil(g);
-  textUtil.createHorizontallyCenteredText(
+  textUtil.centeredText(
     `${winner.toUpperCase()} WINS THE GAME!`,
     48,
     '#000000',

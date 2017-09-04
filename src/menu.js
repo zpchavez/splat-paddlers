@@ -46,7 +46,7 @@ class Menu
 
   draw() {
     if (!this.cursor) {
-      this.texts = this.textUtil.createHorizontallyCenteredTexts(
+      this.texts = this.textUtil.centeredTexts(
         this.items.map(item => item.text),
         this.textSize,
         '#000000',

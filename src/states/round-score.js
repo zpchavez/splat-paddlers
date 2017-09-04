@@ -26,7 +26,7 @@ module.exports = (g) => {
   );
 
   const textUtil = new TextUtil(g);
-  textUtil.createHorizontallyCenteredText(
+  textUtil.centeredText(
     'ROUND SCORE',
     48,
     '#000000',
@@ -36,19 +36,19 @@ module.exports = (g) => {
   const scoreTextStrings = sortedScores.map(
     ({ score, color }) => rpad(`${color}`, longestColor + 1) + lpad(`${score}`, longestScore)
   );
-  textUtil.createHorizontallyCenteredTexts(scoreTextStrings, 36, '#000000', 192, 48)
+  textUtil.centeredTexts(scoreTextStrings, 36, '#000000', 192, 48)
 
   const winner = sortedScores[0].color;
   g.globals.roundsWon[winner] += 1;
 
-  textUtil.createHorizontallyCenteredText(
+  textUtil.centeredText(
     `${winner.toUpperCase()} WINS THE ROUND!`,
     48,
     '#000000',
     32
   )
 
-  textUtil.createHorizontallyCenteredText(
+  textUtil.centeredText(
     `ROUNDS WON`,
     48,
     '#000000',
@@ -58,7 +58,7 @@ module.exports = (g) => {
   const roundWinsTextStrings = Object.keys(g.globals.roundsWon).map(
     (color) => rpad(`${color}`, longestColor + 1) + g.globals.roundsWon[color]
   );
-  textUtil.createHorizontallyCenteredTexts(roundWinsTextStrings, 36, '#000000', 480, 48)
+  textUtil.centeredTexts(roundWinsTextStrings, 36, '#000000', 480, 48)
 
   g.wait(4000, () => {
     textUtil.clear();
