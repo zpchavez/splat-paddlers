@@ -1,7 +1,7 @@
 import AbstractThing from './abstract-thing';
 import colors from '../colors';
 
-const TIMER_SECONDS = 5;
+const TIMER_SECONDS = 90;
 export const HUD_HEIGHT = 32;
 
 class Hud extends AbstractThing
