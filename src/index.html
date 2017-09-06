@@ -4,16 +4,16 @@
     <meta charset="utf-8">
     <title>Splat Paddlers</title>
     <script>
-      function showInstructions() {
+      function show() {
         document.getElementById('instructions').style.display = 'block';
-        document.getElementById('show-instructions-button').style.display = 'none';
-        document.getElementById('hide-instructions-button').style.display = 'inline';
+        document.getElementById('show-button').style.display = 'none';
+        document.getElementById('hide-button').style.display = 'inline';
       };
 
-      function hideInstructions() {
+      function hide() {
         document.getElementById('instructions').style.display = 'none';
-        document.getElementById('show-instructions-button').style.display = 'inline';
-        document.getElementById('hide-instructions-button').style.display = 'none';
+        document.getElementById('show-button').style.display = 'inline';
+        document.getElementById('hide-button').style.display = 'none';
       };
     </script>
 </head>
@@ -21,18 +21,18 @@
 <body>
   <div style="text-align: center">
     <a
-      id="show-instructions-button"
+      id="show-button"
       href="#"
       style="color: black"
-      onClick="showInstructions()"
+      onClick="show()"
     >
       Show Instructions
     </a>
     <a
-      id="hide-instructions-button"
+      id="hide-button"
       href="#"
       style="color: black; display: none;"
-      onClick="hideInstructions()"
+      onClick="hide()"
     >
       Hide Instructions
     </a>
