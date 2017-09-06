@@ -8,6 +8,13 @@ export default (g) => {
   const titleText = textUtil.centeredText('Splat Paddlers!', 64, '#000000', 20);
   const menu = new Menu(g);
   menu.setYPosition(256);
+  menu.addItem('1 Player (Practice)', () => {
+    g.globals = {
+      players: 1,
+    };
+    textUtil.clear();
+    g.state = gameState(g);
+  });
   menu.addItem('2 Players', () => {
     g.globals = {
       players: 2,
