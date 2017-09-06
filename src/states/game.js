@@ -18,7 +18,15 @@ export default (g) => {
   }
 
   let paddleInfo = [];
-  if (g.globals.players === 2 || g.globals.teams) {
+  if (g.globals.players === 1) {
+    paddleInfo = [
+      {position: 'bottom', color: 'blue', player: 1},
+      {position: 'right', color: 'red', player: 1},
+      {position: 'top', color: 'yellow', player: 1},
+      {position: 'left', color: 'green', player: 1},
+    ];
+    paddleInfo[g.randomInt(0, 3)].startWithBall = true;
+  } else if (g.globals.players === 2 || g.globals.teams) {
     paddleInfo = [
       {position: 'bottom', color: 'blue'},
       {position: 'right', color: 'blue'},
@@ -38,10 +46,6 @@ export default (g) => {
     }
     paddleInfo[g.randomInt(0, 1)].startWithBall = true;
     paddleInfo[g.randomInt(2, 3)].startWithBall = true;
-    g.globals.roundScore = {
-      blue: 0,
-      red: 0,
-    };
   } else if (g.globals.players === 4) {
     paddleInfo = [
       {position: 'bottom', color: 'blue', player: 1, startWithBall: true},
@@ -49,13 +53,14 @@ export default (g) => {
       {position: 'top', color: 'yellow', player: 3, startWithBall: true},
       {position: 'left', color: 'green', player: 4, startWithBall: true},
     ];
-    g.globals.roundScore = {
-      blue: 0,
-      red: 0,
-      green: 0,
-      yellow: 0,
-    };
   }
+
+  g.globals.roundScore = {};
+  paddleInfo.forEach(info => {
+    if (!g.globals.roundScore[info.color]) {
+      g.globals.roundScore[info.color] = 0;
+    }
+  })
 
   g.globals.roundsWon = Object.assign(
     {},

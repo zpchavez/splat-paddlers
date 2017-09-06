@@ -318,12 +318,18 @@ class Ball extends AbstractThing
       } else {
         this.sprite.vx += direction * multiplier;
       }
+      this.sprite.vx = this.sprite.vx > 0
+        ? Math.min(this.sprite.vx, MAX_BALL_V)
+        : Math.max(this.sprite.vx, MAX_BALL_V * -1);
     } else {
       if (direction === 0) {
         this.sprite.vy += this.prevMirroring * multiplier;
       } else {
         this.sprite.vy += direction * multiplier;
       }
+      this.sprite.vy = this.sprite.vy > 0
+        ? Math.min(this.sprite.vy, MAX_BALL_V)
+        : Math.max(this.sprite.vy, MAX_BALL_V * -1);
     }
     this.prevMirroring = direction;
   }
