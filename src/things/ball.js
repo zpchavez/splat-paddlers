@@ -32,13 +32,11 @@ class Ball extends AbstractThing
     this.edgeBounces = 0;
     this.collidesWith = ['paddle', 'block', 'pit'];
     this.mirroring = null;
-    this.prevMirroring = 0;
   }
 
   changeMod(mod) {
     this.mod = mod;
     this.mirroring = null;
-    this.prevMirroring = 0;
   }
 
   createSprite() {
@@ -81,7 +79,6 @@ class Ball extends AbstractThing
       this.changeBallColor('blank');
       this.edgeBounces = 0;
       this.mirroring = null;
-      this.prevMirroring = 0;
     }
   }
 
@@ -315,25 +312,10 @@ class Ball extends AbstractThing
     }
     const multiplier = 2;
     if (this.mirroring === 'top' || this.mirroring === 'bottom') {
-      if (direction === 0) {
-        this.sprite.vx += this.prevMirroring * multiplier;
-      } else {
-        this.sprite.vx += direction * multiplier;
-      }
-      this.sprite.vx = this.sprite.vx > 0
-        ? Math.min(this.sprite.vx, MAX_BALL_V)
-        : Math.max(this.sprite.vx, MAX_BALL_V * -1);
+      this.sprite.vx = MAX_BALL_V * direction;
     } else {
-      if (direction === 0) {
-        this.sprite.vy += this.prevMirroring * multiplier;
-      } else {
-        this.sprite.vy += direction * multiplier;
-      }
-      this.sprite.vy = this.sprite.vy > 0
-        ? Math.min(this.sprite.vy, MAX_BALL_V)
-        : Math.max(this.sprite.vy, MAX_BALL_V * -1);
+      this.sprite.vy = MAX_BALL_V * direction;
     }
-    this.prevMirroring = direction;
   }
 
   update() {
