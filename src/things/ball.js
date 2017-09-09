@@ -80,6 +80,8 @@ class Ball extends AbstractThing
     if (this.edgeBounces >= MAX_EDGE_BOUNCES) {
       this.changeBallColor('blank');
       this.edgeBounces = 0;
+      this.mirroring = null;
+      this.prevMirroring = 0;
     }
   }
 
