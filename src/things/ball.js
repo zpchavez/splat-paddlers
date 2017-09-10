@@ -310,7 +310,6 @@ class Ball extends AbstractThing
     if (!this.mirroring) {
       return;
     }
-    const multiplier = 2;
     if (this.mirroring === 'top' || this.mirroring === 'bottom') {
       this.sprite.vx = MAX_BALL_V * direction;
     } else {
