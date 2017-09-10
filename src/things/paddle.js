@@ -6,7 +6,7 @@ import { MAX_BALL_V } from './ball';
 import { HUD_HEIGHT } from './hud';
 import { PIT_SIZE } from './pit';
 
-const PAD_V = 8;
+const PADDLE_V = 8;
 const MIN_PAD_LEN = 16;
 const MAX_PAD_LEN = 256;
 export const LEFT = 'left';
@@ -94,11 +94,10 @@ class Paddle extends AbstractThing
     this.controls.up.press = () => {
       this.upArrowDown = true;
       this.applyToMirroredBall(-1);
-      this.sprite.vy = PAD_V * -1;
+      this.sprite.vy = PADDLE_V * -1;
     };
     this.controls.up.release = () => {
       this.upArrowDown = false;
-      this.applyToMirroredBall(0);
       if (!this.controls.down.isDown) {
         this.sprite.vy = 0;
       }
@@ -106,11 +105,10 @@ class Paddle extends AbstractThing
     this.controls.down.press = () => {
       this.downArrowDown = true;
       this.applyToMirroredBall(1);
-      this.sprite.vy = PAD_V;
+      this.sprite.vy = PADDLE_V;
     };
     this.controls.down.release = () => {
       this.downArrowDown = false;
-      this.applyToMirroredBall(0);
       if (!this.controls.up.isDown) {
         this.sprite.vy = 0;
       }
@@ -121,11 +119,10 @@ class Paddle extends AbstractThing
     this.controls.right.press = () => {
       this.rightArrowDown = true;
       this.applyToMirroredBall(1);
-      this.sprite.vx = PAD_V;
+      this.sprite.vx = PADDLE_V;
     };
     this.controls.right.release = () => {
       this.rightArrowDown = false;
-      this.applyToMirroredBall(0);
       if (!this.controls.left.isDown) {
         this.sprite.vx = 0;
       }
@@ -133,10 +130,9 @@ class Paddle extends AbstractThing
     this.controls.left.press = () => {
       this.applyToMirroredBall(-1);
       this.leftArrowDown = true;
-      this.sprite.vx = PAD_V * -1;
+      this.sprite.vx = PADDLE_V * -1;
     };
     this.controls.left.release = () => {
-      this.applyToMirroredBall(0);
       this.leftArrowDown = false;
       if (!this.controls.right.isDown) {
         this.sprite.vx = 0;

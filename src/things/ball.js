@@ -46,6 +46,12 @@ class Ball extends AbstractThing
       this.mod ? modToColor[this.mod] :colors[this.color].stroke,
       this.mod ? BALL_SIZE * 1.5 : 3,
     );
+
+    if (this.mod === 'asteroidball' && this.g.collisionGroups.hud) {
+      // Recreate HUD sprite so that it remains on top, otherwise vertical
+      // wrapping doesn't look right.
+      this.g.collisionGroups.hud[0].recreateSprites();
+    }
   }
 
   recreateSprite() {
@@ -116,12 +122,6 @@ class Ball extends AbstractThing
   releaseFromPit(pit) {
     this.g.sfx.play('pit2');
     this.createSprite();
-    if (this.mod === 'asteroidball') {
-      // Recreate HUD sprite so that it remains on top, otherwise vertical
-      // wrapping doesn't look right.
-      this.g.collisionGroups.hud[0].recreateSprites();
-    }
-
 
     let xySpeed = [
       this.g.randomInt(2, 3),
@@ -310,7 +310,6 @@ class Ball extends AbstractThing
     if (!this.mirroring) {
       return;
     }
-    const multiplier = 2;
     if (this.mirroring === 'top' || this.mirroring === 'bottom') {
       this.sprite.vx = MAX_BALL_V * direction;
     } else {
