@@ -98,7 +98,6 @@ class Paddle extends AbstractThing
     };
     this.controls.up.release = () => {
       this.upArrowDown = false;
-      this.applyToMirroredBall(0);
       if (!this.controls.down.isDown) {
         this.sprite.vy = 0;
       }
@@ -110,7 +109,6 @@ class Paddle extends AbstractThing
     };
     this.controls.down.release = () => {
       this.downArrowDown = false;
-      this.applyToMirroredBall(0);
       if (!this.controls.up.isDown) {
         this.sprite.vy = 0;
       }
@@ -125,7 +123,6 @@ class Paddle extends AbstractThing
     };
     this.controls.right.release = () => {
       this.rightArrowDown = false;
-      this.applyToMirroredBall(0);
       if (!this.controls.left.isDown) {
         this.sprite.vx = 0;
       }
@@ -136,7 +133,6 @@ class Paddle extends AbstractThing
       this.sprite.vx = PADDLE_V * -1;
     };
     this.controls.left.release = () => {
-      this.applyToMirroredBall(0);
       this.leftArrowDown = false;
       if (!this.controls.right.isDown) {
         this.sprite.vx = 0;
