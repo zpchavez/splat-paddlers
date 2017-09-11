@@ -79,12 +79,14 @@ class Ball extends AbstractThing
     if (bounced) {
       this.antiCollisionFrames['border'] = ANTI_COLLISION_FRAMES;
       this.edgeBounces += 1;
-      this.g.sfx.play('hit3');
     }
-    if (this.edgeBounces >= MAX_EDGE_BOUNCES) {
+    if (this.edgeBounces >= MAX_EDGE_BOUNCES && this.color !== 'blank') {
       this.changeBallColor('blank');
       this.edgeBounces = 0;
       this.mirroring = null;
+      this.g.sfx.play('hit4');
+    } else if (bounced) {
+      this.g.sfx.play('hit3');
     }
   }
 
