@@ -1,6 +1,6 @@
 import Ball from '../things/ball';
 import Block from '../things/block';
-import Hud from '../things/hud';
+import Hud, { HUD_HEIGHT } from '../things/hud';
 import Paddle from '../things/paddle';
 import Pit from '../things/pit';
 
@@ -12,7 +12,7 @@ export default (g) => {
 
   const blocks = [];
   for (let x = 128; x <= 608; x += 32) {
-    for (let y = 128; y <= 608; y += 32) {
+    for (let y = 128 + HUD_HEIGHT; y <= 608 + HUD_HEIGHT; y += 32) {
       blocks.push(new Block(g, { x, y }));
     }
   }
