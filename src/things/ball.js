@@ -6,7 +6,6 @@ import Pit from './pit';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
 import { HUD_HEIGHT } from './hud';
 import { ANTI_COLLISION_FRAMES } from './abstract-thing';
-import { lpad } from '../utils';
 
 const BALL_SIZE = 8;
 export const MAX_BALL_V = 6;
