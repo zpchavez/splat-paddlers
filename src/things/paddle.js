@@ -36,13 +36,13 @@ class Paddle extends AbstractThing
         g.stage.putTop(this.sprite, 16, HUD_HEIGHT + this.sprite.height);
         break;
       case RIGHT:
-        g.stage.putRight(this.sprite, this.sprite.width * -1, -32);
+        g.stage.putRight(this.sprite, this.sprite.width * -1, HUD_HEIGHT - 32);
         break;
       case BOTTOM:
         g.stage.putBottom(this.sprite, -16, this.sprite.height * -1);
         break;
       case LEFT:
-        g.stage.putLeft(this.sprite, this.sprite.width, 32);
+        g.stage.putLeft(this.sprite, this.sprite.width, HUD_HEIGHT);
         break;
       default:
         this.g.pause();
