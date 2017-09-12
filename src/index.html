@@ -6,14 +6,14 @@
     <script>
       function show() {
         document.getElementById('instructions').style.display = 'block';
-        document.getElementById('show-button').style.display = 'none';
-        document.getElementById('hide-button').style.display = 'inline';
+        document.getElementById('showbutton').style.display = 'none';
+        document.getElementById('hidebutton').style.display = 'inline';
       };
 
       function hide() {
         document.getElementById('instructions').style.display = 'none';
-        document.getElementById('show-button').style.display = 'inline';
-        document.getElementById('hide-button').style.display = 'none';
+        document.getElementById('showbutton').style.display = 'inline';
+        document.getElementById('hidebutton').style.display = 'none';
       };
     </script>
 </head>
@@ -21,7 +21,7 @@
 <body>
   <div style="text-align: center">
     <a
-      id="show-button"
+      id="showbutton"
       href="#"
       style="color: black"
       onClick="show()"
@@ -29,7 +29,7 @@
       Show Instructions
     </a>
     <a
-      id="hide-button"
+      id="hidebutton"
       href="#"
       style="color: black; display: none;"
       onClick="hide()"

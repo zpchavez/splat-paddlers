@@ -6,7 +6,6 @@ import Pit from './pit';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
 import { HUD_HEIGHT } from './hud';
 import { ANTI_COLLISION_FRAMES } from './abstract-thing';
-import { lpad } from '../utils';
 
 const BALL_SIZE = 8;
 export const MAX_BALL_V = 6;
@@ -69,10 +68,17 @@ class Ball extends AbstractThing
       return;
     }
     let bounced = false;
-    if (this.sprite.x <= 0 || this.sprite.x >= this.g.stage.width - this.sprite.width) {
+    if (
+      (this.sprite.x <= 0 && this.sprite.vx < 0) ||
+      (this.sprite.x >= this.g.stage.width - this.sprite.width && this.sprite.vx > 0)
+    ) {
       this.sprite.vx *= -1; // left or right side bounce
       bounced = true;
-    } else if (this.sprite.y <= HUD_HEIGHT || this.sprite.y >= this.g.stage.height - this.sprite.height) {
+    }
+    if (
+      (this.sprite.y <= HUD_HEIGHT && this.sprite.vy < 0) ||
+      (this.sprite.y >= this.g.stage.height - this.sprite.height && this.sprite.vy > 0)
+    ) {
       this.sprite.vy *= -1; // top or bottom side bounce
       bounced = true;
     }
@@ -81,7 +87,7 @@ class Ball extends AbstractThing
       this.edgeBounces += 1;
     }
     if (bounced && this.edgeBounces >= MAX_EDGE_BOUNCES && this.color !== 'blank') {
-      this.changeBallColor('blank');
+      this.changeColor('blank');
       this.edgeBounces = 0;
       this.mirroring = null;
       this.g.sfx.play('hit4');
@@ -165,7 +171,7 @@ class Ball extends AbstractThing
     this.antiCollisionFrames[pit.id] = 10;
   }
 
-  changeBallColor(newColor) {
+  changeColor(newColor) {
     this.color = newColor;
     this.recreateSprite();
   }
@@ -233,7 +239,7 @@ class Ball extends AbstractThing
     const otherThingPos = otherThing.getPreviousPosition();
 
     if (otherThing instanceof Paddle && otherThing.color !== this.color) {
-      this.changeBallColor(otherThing.color);
+      this.changeColor(otherThing.color);
     }
 
     let hitRegion = null;
@@ -297,6 +303,7 @@ class Ball extends AbstractThing
         otherThing.attachBall(this);
         this.changeMod(null);
         this.color = otherThing.color;
+        this.edgeBounces = 0;
         this.recreateSprite();
       } else {
         if (!(otherThing instanceof Block && this.mod === 'powerball')) {
