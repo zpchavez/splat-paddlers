@@ -87,7 +87,7 @@ class Ball extends AbstractThing
       this.edgeBounces += 1;
     }
     if (bounced && this.edgeBounces >= MAX_EDGE_BOUNCES && this.color !== 'blank') {
-      this.changeBallColor('blank');
+      this.changeColor('blank');
       this.edgeBounces = 0;
       this.mirroring = null;
       this.g.sfx.play('hit4');
@@ -171,7 +171,7 @@ class Ball extends AbstractThing
     this.antiCollisionFrames[pit.id] = 10;
   }
 
-  changeBallColor(newColor) {
+  changeColor(newColor) {
     this.color = newColor;
     this.recreateSprite();
   }
@@ -239,7 +239,7 @@ class Ball extends AbstractThing
     const otherThingPos = otherThing.getPreviousPosition();
 
     if (otherThing instanceof Paddle && otherThing.color !== this.color) {
-      this.changeBallColor(otherThing.color);
+      this.changeColor(otherThing.color);
     }
 
     let hitRegion = null;
