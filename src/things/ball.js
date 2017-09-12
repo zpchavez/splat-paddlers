@@ -65,7 +65,7 @@ class Ball extends AbstractThing
   }
 
   bounceOffBounds() {
-    if (this.antiCollisionFrames['border']) {
+    if (this.antiCollisionFrames['border'] || this.isCaught()) {
       return;
     }
     let bounced = false;
@@ -80,7 +80,7 @@ class Ball extends AbstractThing
       this.antiCollisionFrames['border'] = ANTI_COLLISION_FRAMES;
       this.edgeBounces += 1;
     }
-    if (this.edgeBounces >= MAX_EDGE_BOUNCES && this.color !== 'blank') {
+    if (bounced && this.edgeBounces >= MAX_EDGE_BOUNCES && this.color !== 'blank') {
       this.changeBallColor('blank');
       this.edgeBounces = 0;
       this.mirroring = null;
@@ -278,6 +278,10 @@ class Ball extends AbstractThing
         ball.sprite.vx = Math.min(Math.abs(ball.sprite.vx), MAX_BALL_V) * (ball.sprite.vx < 0 ? -1 : 1);
       }
     }
+  }
+
+  isCaught() {
+    return this.g.collisionGroups.paddle.reduce((acc, val) => acc || val.caughtBall === this, false);
   }
 
   handleCollision(otherThing) {

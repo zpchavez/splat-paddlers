@@ -6,33 +6,33 @@ class Menu
   constructor(g) {
     this.g = g;
     this.items = [];
-    this.cursorPosition = 0;
+    this.cursorPos = 0;
     this.textUtil = new TextUtil(g);
     this.textSize = 48;
-    this.verticalSpacing = 64;
+    this.spacing = 64;
     this.initInput();
   }
 
   initInput() {
     this.controls = getPlayerControls(this.g, 1);
     this.controls.up.press = () => {
-      if (this.cursorPosition === 0) {
-        this.cursorPosition = this.items.length - 1;
+      if (this.cursorPos === 0) {
+        this.cursorPos = this.items.length - 1;
       } else {
-        this.cursorPosition -= 1;
+        this.cursorPos -= 1;
       }
     }
     this.controls.down.press = () => {
-      if (this.cursorPosition === this.items.length - 1) {
-        this.cursorPosition = 0;
+      if (this.cursorPos === this.items.length - 1) {
+        this.cursorPos = 0;
       } else {
-        this.cursorPosition += 1;
+        this.cursorPos += 1;
       }
     }
     this.controls.action.press = () => {
       this.textUtil.clear();
       this.controls.action.press = null;
-      this.items[this.cursorPosition].callback();
+      this.items[this.cursorPos].callback();
     }
   }
 
@@ -51,19 +51,19 @@ class Menu
         this.textSize,
         '#000000',
         this.y,
-        this.verticalSpacing
+        this.spacing
       );
 
       this.cursor = this.textUtil.createText(
         '=>',
         this.textSize,
         '#000000',
-        this.texts[0].x - this.verticalSpacing,
-        this.y + (this.verticalSpacing * this.cursorPosition)
+        this.texts[0].x - this.spacing,
+        this.y + (this.spacing * this.cursorPos)
       );
     }
 
-    this.cursor.y = this.y + (this.verticalSpacing * this.cursorPosition);
+    this.cursor.y = this.y + (this.spacing * this.cursorPos);
   }
 }
 
