@@ -281,7 +281,7 @@ class Ball extends AbstractThing
   }
 
   isCaught() {
-    return this.g.collisionGroups.paddle.reduce((acc, val) => acc || !!val.caughtBall, false);
+    return this.g.collisionGroups.paddle.reduce((acc, val) => acc || val.caughtBall === this, false);
   }
 
   handleCollision(otherThing) {
