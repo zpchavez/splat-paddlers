@@ -68,10 +68,17 @@ class Ball extends AbstractThing
       return;
     }
     let bounced = false;
-    if (this.sprite.x <= 0 || this.sprite.x >= this.g.stage.width - this.sprite.width) {
+    if (
+      (this.sprite.x <= 0 && this.sprite.vx < 0) ||
+      (this.sprite.x >= this.g.stage.width - this.sprite.width && this.sprite.vx > 0)
+    ) {
       this.sprite.vx *= -1; // left or right side bounce
       bounced = true;
-    } else if (this.sprite.y <= HUD_HEIGHT || this.sprite.y >= this.g.stage.height - this.sprite.height) {
+    }
+    if (
+      (this.sprite.y <= HUD_HEIGHT && this.sprite.vy < 0) ||
+      (this.sprite.y >= this.g.stage.height - this.sprite.height && this.sprite.vy > 0)
+    ) {
       this.sprite.vy *= -1; // top or bottom side bounce
       bounced = true;
     }
