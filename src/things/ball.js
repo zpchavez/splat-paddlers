@@ -296,6 +296,7 @@ class Ball extends AbstractThing
         otherThing.attachBall(this);
         this.changeMod(null);
         this.color = otherThing.color;
+        this.edgeBounces = 0;
         this.recreateSprite();
       } else {
         if (!(otherThing instanceof Block && this.mod === 'powerball')) {
