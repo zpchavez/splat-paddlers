@@ -14,20 +14,23 @@ var environment = (process.env.APP_ENV || 'development');
 var __HOSTNAME__ = 'localhost';
 var __PORT__ = 9123;
 
-var appEntries = [
-    appFolder + '/main.js',
-];
-
 var config = {
   devtools: [],
-  entries: {
-    app: appEntries
-  },
   plugins: [
     new Webpack.optimize.OccurrenceOrderPlugin(),
     new Webpack.optimize.DedupePlugin(),
     new HtmlWebpackPlugin({
-      template: appFolder + '/index.html',
+      template: appFolder + '/screen.html',
+      filename: "screen.html",
+      minify: {
+        minifyJS: true,
+        collapseWhitespace: true,
+      },
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: appFolder + '/controller.html',
+      filename: "controller.html",
       minify: {
         minifyJS: true,
         collapseWhitespace: true,
@@ -65,42 +68,58 @@ if (environment === 'development') {
 
 var phaserFilename = (environment === 'development') ? 'phaser.js' : 'phaser.min.js';
 
+const moduleOptions = {
+  loaders: [
+    {
+      test: /\.(eot|ico|ttf|woff|woff2|gif|jpe?g|png|svg)$/,
+      loader: 'file-loader',
+      exclude: npmPath,
+    },
+    {
+      test: /\.jsx?$/,
+      loaders: ['babel'],
+      exclude: npmPath,
+    },
+    {
+      test: /\.json$/,
+      loader: 'json-loader',
+      exclude: npmPath,
+    },
+  ],
+};
+
+const resolveOptions = {
+  alias: {
+    base: path.resolve('./'),
+  },
+  extensions: ['', '.css', '.js', '.json', '.jsx', '.scss', '.webpack.js', '.web.js'],
+};
+
 module.exports = [
   {
-    name: 'app bundle',
-    entry: config.entries.app,
+    name: 'screen bundle',
+    entry: appFolder + '/screen.js',
     output: {
-      filename: 'app.js',
+      filename: 'screen.js',
       path: buildPath,
       publicPath: '/',
     },
-    module: {
-      loaders: [
-        {
-          test: /\.(eot|ico|ttf|woff|woff2|gif|jpe?g|png|svg)$/,
-          loader: 'file-loader',
-          exclude: npmPath,
-        },
-        {
-          test: /\.jsx?$/,
-          loaders: ['babel'],
-          exclude: npmPath,
-        },
-        {
-          test: /\.json$/,
-          loader: 'json-loader',
-          exclude: npmPath,
-        },
-      ],
-    },
+    module: moduleOptions,
     plugins: config.plugins,
-
-    resolve: {
-      alias: {
-        base: path.resolve('./'),
-      },
-      extensions: ['', '.css', '.js', '.json', '.jsx', '.scss', '.webpack.js', '.web.js'],
+    resolve: resolveOptions,
+    devtool: config.devtools,
+  },
+  {
+    name: 'controller bundle',
+    entry: appFolder + '/controller.js',
+    output: {
+      filename: 'controller.js',
+      path: buildPath,
+      publicPath: '/',
     },
+    module: moduleOptions,
+    plugins: config.plugins,
+    resolve: resolveOptions,
     devtool: config.devtools,
   },
 ];
