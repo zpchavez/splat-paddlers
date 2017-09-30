@@ -52,6 +52,7 @@ class Paddle extends AbstractThing
     this.antiCollisionFrames = {};
     this.initInput();
     this.controls = getPlayerControls(g, this.player);
+    console.log('got player controls', this.controls);
   }
 
   attachBall(ball) {
@@ -92,6 +93,7 @@ class Paddle extends AbstractThing
 
   initVerticalControls() {
     this.controls.up.press = () => {
+      console.log('press up');
       this.upArrowDown = true;
       this.applyToMirroredBall(-1);
       this.sprite.vy = PADDLE_V * -1;
@@ -117,6 +119,7 @@ class Paddle extends AbstractThing
 
   initHorizontalControls() {
     this.controls.right.press = () => {
+      console.log('press right');
       this.rightArrowDown = true;
       this.applyToMirroredBall(1);
       this.sprite.vx = PADDLE_V;

@@ -15,6 +15,7 @@ var g = ga(
     g.canvas.style.margin = "auto";
     g.backgroundColor = "white";
     g.sfx = new Sfx();
+    g.airconsole = new AirConsole();
 
     g.state = mainMenuState(g);
   },
