@@ -48,46 +48,49 @@ class Controller extends Component {
   }
 
   render() {
+    const windowHeight = document.documentElement.clientHeight;
+    const windowWidth = document.documentElement.clientWidth;
+
     const buttonStyle = {
+      margin: 0,
+      padding: 0,
       fontSize: '2em',
-      flexGrow: 1
+      height: windowWidth,
+      flexGrow: 1,
+      border: '1px solid black',
     };
+
+    const containerStyle = {
+      display: 'flex',
+      flexDirection: 'row',
+      margin: 0,
+      padding: 0,
+    }
 
     return (
       <div style={{
+        margin: 0,
+        padding: 0,
+        display: 'flex',
         transform: 'rotate(90deg)',
-        transformOrigin: '0 100%'
+        // transformOrigin: '0 100%'
       }}>
         <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-          }}
+          style={containerStyle}
         >
-          <button
-            id="up"
-            onTouchStart={this.onTouchStart}
-            onTouchEnd={this.onTouchEnd}
-            onTouchMove={this.onTouchMove}
-            style={buttonStyle}
-          >
-            ↑
-          </button>
-          <button
-            id="down"
-            onTouchStart={this.onTouchStart}
-            onTouchEnd={this.onTouchEnd}
-            onTouchMove={this.onTouchMove}
-            style={buttonStyle}
-          >
-            ↓
-          </button>
           <button
             id="left"
             onTouchStart={this.onTouchStart}
             onTouchEnd={this.onTouchEnd}
             onTouchMove={this.onTouchMove}
-            style={buttonStyle}
+            style={
+              Object.assign(
+                {
+                  width: windowHeight / 6
+                },
+                buttonStyle
+              )
+            }
           >
             ←
           </button>
@@ -96,16 +99,20 @@ class Controller extends Component {
             onTouchStart={this.onTouchStart}
             onTouchEnd={this.onTouchEnd}
             onTouchMove={this.onTouchMove}
-            style={buttonStyle}
+            style={
+              Object.assign(
+                {
+                  width: windowHeight / 6
+                },
+                buttonStyle
+              )
+            }
           >
             →
           </button>
         </div>
         <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-          }}
+          style={containerStyle}
         >
           <button
             id="action"
@@ -116,6 +123,58 @@ class Controller extends Component {
           >
             Release
           </button>
+        </div>
+        <div
+          style={
+            Object.assign(
+              {
+                // width: windowHeight / 2,
+                flexWrap: 'wrap',
+              },
+              containerStyle
+            )
+          }
+        >
+          {/* <div> */}
+            <button
+              id="up"
+              onTouchStart={this.onTouchStart}
+              onTouchEnd={this.onTouchEnd}
+              onTouchMove={this.onTouchMove}
+              style={
+                Object.assign(
+                  {},
+                  buttonStyle,
+                  {
+                    width: windowHeight / 2.35,
+                    height: windowWidth / 2,
+                  },
+                )
+              }
+            >
+              ↑
+            </button>
+          {/* </div> */}
+          {/* <div> */}
+            <button
+              id="down"
+              onTouchStart={this.onTouchStart}
+              onTouchEnd={this.onTouchEnd}
+              onTouchMove={this.onTouchMove}
+              style={
+                Object.assign(
+                  {},
+                  buttonStyle,
+                  {
+                    width: windowHeight / 2.35,
+                    height: windowWidth / 2,
+                  },
+                )
+              }
+            >
+              ↓
+            </button>
+          {/* </div> */}
         </div>
       </div>
     )
