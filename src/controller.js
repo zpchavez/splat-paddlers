@@ -48,133 +48,119 @@ class Controller extends Component {
   }
 
   render() {
-    const windowHeight = document.documentElement.clientHeight;
-    const windowWidth = document.documentElement.clientWidth;
+    // const ratio = window.devicePixelRatio || 1;
+    const ratio = 1;
+    const windowWidth = screen.width * ratio;
+    const windowHeight = screen.height * ratio;
 
     const buttonStyle = {
       margin: 0,
       padding: 0,
       fontSize: '2em',
-      height: windowWidth,
-      flexGrow: 1,
       border: '1px solid black',
     };
 
-    const containerStyle = {
-      display: 'flex',
-      flexDirection: 'row',
-      margin: 0,
-      padding: 0,
-    }
+    const topBarHeight = 64;
 
     return (
       <div style={{
-        margin: 0,
-        padding: 0,
         display: 'flex',
-        transform: 'rotate(90deg)',
-        // transformOrigin: '0 100%'
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        height: windowHeight,
+        marginTop: '3em'
       }}>
-        <div
-          style={containerStyle}
-        >
-          <button
-            id="left"
-            onTouchStart={this.onTouchStart}
-            onTouchEnd={this.onTouchEnd}
-            onTouchMove={this.onTouchMove}
-            style={
-              Object.assign(
-                {
-                  width: windowHeight / 6
-                },
-                buttonStyle
-              )
-            }
-          >
-            ←
-          </button>
-          <button
-            id="right"
-            onTouchStart={this.onTouchStart}
-            onTouchEnd={this.onTouchEnd}
-            onTouchMove={this.onTouchMove}
-            style={
-              Object.assign(
-                {
-                  width: windowHeight / 6
-                },
-                buttonStyle
-              )
-            }
-          >
-            →
-          </button>
-        </div>
-        <div
-          style={containerStyle}
-        >
-          <button
-            id="action"
-            onTouchStart={this.onTouchStart}
-            onTouchEnd={this.onTouchEnd}
-            onTouchMove={this.onTouchMove}
-            style={buttonStyle}
-          >
-            Release
-          </button>
-        </div>
-        <div
+        <button
+          id="left"
+          onTouchStart={this.onTouchStart}
+          onTouchEnd={this.onTouchEnd}
+          onTouchMove={this.onTouchMove}
           style={
             Object.assign(
               {
-                // width: windowHeight / 2,
-                flexWrap: 'wrap',
+                width: windowWidth - topBarHeight,
+                height: windowHeight / 6,
               },
-              containerStyle
+              buttonStyle
             )
           }
         >
-          {/* <div> */}
-            <button
-              id="up"
-              onTouchStart={this.onTouchStart}
-              onTouchEnd={this.onTouchEnd}
-              onTouchMove={this.onTouchMove}
-              style={
-                Object.assign(
-                  {},
-                  buttonStyle,
-                  {
-                    width: windowHeight / 2.35,
-                    height: windowWidth / 2,
-                  },
-                )
-              }
-            >
-              ↑
-            </button>
-          {/* </div> */}
-          {/* <div> */}
-            <button
-              id="down"
-              onTouchStart={this.onTouchStart}
-              onTouchEnd={this.onTouchEnd}
-              onTouchMove={this.onTouchMove}
-              style={
-                Object.assign(
-                  {},
-                  buttonStyle,
-                  {
-                    width: windowHeight / 2.35,
-                    height: windowWidth / 2,
-                  },
-                )
-              }
-            >
-              ↓
-            </button>
-          {/* </div> */}
+          ↑
+        </button>
+        <button
+          id="right"
+          onTouchStart={this.onTouchStart}
+          onTouchEnd={this.onTouchEnd}
+          onTouchMove={this.onTouchMove}
+          style={
+            Object.assign(
+              {
+                width: windowWidth - topBarHeight,
+                height: windowHeight / 6,
+              },
+              buttonStyle
+            )
+          }
+        >
+          ↓
+        </button>
+        <button
+          id="action"
+          onTouchStart={this.onTouchStart}
+          onTouchEnd={this.onTouchEnd}
+          onTouchMove={this.onTouchMove}
+          style={
+            Object.assign(
+              {
+                width: windowWidth - topBarHeight,
+                height: windowHeight / 6,
+              },
+              buttonStyle
+            )
+          }
+        >
+          Release
+        </button>
+        <button
+          id="down"
+          onTouchStart={this.onTouchStart}
+          onTouchEnd={this.onTouchEnd}
+          onTouchMove={this.onTouchMove}
+          style={
+            Object.assign(
+              {
+                width: (windowWidth / 2) - (topBarHeight / 2),
+                height: windowHeight / 3,
+              },
+              buttonStyle
+            )
+          }
+        >
+          ←
+        </button>
+        <button
+          id="up"
+          onTouchStart={this.onTouchStart}
+          onTouchEnd={this.onTouchEnd}
+          onTouchMove={this.onTouchMove}
+          style={
+            Object.assign(
+              {
+                width: (windowWidth / 2) - (topBarHeight / 2),
+                height: windowHeight / 3,
+              },
+              buttonStyle
+            )
+          }
+        >
+          →
+        </button>
+        <div style={{
+          height: topBarHeight,
+          transform: 'rotate(90deg)',
+          transformOrigin: 'left top 0',
+        }}>
+          Controlling such-and-such paddle
         </div>
       </div>
     )
