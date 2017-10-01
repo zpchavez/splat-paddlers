@@ -1,24 +1,32 @@
+let setsOfControls = [];
+
+export function resetControls() {
+  setsOfControls = [];
+}
+
 export function getPlayerControls(g, playerNumber) {
-
-  console.log('getting player controls');
-
   const controls = {
-    up: { press: () => {}, release: () => {} },
-    down: { press: () => {}, release: () => {} },
-    left: { press: () => {}, release: () => {} },
-    right: { press: () => {}, release: () => {} },
-    action: { press: () => {}, release: () => {} },
-  }
-
-  g.airconsole.onMessage = (from, data) => {
-    // const player = g.airconsole.convertDeviceIdToPlayerNumber(from);
-    const player = from;
-    const action = data.substr(0, data.indexOf('-'));
-    const button = data.substr(data.indexOf('-') + 1);
-    if (player === playerNumber) {
-      controls[button][action]()
+    [playerNumber]: {
+      up: { press: () => {}, release: () => {} },
+      down: { press: () => {}, release: () => {} },
+      left: { press: () => {}, release: () => {} },
+      right: { press: () => {}, release: () => {} },
+      action: { press: () => {}, release: () => {} },
     }
   };
 
-  return controls;
+  setsOfControls.push(controls);
+
+  g.airconsole.onMessage = (from, data) => {
+    const player = from;
+    const action = data.substr(0, data.indexOf('-'));
+    const button = data.substr(data.indexOf('-') + 1);
+    setsOfControls.forEach(controls => {
+      if (controls[player]) {
+        controls[player][button][action]()
+      }
+    })
+  };
+
+  return controls[playerNumber];
 }

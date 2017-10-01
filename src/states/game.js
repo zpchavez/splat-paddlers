@@ -3,10 +3,12 @@ import Block from '../things/block';
 import Hud, { HUD_HEIGHT } from '../things/hud';
 import Paddle from '../things/paddle';
 import Pit from '../things/pit';
+import { resetControls } from '../controls';
 
 import roundScoreState from '../states/round-score';
 
 export default (g) => {
+  resetControls();
   g.things = [];
   g.collisionGroups = {};
 
