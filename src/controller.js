@@ -60,7 +60,7 @@ class Controller extends Component {
       border: '1px solid black',
     };
 
-    const topBarHeight = 64;
+    const topBarHeight = 32;
 
     return (
       <div style={{
@@ -78,48 +78,14 @@ class Controller extends Component {
           style={
             Object.assign(
               {
-                width: windowWidth - topBarHeight,
-                height: windowHeight / 6,
+                width: (windowWidth / 2) - (topBarHeight / 2),
+                height: windowHeight / 3,
               },
               buttonStyle
             )
           }
         >
           ↑
-        </button>
-        <button
-          id="right"
-          onTouchStart={this.onTouchStart}
-          onTouchEnd={this.onTouchEnd}
-          onTouchMove={this.onTouchMove}
-          style={
-            Object.assign(
-              {
-                width: windowWidth - topBarHeight,
-                height: windowHeight / 6,
-              },
-              buttonStyle
-            )
-          }
-        >
-          ↓
-        </button>
-        <button
-          id="action"
-          onTouchStart={this.onTouchStart}
-          onTouchEnd={this.onTouchEnd}
-          onTouchMove={this.onTouchMove}
-          style={
-            Object.assign(
-              {
-                width: windowWidth - topBarHeight,
-                height: windowHeight / 6,
-              },
-              buttonStyle
-            )
-          }
-        >
-          Release
         </button>
         <button
           id="down"
@@ -139,6 +105,40 @@ class Controller extends Component {
           ←
         </button>
         <button
+          id="action"
+          onTouchStart={this.onTouchStart}
+          onTouchEnd={this.onTouchEnd}
+          onTouchMove={this.onTouchMove}
+          style={
+            Object.assign(
+              {
+                width: windowWidth - topBarHeight,
+                height: windowHeight / 6,
+              },
+              buttonStyle
+            )
+          }
+        >
+          Release
+        </button>
+        <button
+          id="right"
+          onTouchStart={this.onTouchStart}
+          onTouchEnd={this.onTouchEnd}
+          onTouchMove={this.onTouchMove}
+          style={
+            Object.assign(
+              {
+                width: (windowWidth / 2) - (topBarHeight / 2),
+                height: windowHeight / 3,
+              },
+              buttonStyle
+            )
+          }
+        >
+          ↓
+        </button>
+        <button
           id="up"
           onTouchStart={this.onTouchStart}
           onTouchEnd={this.onTouchEnd}
@@ -156,11 +156,15 @@ class Controller extends Component {
           →
         </button>
         <div style={{
-          height: topBarHeight,
-          transform: 'rotate(90deg)',
-          transformOrigin: 'left top 0',
+          width: topBarHeight - 20,
+          height: windowHeight - 10,
         }}>
-          Controlling such-and-such paddle
+          {/* <div style={{
+            transform: 'rotate(90deg)',
+            transformOrigin: 'left top 0',
+          }}>
+            Controlling such-and-such paddle
+          </div> */}
         </div>
       </div>
     )
