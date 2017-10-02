@@ -17,6 +17,7 @@ class MainMenuController extends Component
       border: '1px solid black',
       width: '100%',
       height: '3em',
+      fontSize: '2em',
       marginBottom: '1em',
     };
 
@@ -33,6 +34,7 @@ class MainMenuController extends Component
         </div>
         <div>
           <button
+            disabled={activePlayers < 2}
             style={buttonStyle}
             onClick={this.startGame.bind(this, '2-players')}
           >
@@ -41,6 +43,7 @@ class MainMenuController extends Component
         </div>
         <div>
           <button
+            disabled={activePlayers < 4}
             style={buttonStyle}
             onClick={this.startGame.bind(this, '4-players-teams')}
           >
@@ -49,6 +52,7 @@ class MainMenuController extends Component
         </div>
         <div>
           <button
+            disabled={activePlayers < 4}
             style={buttonStyle}
             onClick={this.startGame.bind(this, '4-players-vs')}
           >
