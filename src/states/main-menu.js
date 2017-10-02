@@ -22,17 +22,24 @@ const updateControllers = (airconsole) => {
   }
 }
 
+const updateConnectedControllers = (airconsole, deviceId) => {
+  const activePlayers = airconsole.getActivePlayerDeviceIds();
+  const connectedControllers = airconsole.getControllerDeviceIds();
+  if (activePlayers.length < connectedControllers.length) {
+    airconsole.setActivePlayers(connectedControllers.length);
+  }
+  updateControllers(airconsole);
+};
+
 export default (g) => {
   resetControls();
   updateControllers(g.airconsole);
   g.airconsole.onConnect = function(deviceId) {
-    const activePlayers = g.airconsole.getActivePlayerDeviceIds();
-    const connectedControllers = g.airconsole.getControllerDeviceIds();
-    if (activePlayers.length < connectedControllers.length) {
-      g.airconsole.setActivePlayers(connectedControllers.length);
-    }
-    updateControllers(g.airconsole);
+    updateConnectedControllers(g.airconsole, deviceId);
   };
+  g.airconsole.onDisconnect = function(deviceId) {
+    updateConnectedControllers(g.airconsole, deviceId);
+  }
 
   const textUtil = new TextUtil(g);
   const titleText = textUtil.centeredText('Splat Paddlers!', 64, '#000000', 20);
