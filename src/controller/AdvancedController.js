@@ -17,10 +17,14 @@ class AdvancedController extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.touching !== this.state.touching) {
       if (prevState.touching) {
-        airconsole.message(AirConsole.SCREEN, `release-${prevState.touching}`)
+        prevState.touching.split('-').forEach(direction => {
+          airconsole.message(AirConsole.SCREEN, `release-${direction}`)
+        })
       }
       if (this.state.touching) {
-        airconsole.message(AirConsole.SCREEN, `press-${this.state.touching}`)
+        this.state.touching.split('-').forEach(direction => {
+          airconsole.message(AirConsole.SCREEN, `press-${direction}`)
+        });
       }
     }
   }
@@ -70,14 +74,14 @@ class AdvancedController extends Component {
         marginTop: '3em'
       }}>
         <button
-          id="left"
+          id="left-up"
           onTouchStart={this.onTouchStart}
           onTouchEnd={this.onTouchEnd}
           onTouchMove={this.onTouchMove}
           style={
             Object.assign(
               {
-                width: (windowWidth / 2) - (topBarHeight / 2),
+                width: (windowWidth) - (topBarHeight),
                 height: windowHeight / 3,
               },
               buttonStyle
@@ -85,23 +89,6 @@ class AdvancedController extends Component {
           }
         >
           ↑
-        </button>
-        <button
-          id="down"
-          onTouchStart={this.onTouchStart}
-          onTouchEnd={this.onTouchEnd}
-          onTouchMove={this.onTouchMove}
-          style={
-            Object.assign(
-              {
-                width: (windowWidth / 2) - (topBarHeight / 2),
-                height: windowHeight / 3,
-              },
-              buttonStyle
-            )
-          }
-        >
-          ←
         </button>
         <button
           id="action"
@@ -121,14 +108,14 @@ class AdvancedController extends Component {
           Release
         </button>
         <button
-          id="right"
+          id="right-down"
           onTouchStart={this.onTouchStart}
           onTouchEnd={this.onTouchEnd}
           onTouchMove={this.onTouchMove}
           style={
             Object.assign(
               {
-                width: (windowWidth / 2) - (topBarHeight / 2),
+                width: (windowWidth) - (topBarHeight),
                 height: windowHeight / 3,
               },
               buttonStyle
@@ -136,23 +123,6 @@ class AdvancedController extends Component {
           }
         >
           ↓
-        </button>
-        <button
-          id="up"
-          onTouchStart={this.onTouchStart}
-          onTouchEnd={this.onTouchEnd}
-          onTouchMove={this.onTouchMove}
-          style={
-            Object.assign(
-              {
-                width: (windowWidth / 2) - (topBarHeight / 2),
-                height: windowHeight / 3,
-              },
-              buttonStyle
-            )
-          }
-        >
-          →
         </button>
         <div style={{
           width: topBarHeight - 20,
