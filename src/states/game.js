@@ -28,7 +28,7 @@ export default (g) => {
       {position: 'left', color: 'green', player: 1},
     ];
     paddleInfo[g.randomInt(0, 3)].startWithBall = true;
-  } else if (g.globals.players === 2 || g.globals.teams) {
+  } else if (g.globals.players === 2) {
     paddleInfo = [
       {position: 'bottom', color: 'blue'},
       {position: 'top', color: 'blue'},
@@ -49,12 +49,23 @@ export default (g) => {
     paddleInfo[g.randomInt(0, 1)].startWithBall = true;
     paddleInfo[g.randomInt(2, 3)].startWithBall = true;
   } else if (g.globals.players === 4) {
-    paddleInfo = [
-      {position: 'bottom', color: 'blue', player: 1, startWithBall: true},
-      {position: 'right', color: 'red', player: 2, startWithBall: true},
-      {position: 'top', color: 'yellow', player: 3, startWithBall: true},
-      {position: 'left', color: 'green', player: 4, startWithBall: true},
-    ];
+    if (g.globals.teams) {
+      paddleInfo = [
+        {position: 'bottom', color: 'blue', player: 1},
+        {position: 'right', color: 'blue', player: 2},
+        {position: 'top', color: 'red', player: 3},
+        {position: 'left', color: 'red', player: 4},
+      ];
+      paddleInfo[g.randomInt(0, 1)].startWithBall = true;
+      paddleInfo[g.randomInt(2, 3)].startWithBall = true;
+    } else {
+      paddleInfo = [
+        {position: 'bottom', color: 'blue', player: 1, startWithBall: true},
+        {position: 'right', color: 'red', player: 2, startWithBall: true},
+        {position: 'top', color: 'yellow', player: 3, startWithBall: true},
+        {position: 'left', color: 'green', player: 4, startWithBall: true},
+      ];
+    }
   }
 
   g.globals.roundScore = {};

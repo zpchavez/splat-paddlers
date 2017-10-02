@@ -90,6 +90,45 @@ export default (g) => {
         g.state = gameState(g);
         break;
     }
+
+    if (g.globals.players === 4) {
+      g.airconsole.message(
+        1,
+        {
+          controller: 'SimpleController',
+          props: {
+            orientation: 'horizontal'
+          }
+        }
+      );
+      g.airconsole.message(
+        2,
+        {
+          controller: 'SimpleController',
+          props: {
+            orientation: 'vertical'
+          }
+        }
+      );
+      g.airconsole.message(
+        3,
+        {
+          controller: 'SimpleController',
+          props: {
+            orientation: 'horizontal'
+          }
+        }
+      );
+      g.airconsole.message(
+        4,
+        {
+          controller: 'SimpleController',
+          props: {
+            orientation: 'vertical'
+          }
+        }
+      );
+    }
   };
   return () => {};
 }
