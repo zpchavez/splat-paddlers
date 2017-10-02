@@ -12,7 +12,6 @@ class AdvancedController extends Component {
 
     this.onTouchStart = this.onTouchStart.bind(this);
     this.onTouchEnd = this.onTouchEnd.bind(this);
-    this.onTouchMove = this.onTouchMove.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -37,8 +36,13 @@ class AdvancedController extends Component {
   onTouchStart(event) {
     this.setState(prevState => {
       const state = Object.assign({}, prevState);
-      state.touching = event.target.getAttribute('id');
-      state.touches += 1;
+      const action = event.target.getAttribute('id');
+      if (action === 'action') {
+        this.sendMessage('press-action');
+      } else {
+        state.touching = event.target.getAttribute('id');
+        state.touches += 1;
+      }
       return state;
     });
   }
@@ -46,11 +50,14 @@ class AdvancedController extends Component {
   onTouchEnd(event) {
     this.setState(prevState => {
       const state = Object.assign({}, prevState);
-      state.touches -= 1;
-      if (state.touches === 0) {
-        state.touching = null;
+      const action = event.target.getAttribute('id');
+      if (action !== 'action') {
+        state.touches -= 1;
+        if (state.touches === 0) {
+          state.touching = null;
+        }
+        return state;
       }
-      return state;
     });
   }
 
