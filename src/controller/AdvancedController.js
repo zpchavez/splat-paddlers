@@ -6,6 +6,7 @@ class AdvancedController extends Component {
     super(props);
 
     this.state = {
+      touches: 0,
       touching: null,
     };
 
@@ -34,20 +35,23 @@ class AdvancedController extends Component {
   }
 
   onTouchStart(event) {
-    this.setState({ touching: event.target.getAttribute('id') });
+    this.setState(prevState => {
+      const state = Object.assign({}, prevState);
+      state.touching = event.target.getAttribute('id');
+      state.touches += 1;
+      return state;
+    });
   }
 
   onTouchEnd(event) {
-    this.setState({ touching: null });
-  }
-
-  onTouchMove(event) {
-    var myLocation = event.changedTouches[0];
-    var realTarget = document.elementFromPoint(myLocation.clientX, myLocation.clientY);
-    var originalTarget = event.target;
-    if (realTarget.getAttribute('id') !== this.state.touching) {
-      this.setState({ touching: realTarget.getAttribute('id') });
-    }
+    this.setState(prevState => {
+      const state = Object.assign({}, prevState);
+      state.touches -= 1;
+      if (state.touches === 0) {
+        state.touching = null;
+      }
+      return state;
+    });
   }
 
   render() {
@@ -77,7 +81,6 @@ class AdvancedController extends Component {
           id="left-up"
           onTouchStart={this.onTouchStart}
           onTouchEnd={this.onTouchEnd}
-          onTouchMove={this.onTouchMove}
           style={
             Object.assign(
               {
@@ -94,7 +97,6 @@ class AdvancedController extends Component {
           id="action"
           onTouchStart={this.onTouchStart}
           onTouchEnd={this.onTouchEnd}
-          onTouchMove={this.onTouchMove}
           style={
             Object.assign(
               {
@@ -111,7 +113,6 @@ class AdvancedController extends Component {
           id="right-down"
           onTouchStart={this.onTouchStart}
           onTouchEnd={this.onTouchEnd}
-          onTouchMove={this.onTouchMove}
           style={
             Object.assign(
               {
