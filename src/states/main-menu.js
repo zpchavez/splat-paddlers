@@ -15,21 +15,20 @@ export default (g) => {
     if (activePlayers.length < connectedControllers.length) {
       g.airconsole.setActivePlayers(connectedControllers.length);
     }
-    connectedControllers.forEach(connectedDeviceId => {
-      const player = g.airconsole.convertDeviceIdToPlayerNumber(connectedDeviceId);
-      if (player === 0) {
-        g.airconsole.message(deviceId, {
+    for (let player = 1; player <= connectedControllers.length; player += 1) {
+      if (player === 1) {
+        g.airconsole.message(1, {
           controller: 'MainMenu',
           props: {
             activePlayers: activePlayers.length,
           }
         });
       } else {
-        g.airconsole.message(deviceId, {
+        g.airconsole.message(player, {
           controller: 'Waiting'
         });
       }
-    })
+    }
   };
 
   const textUtil = new TextUtil(g);
@@ -45,7 +44,7 @@ export default (g) => {
         textUtil.clear();
         g.state = gameState(g);
         g.airconsole.message(
-          activePlayers[0],
+          1,
           { controller: 'AdvancedController' }
         );
         break;
