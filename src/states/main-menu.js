@@ -4,31 +4,34 @@ import TextUtil from '../text-util';
 import Menu from '../menu';
 import { resetControls } from '../controls';
 
+const updateControllers = (airconsole) => {
+  const connectedControllers = airconsole.getControllerDeviceIds();
+  for (let player = 1; player <= Math.min(connectedControllers.length, 4); player += 1) {
+    if (player === 1) {
+      airconsole.message(1, {
+        controller: 'MainMenu',
+        props: {
+          activePlayers: connectedControllers.length,
+        }
+      });
+    } else {
+      airconsole.message(player, {
+        controller: 'Waiting'
+      });
+    }
+  }
+}
+
 export default (g) => {
   resetControls();
-  g.airconsole.message(1, {
-    controller: 'MainMenu'
-  });
+  updateControllers(g.airconsole);
   g.airconsole.onConnect = function(deviceId) {
     const activePlayers = g.airconsole.getActivePlayerDeviceIds();
     const connectedControllers = g.airconsole.getControllerDeviceIds();
     if (activePlayers.length < connectedControllers.length) {
       g.airconsole.setActivePlayers(connectedControllers.length);
     }
-    for (let player = 1; player <= connectedControllers.length; player += 1) {
-      if (player === 1) {
-        g.airconsole.message(1, {
-          controller: 'MainMenu',
-          props: {
-            activePlayers: activePlayers.length,
-          }
-        });
-      } else {
-        g.airconsole.message(player, {
-          controller: 'Waiting'
-        });
-      }
-    }
+    updateControllers(g.airconsole);
   };
 
   const textUtil = new TextUtil(g);
