@@ -31,9 +31,9 @@ export default (g) => {
   } else if (g.globals.players === 2 || g.globals.teams) {
     paddleInfo = [
       {position: 'bottom', color: 'blue'},
-      {position: 'right', color: 'blue'},
-      {position: 'top', color: 'red'},
+      {position: 'top', color: 'blue'},
       {position: 'left', color: 'red'},
+      {position: 'right', color: 'red'},
     ];
     if (g.globals.players === 2) {
       paddleInfo[0].player = 1;
