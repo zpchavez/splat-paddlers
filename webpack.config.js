@@ -22,19 +22,11 @@ var config = {
     new HtmlWebpackPlugin({
       template: appFolder + '/screen.html',
       filename: "screen.html",
-      minify: {
-        minifyJS: true,
-        collapseWhitespace: true,
-      },
       inject: false
     }),
     new HtmlWebpackPlugin({
       template: appFolder + '/controller.html',
       filename: "controller.html",
-      minify: {
-        minifyJS: true,
-        collapseWhitespace: true,
-      },
       inject: false
     }),
   ],
