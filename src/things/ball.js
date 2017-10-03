@@ -8,7 +8,7 @@ import { HUD_HEIGHT } from './hud';
 import { ANTI_COLLISION_FRAMES } from './abstract-thing';
 
 const BALL_SIZE = 8;
-export const MAX_BALL_V = 6;
+export const MAX_BALL_V = 5;
 const MAX_EDGE_BOUNCES = 2;
 const modToColor = {
   'stickyball': '#ffaa00',
