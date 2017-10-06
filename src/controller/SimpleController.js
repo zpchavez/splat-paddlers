@@ -58,25 +58,15 @@ class SimpleController extends Component {
   }
 
   render() {
-    // const ratio = window.devicePixelRatio || 1;
-    const ratio = 1;
-    const windowWidth = screen.width * ratio;
-    const windowHeight = screen.height * ratio;
-
-    const buttonStyle = {
-      margin: 0,
-      padding: 0,
-      fontSize: '2em',
-      border: '1px solid black',
-    };
-
-    const topBarHeight = 32;
-
+    const { color, orientation } = this.props;
+    const buttonStyle = { background: color };
     return (
       <div class="controller">
+        <h1>{orientation}</h1>
         <button
-          id="left"
-          class="button button--left"
+          id={orientation === 'portrait' ? 'up' : 'left'}
+          style={buttonStyle}
+          class="button"
           onTouchStart={this.onTouchStart}
           onTouchEnd={this.onTouchEnd}
         >
@@ -97,8 +87,9 @@ class SimpleController extends Component {
           </svg>
         </button>
         <button
-          id="right"
-          class="button button--right"
+          id={orientation === 'portrait' ? 'down' : 'right'}
+          style={buttonStyle}
+          class="button"
           onTouchStart={this.onTouchStart}
           onTouchEnd={this.onTouchEnd}
         >

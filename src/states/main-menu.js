@@ -1,4 +1,5 @@
 import { getPlayerControls } from '../controls';
+import colors from '../colors';
 import gameState from './game';
 import TextUtil from '../text-util';
 import Menu from '../menu';
@@ -69,7 +70,8 @@ export default (g) => {
           {
             controller: 'SimpleController',
             props: {
-              orientation: 'landscape'
+              orientation: 'landscape',
+              color: colors.blue.fill,
             }
           }
         );
@@ -78,7 +80,8 @@ export default (g) => {
           {
             controller: 'SimpleController',
             props: {
-              orientation: 'portrait'
+              orientation: 'portrait',
+              color: colors.red.fill,
             }
           }
         );
@@ -107,7 +110,8 @@ export default (g) => {
         {
           controller: 'SimpleController',
           props: {
-            orientation: 'landscape'
+            orientation: 'landscape',
+            color: colors.blue.fill,
           }
         }
       );
@@ -116,7 +120,8 @@ export default (g) => {
         {
           controller: 'SimpleController',
           props: {
-            orientation: 'portrait'
+            orientation: 'portrait',
+            color: colors.red.fill,
           }
         }
       );
@@ -125,7 +130,8 @@ export default (g) => {
         {
           controller: 'SimpleController',
           props: {
-            orientation: 'landscape'
+            orientation: 'landscape',
+            color: colors.yellow.fill,
           }
         }
       );
@@ -134,7 +140,8 @@ export default (g) => {
         {
           controller: 'SimpleController',
           props: {
-            orientation: 'portrait'
+            orientation: 'portrait',
+            color: colors.green.fill,
           }
         }
       );

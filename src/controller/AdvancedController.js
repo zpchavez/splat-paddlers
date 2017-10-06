@@ -62,25 +62,16 @@ class AdvancedController extends Component {
   }
 
   render() {
-    // const ratio = window.devicePixelRatio || 1;
-    const ratio = 1;
-    const windowWidth = screen.width * ratio;
-    const windowHeight = screen.height * ratio;
-
     const buttonStyle = {
-      margin: 0,
-      padding: 0,
-      fontSize: '2em',
-      border: '1px solid black',
+      background: 'black'
     };
-
-    const topBarHeight = 32;
 
     return (
       <div class="controller">
         <button
           id="left-up"
-          class="button button--left"
+          style={buttonStyle}
+          class="button"
           onTouchStart={this.onTouchStart}
           onTouchEnd={this.onTouchEnd}
         >
@@ -102,7 +93,8 @@ class AdvancedController extends Component {
         </button>
         <button
           id="right-down"
-          class="button button--right"
+          style={buttonStyle}
+          class="button"
           onTouchStart={this.onTouchStart}
           onTouchEnd={this.onTouchEnd}
         >
