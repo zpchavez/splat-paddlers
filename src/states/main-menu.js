@@ -69,7 +69,7 @@ export default (g) => {
           {
             controller: 'SimpleController',
             props: {
-              orientation: 'horizontal'
+              orientation: 'landscape'
             }
           }
         );
@@ -78,7 +78,7 @@ export default (g) => {
           {
             controller: 'SimpleController',
             props: {
-              orientation: 'vertical'
+              orientation: 'portrait'
             }
           }
         );
@@ -107,7 +107,7 @@ export default (g) => {
         {
           controller: 'SimpleController',
           props: {
-            orientation: 'horizontal'
+            orientation: 'landscape'
           }
         }
       );
@@ -116,7 +116,7 @@ export default (g) => {
         {
           controller: 'SimpleController',
           props: {
-            orientation: 'vertical'
+            orientation: 'portrait'
           }
         }
       );
@@ -125,7 +125,7 @@ export default (g) => {
         {
           controller: 'SimpleController',
           props: {
-            orientation: 'horizontal'
+            orientation: 'landscape'
           }
         }
       );
@@ -134,7 +134,7 @@ export default (g) => {
         {
           controller: 'SimpleController',
           props: {
-            orientation: 'vertical'
+            orientation: 'portrait'
           }
         }
       );

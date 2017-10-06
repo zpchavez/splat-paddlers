@@ -4,6 +4,66 @@
       <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.7.0.js"></script>
       <meta charset="utf-8">
       <title>Splat Paddlers</title>
+      <style>
+        /* Eric Meyer's CSS Reset */
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+          margin: 0;
+          padding: 0;
+          border: 0;
+          font-size: 100%;
+          font: inherit;
+          vertical-align: baseline;
+        }
+        /* Chris' Button Reset */
+        button {
+          display: inline-block;
+          appearance: none;
+          user-select: none;
+          text-decoration: none;
+          cursor: pointer;
+          font-family: $sans;
+          font-weight: $regular;
+          border: none;
+          background-color: transparent;
+          border-color: transparent;
+          padding: 0;
+          margin: 0;
+        }
+        /* Styles! */
+        body {
+          overflow: hidden;
+        }
+        .controller {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          width: 100vw;
+          height: 100vh;
+        }
+        .button {
+          width: 100vw;
+          height: 25vh;
+          background: red;
+          fill: white;
+        }
+        .action {
+          border: 2px solid black;
+          transform: rotate(90deg);
+        }
+      </style>
   </head>
 
   <body style="background-color: white"></body>
