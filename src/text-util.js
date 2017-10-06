@@ -2,11 +2,11 @@ class TextUtil
 {
   constructor(g) {
     this.g = g;
-    this.texts = [];
+    this.g.texts = this.g.texts || [];
   }
 
   clear() {
-    this.g.remove(this.texts);
+    this.g.remove(this.g.texts);
   }
 
   createText(string, size, color, x, y) {
@@ -18,7 +18,7 @@ class TextUtil
       y
     );
 
-    this.texts.push(text);
+    this.g.texts.push(text);
 
     return text;
   }
@@ -40,7 +40,7 @@ class TextUtil
       )
     );
 
-    this.texts.push.apply(this.texts, texts);
+    this.g.texts.push.apply(this.g.texts, texts);
 
     return texts;
   }
@@ -56,7 +56,7 @@ class TextUtil
       y
     );
 
-    this.texts.push(text);
+    this.g.texts.push(text);
 
     return text;
   }

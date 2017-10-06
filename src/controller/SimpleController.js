@@ -62,7 +62,6 @@ class SimpleController extends Component {
     const buttonStyle = { background: color };
     return (
       <div class="controller">
-        <h1>{orientation}</h1>
         <button
           id={orientation === 'portrait' ? 'up' : 'left'}
           style={buttonStyle}

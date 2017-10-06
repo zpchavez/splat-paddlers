@@ -5,42 +5,8 @@ import TextUtil from '../text-util';
 import Menu from '../menu';
 import { resetControls } from '../controls';
 
-const updateControllers = (airconsole) => {
-  const connectedControllers = airconsole.getControllerDeviceIds();
-  for (let player = 1; player <= Math.min(connectedControllers.length, 4); player += 1) {
-    if (player === 1) {
-      airconsole.message(1, {
-        controller: 'MainMenu',
-        props: {
-          activePlayers: connectedControllers.length,
-        }
-      });
-    } else {
-      airconsole.message(player, {
-        controller: 'Waiting'
-      });
-    }
-  }
-}
-
-const updateConnectedControllers = (airconsole, deviceId) => {
-  const activePlayers = airconsole.getActivePlayerDeviceIds();
-  const connectedControllers = airconsole.getControllerDeviceIds();
-  if (activePlayers.length < connectedControllers.length) {
-    airconsole.setActivePlayers(connectedControllers.length);
-  }
-  updateControllers(airconsole);
-};
-
 export default (g) => {
   resetControls();
-  updateControllers(g.airconsole);
-  g.airconsole.onConnect = function(deviceId) {
-    updateConnectedControllers(g.airconsole, deviceId);
-  };
-  g.airconsole.onDisconnect = function(deviceId) {
-    updateConnectedControllers(g.airconsole, deviceId);
-  }
 
   const textUtil = new TextUtil(g);
   const titleText = textUtil.centeredText('Splat Paddlers!', 64, '#000000', 20);
