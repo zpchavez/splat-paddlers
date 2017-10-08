@@ -5,8 +5,6 @@ import SimpleController from './controller/SimpleController';
 import MainMenuController from './controller/MainMenuController';
 import airconsole from './airconsole';
 
-airconsole.showDefaultUI(false);
-
 class ControllerWrapper extends Component
 {
   constructor(props) {
@@ -16,15 +14,19 @@ class ControllerWrapper extends Component
       if (from === AirConsole.SCREEN && data.controller) {
         switch (data.controller) {
           case 'MainMenu':
+            airconsole.showDefaultUI(true);
             this.setState({ controller: MainMenuController, props: data.props })
             break;
           case 'AdvancedController':
+            airconsole.showDefaultUI(false);
             this.setState({ controller: AdvancedController, props: data.props })
             break;
           case 'SimpleController':
+            airconsole.showDefaultUI(false);
             this.setState({ controller: SimpleController, props: data.props })
             break;
           case 'Waiting':
+            airconsole.showDefaultUI(true);
             this.setState({ controller: Waiting })
             break
         }
