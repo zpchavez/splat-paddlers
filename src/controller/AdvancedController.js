@@ -62,14 +62,11 @@ class AdvancedController extends Component {
   }
 
   renderActionButton() {
-    if (!this.props.hasBall) {
-      return null;
-    }
-
     return (
       <button
         id="action"
         class="action"
+        style={{visibility: this.props.hasBall ? 'visible' : 'hidden'}}
         onTouchStart={this.onTouchStart}
         onTouchEnd={this.onTouchEnd}
       >

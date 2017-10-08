@@ -59,9 +59,6 @@ class SimpleController extends Component {
 
   renderActionButton() {
     const { hasBall, position } = this.props;
-    if (!hasBall) {
-      return null;
-    }
 
     let transformDegrees;
     switch (position) {
@@ -83,7 +80,10 @@ class SimpleController extends Component {
       <button
         id="action"
         class="action"
-        style={{transform: `rotate(${transformDegrees}deg)`}}
+        style={{
+          transform: `rotate(${transformDegrees}deg)`,
+          visibility: hasBall ? 'visible' : 'hidden'
+        }}
         onTouchStart={this.onTouchStart}
         onTouchEnd={this.onTouchEnd}
       >
