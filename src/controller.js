@@ -30,7 +30,7 @@ class ControllerWrapper extends Component
     };
 
     this.state = {
-      controller: Waiting,
+      controller: MainMenuController,
       props: {}
     };
   }

@@ -13,20 +13,11 @@ class MainMenuController extends Component
   render() {
     const activePlayers = this.props.activePlayers;
 
-    const buttonStyle = {
-      border: '1px solid black',
-      width: '100%',
-      height: '3em',
-      fontSize: '2em',
-      marginBottom: '1em',
-    };
-
     return (
-      <div>
+      <div className="menu">
         <h1>Splat Paddlers</h1>
         <div>
           <button
-            style={buttonStyle}
             onClick={this.startGame.bind(this, '1-player')}
           >
             1 Player (PRACTICE)
@@ -35,7 +26,6 @@ class MainMenuController extends Component
         <div>
           <button
             disabled={activePlayers < 2}
-            style={buttonStyle}
             onClick={this.startGame.bind(this, '2-players')}
           >
             2 Players
@@ -44,7 +34,6 @@ class MainMenuController extends Component
         <div>
           <button
             disabled={activePlayers < 4}
-            style={buttonStyle}
             onClick={this.startGame.bind(this, '4-players-teams')}
           >
             4 Players (Teams)
@@ -53,7 +42,6 @@ class MainMenuController extends Component
         <div>
           <button
             disabled={activePlayers < 4}
-            style={buttonStyle}
             onClick={this.startGame.bind(this, '4-players-vs')}
           >
             4 Players (Vs)
