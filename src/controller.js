@@ -5,6 +5,8 @@ import SimpleController from './controller/SimpleController';
 import MainMenuController from './controller/MainMenuController';
 import airconsole from './airconsole';
 
+airconsole.showDefaultUI(false);
+
 class ControllerWrapper extends Component
 {
   constructor(props) {
@@ -30,7 +32,7 @@ class ControllerWrapper extends Component
     };
 
     this.state = {
-      controller: MainMenuController,
+      controller: Waiting,
       props: {}
     };
   }
