@@ -87,7 +87,7 @@ export default (g) => {
           controller: 'SimpleController',
           props: {
             orientation: 'portrait',
-            color: colors.red.fill,
+            color: g.globals.teams ? colors.blue.fill : colors.red.fill,
           }
         }
       );
@@ -97,7 +97,7 @@ export default (g) => {
           controller: 'SimpleController',
           props: {
             orientation: 'landscape',
-            color: colors.yellow.fill,
+            color: g.globals.teams ? colors.red.fill : colors.yellow.fill,
           }
         }
       );
@@ -107,7 +107,7 @@ export default (g) => {
           controller: 'SimpleController',
           props: {
             orientation: 'portrait',
-            color: colors.green.fill,
+            color: g.globals.teams ? colors.red.fill : colors.green.fill,
           }
         }
       );
