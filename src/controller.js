@@ -17,7 +17,7 @@ class ControllerWrapper extends Component
             this.setState({ controller: MainMenuController, props: data.props })
             break;
           case 'AdvancedController':
-            this.setState({ controller: AdvancedController })
+            this.setState({ controller: AdvancedController, props: data.props })
             break;
           case 'SimpleController':
             this.setState({ controller: SimpleController, props: data.props })

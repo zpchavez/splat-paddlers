@@ -1,7 +1,24 @@
+import colors from './colors';
+
 let setsOfControls = [];
 
 export function resetControls() {
   setsOfControls = [];
+}
+
+export function updateGameController(paddle) {
+  const g = paddle.g;
+  g.airconsole.message(
+    g.airconsole.convertPlayerNumberToDeviceId(paddle.player - 1),
+    {
+      controller: g.globals.players === 1 ? 'AdvancedController' : 'SimpleController',
+      props: {
+        position: paddle.position,
+        color: colors[paddle.color].fill,
+        hasBall: !!paddle.caughtBall
+      }
+    }
+  );
 }
 
 export function getPlayerControls(g, playerNumber) {

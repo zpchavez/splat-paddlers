@@ -20,10 +20,6 @@ export default (g) => {
         };
         textUtil.clear();
         g.state = gameState(g);
-        g.airconsole.message(
-          g.airconsole.convertPlayerNumberToDeviceId(0),
-          { controller: 'AdvancedController' }
-        );
         break;
       case '2-players':
         g.globals = {
@@ -31,26 +27,6 @@ export default (g) => {
         };
         textUtil.clear();
         g.state = gameState(g);
-        g.airconsole.message(
-          g.airconsole.convertPlayerNumberToDeviceId(0),
-          {
-            controller: 'SimpleController',
-            props: {
-              orientation: 'landscape',
-              color: colors.blue.fill,
-            }
-          }
-        );
-        g.airconsole.message(
-          g.airconsole.convertPlayerNumberToDeviceId(1),
-          {
-            controller: 'SimpleController',
-            props: {
-              orientation: 'portrait',
-              color: colors.red.fill,
-            }
-          }
-        );
         break;
       case '4-players-teams':
         g.globals = {
@@ -68,49 +44,6 @@ export default (g) => {
         textUtil.clear();
         g.state = gameState(g);
         break;
-    }
-
-    if (g.globals.players === 4) {
-      g.airconsole.message(
-        g.airconsole.convertPlayerNumberToDeviceId(0),
-        {
-          controller: 'SimpleController',
-          props: {
-            orientation: 'landscape',
-            color: colors.blue.fill,
-          }
-        }
-      );
-      g.airconsole.message(
-        g.airconsole.convertPlayerNumberToDeviceId(1),
-        {
-          controller: 'SimpleController',
-          props: {
-            orientation: 'portrait',
-            color: g.globals.teams ? colors.blue.fill : colors.red.fill,
-          }
-        }
-      );
-      g.airconsole.message(
-        g.airconsole.convertPlayerNumberToDeviceId(2),
-        {
-          controller: 'SimpleController',
-          props: {
-            orientation: 'landscape',
-            color: g.globals.teams ? colors.red.fill : colors.yellow.fill,
-          }
-        }
-      );
-      g.airconsole.message(
-        g.airconsole.convertPlayerNumberToDeviceId(3),
-        {
-          controller: 'SimpleController',
-          props: {
-            orientation: 'portrait',
-            color: g.globals.teams ? colors.red.fill : colors.green.fill,
-          }
-        }
-      );
     }
   };
   return () => {};

@@ -3,7 +3,7 @@ import Block from '../things/block';
 import Hud, { HUD_HEIGHT } from '../things/hud';
 import Paddle from '../things/paddle';
 import Pit from '../things/pit';
-import { resetControls } from '../controls';
+import { resetControls, updateGameController } from '../controls';
 
 import roundScoreState from '../states/round-score';
 
@@ -68,6 +68,13 @@ export default (g) => {
     }
   }
 
+  if (g.globals.players === 1) {
+    g.airconsole.message(
+      g.airconsole.convertPlayerNumberToDeviceId(0),
+      { controller: 'AdvancedController', props: { hasBall: true } }
+    );
+  }
+
   g.globals.roundScore = {};
   paddleInfo.forEach(info => {
     if (!g.globals.roundScore[info.color]) {
@@ -86,6 +93,11 @@ export default (g) => {
     if (paddleOptions.startWithBall) {
       const ball = new Ball(g, paddleOptions.color);
       paddle.attachBall(ball);
+    }
+    // Prevent hasBall being set to false in 1-2 player games
+    if (paddleOptions.startWithBall && g.globals.players > 1) {
+      console.log('updating game controller');
+      updateGameController(paddle);
     }
   })
 

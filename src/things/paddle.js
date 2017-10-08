@@ -1,7 +1,7 @@
 import AbstractThing from './abstract-thing';
 import Ball from './ball';
 import colors from '../colors';
-import { getPlayerControls } from '../controls';
+import { getPlayerControls, updateGameController } from '../controls';
 import { MAX_BALL_V } from './ball';
 import { HUD_HEIGHT } from './hud';
 import { PIT_SIZE } from './pit';
@@ -177,6 +177,7 @@ class Paddle extends AbstractThing
           break;
       }
       this.caughtBall = null;
+      updateGameController(this);
     }
   }
 

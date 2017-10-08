@@ -57,9 +57,49 @@ class SimpleController extends Component {
     });
   }
 
+  renderActionButton() {
+    const { hasBall, position } = this.props;
+    if (!hasBall) {
+      return null;
+    }
+
+    let transformDegrees;
+    switch (position) {
+      case 'top':
+        transformDegrees = 270;
+        break;
+      case 'bottom':
+        transformDegrees = 90;
+        break;
+      case 'right':
+        transformDegrees = 270;
+        break;
+      case 'left':
+        transformDegrees = 90;
+        break;
+    }
+
+    return (
+      <button
+        id="action"
+        class="action"
+        style={{transform: `rotate(${transformDegrees}deg)`}}
+        onTouchStart={this.onTouchStart}
+        onTouchEnd={this.onTouchEnd}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24">
+          <rect x="4" y="20" width="16" height="2"/>
+          <polygon points="6.67 8 7.61 8.94 11.33 5.22 11.33 13.33 12.67 13.33 12.67 5.22 16.39 8.95 17.33 8 12 2.67 6.67 8"/>
+          <circle cx="12" cy="18" r="2"/>
+        </svg>
+      </button>
+    );
+  }
+
   render() {
-    const { color, orientation } = this.props;
+    const { color, position } = this.props;
     const buttonStyle = { background: color };
+    const orientation = ['top', 'bottom'].indexOf(position) > -1 ? 'landscape' : 'portrait';
     return (
       <div class="controller">
         <button
@@ -73,18 +113,7 @@ class SimpleController extends Component {
             <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z" />
           </svg>
         </button>
-        <button
-          id="action"
-          class="action"
-          onTouchStart={this.onTouchStart}
-          onTouchEnd={this.onTouchEnd}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24">
-            <rect x="4" y="20" width="16" height="2"/>
-            <polygon points="6.67 8 7.61 8.94 11.33 5.22 11.33 13.33 12.67 13.33 12.67 5.22 16.39 8.95 17.33 8 12 2.67 6.67 8"/>
-            <circle cx="12" cy="18" r="2"/>
-          </svg>
-        </button>
+        {this.renderActionButton()}
         <button
           id={orientation === 'portrait' ? 'down' : 'right'}
           style={buttonStyle}

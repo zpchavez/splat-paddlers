@@ -3,6 +3,7 @@ import Block from './block';
 import colors from '../colors';
 import Paddle from './paddle';
 import Pit from './pit';
+import { updateGameController } from '../controls';
 import { TOP, LEFT, BOTTOM, RIGHT } from './paddle';
 import { HUD_HEIGHT } from './hud';
 import { ANTI_COLLISION_FRAMES } from './abstract-thing';
@@ -301,6 +302,7 @@ class Ball extends AbstractThing
     ) {
       if (otherThing instanceof Paddle && this.mod === 'stickyball' && !otherThing.caughtBall) {
         otherThing.attachBall(this);
+        updateGameController(otherThing);
         this.changeMod(null);
         this.color = otherThing.color;
         this.edgeBounces = 0;
