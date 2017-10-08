@@ -3,36 +3,9 @@ require('../lib/custom.js');
 
 import mainMenuState from './states/main-menu';
 import Sfx from './sfx';
+import { updateConnectedControllers, updateMenuControllers } from './controls';
 
 const ga = window.ga;
-
-const updateControllers = (airconsole) => {
-  const connectedControllers = airconsole.getControllerDeviceIds();
-  for (let player = 0; player < Math.min(connectedControllers.length); player += 1) {
-    const deviceId = airconsole.convertPlayerNumberToDeviceId(player);
-    if (player === 0) {
-      airconsole.message(deviceId, {
-        controller: 'MainMenu',
-        props: {
-          activePlayers: connectedControllers.length,
-        }
-      });
-    } else {
-      airconsole.message(deviceId, {
-        controller: 'Waiting'
-      });
-    }
-  }
-}
-
-const updateConnectedControllers = (airconsole, deviceId) => {
-  const activePlayers = airconsole.getActivePlayerDeviceIds();
-  const connectedControllers = airconsole.getControllerDeviceIds();
-  if (activePlayers.length < connectedControllers.length) {
-    airconsole.setActivePlayers(connectedControllers.length);
-  }
-  updateControllers(airconsole);
-};
 
 var g = ga(
   768,
@@ -52,8 +25,6 @@ var g = ga(
       }
     }
     g.airconsole = new AirConsole();
-
-    updateControllers(g.airconsole);
 
     const onConnectOrDisconnect = function(deviceId) {
       updateConnectedControllers(g.airconsole, deviceId);

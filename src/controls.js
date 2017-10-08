@@ -6,6 +6,34 @@ export function resetControls() {
   setsOfControls = [];
 }
 
+export function updateConnectedControllers(airconsole) {
+  const activePlayers = airconsole.getActivePlayerDeviceIds();
+  const connectedControllers = airconsole.getControllerDeviceIds();
+  if (activePlayers.length < connectedControllers.length) {
+    airconsole.setActivePlayers(connectedControllers.length);
+  }
+  updateMenuControllers(airconsole);
+};
+
+export function updateMenuControllers(airconsole) {
+  const connectedControllers = airconsole.getControllerDeviceIds();
+  for (let player = 0; player < Math.min(connectedControllers.length); player += 1) {
+    const deviceId = airconsole.convertPlayerNumberToDeviceId(player);
+    if (player === 0) {
+      airconsole.message(deviceId, {
+        controller: 'MainMenu',
+        props: {
+          activePlayers: connectedControllers.length,
+        }
+      });
+    } else {
+      airconsole.message(deviceId, {
+        controller: 'Waiting'
+      });
+    }
+  }
+}
+
 export function updateGameController(paddle) {
   const g = paddle.g;
   g.airconsole.message(

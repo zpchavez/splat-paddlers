@@ -3,10 +3,11 @@ import colors from '../colors';
 import gameState from './game';
 import TextUtil from '../text-util';
 import Menu from '../menu';
-import { resetControls } from '../controls';
+import { resetControls, updateMenuControllers } from '../controls';
 
 export default (g) => {
   resetControls();
+  updateMenuControllers(g.airconsole);
 
   const textUtil = new TextUtil(g);
   const titleText = textUtil.centeredText('Splat Paddlers!', 64, '#000000', 20);
