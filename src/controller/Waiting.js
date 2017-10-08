@@ -4,7 +4,9 @@ class Waiting extends Component
 {
   render() {
     return (
-      <h1>Waiting for Player 1 to make a selection</h1>
+      <h1 className="waiting-message">
+        Waiting for Player 1
+      </h1>
     );
   }
 }
