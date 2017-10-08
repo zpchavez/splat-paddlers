@@ -8,16 +8,17 @@ const ga = window.ga;
 
 const updateControllers = (airconsole) => {
   const connectedControllers = airconsole.getControllerDeviceIds();
-  for (let player = 1; player <= Math.min(connectedControllers.length, 4); player += 1) {
-    if (player === 1) {
-      airconsole.message(1, {
+  for (let player = 0; player < Math.min(connectedControllers.length); player += 1) {
+    const deviceId = airconsole.convertPlayerNumberToDeviceId(player);
+    if (player === 0) {
+      airconsole.message(deviceId, {
         controller: 'MainMenu',
         props: {
           activePlayers: connectedControllers.length,
         }
       });
     } else {
-      airconsole.message(player, {
+      airconsole.message(deviceId, {
         controller: 'Waiting'
       });
     }

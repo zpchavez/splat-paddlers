@@ -21,7 +21,7 @@ export default (g) => {
         textUtil.clear();
         g.state = gameState(g);
         g.airconsole.message(
-          1,
+          g.airconsole.convertPlayerNumberToDeviceId(0),
           { controller: 'AdvancedController' }
         );
         break;
@@ -32,7 +32,7 @@ export default (g) => {
         textUtil.clear();
         g.state = gameState(g);
         g.airconsole.message(
-          1,
+          g.airconsole.convertPlayerNumberToDeviceId(0),
           {
             controller: 'SimpleController',
             props: {
@@ -42,7 +42,7 @@ export default (g) => {
           }
         );
         g.airconsole.message(
-          2,
+          g.airconsole.convertPlayerNumberToDeviceId(1),
           {
             controller: 'SimpleController',
             props: {
@@ -72,7 +72,7 @@ export default (g) => {
 
     if (g.globals.players === 4) {
       g.airconsole.message(
-        1,
+        g.airconsole.convertPlayerNumberToDeviceId(0),
         {
           controller: 'SimpleController',
           props: {
@@ -82,7 +82,7 @@ export default (g) => {
         }
       );
       g.airconsole.message(
-        2,
+        g.airconsole.convertPlayerNumberToDeviceId(1),
         {
           controller: 'SimpleController',
           props: {
@@ -92,7 +92,7 @@ export default (g) => {
         }
       );
       g.airconsole.message(
-        3,
+        g.airconsole.convertPlayerNumberToDeviceId(2),
         {
           controller: 'SimpleController',
           props: {
@@ -102,7 +102,7 @@ export default (g) => {
         }
       );
       g.airconsole.message(
-        4,
+        g.airconsole.convertPlayerNumberToDeviceId(3),
         {
           controller: 'SimpleController',
           props: {
